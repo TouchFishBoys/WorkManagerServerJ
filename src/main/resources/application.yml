@@ -1,0 +1,4 @@
+workmanager:
+  storage:
+    root-directory:
+      /storage
