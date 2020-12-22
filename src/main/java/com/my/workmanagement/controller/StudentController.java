@@ -3,7 +3,7 @@ package com.my.workmanagement.controller;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
-import com.my.workmanagement.entity.http.ReqStudentLogin;
+import com.my.workmanagement.dto.ReqStudentLogin;
 import com.my.workmanagement.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;

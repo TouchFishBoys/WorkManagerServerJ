@@ -1,4 +1,4 @@
-package com.my.workmanagement.entity.http;
+package com.my.workmanagement.dto;
 
 public class RespEntity {
     private int code;
