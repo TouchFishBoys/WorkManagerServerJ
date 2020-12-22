@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "workmanager.auth.jwtExpirationMs",
+      "type": "java.lang.Integer",
+      "description": "Description for workmanager.auth.jwtExpirationMs."
+    },
+    {
+      "name": "workmanager.auth.jwtSecret",
+      "type": "java.lang.String",
+      "description": "Description for workmanager.auth.jwtSecret."
+    },
+    {
+      "name": "workmanager.storage.root-directory",
+      "type": "java.lang.String",
+      "description": "Description for workmanager.storage.root-directory."
+    }
+  ] }

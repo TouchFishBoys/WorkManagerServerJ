@@ -3,7 +3,6 @@ package com.my.workmanagement.controller;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
-import com.my.workmanagement.entity.http.ReqStudentLogin;
 import com.my.workmanagement.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -19,12 +18,6 @@ public class StudentController {
     @Autowired
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
-    }
-
-    @PostMapping(value = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> login(@RequestBody @Valid ReqStudentLogin reqData) {
-        boolean result = studentService.login(reqData.getUsername(), reqData.getPassword());
-        return ResponseEntity.ok(result);
     }
 
     @PostMapping(value = "/import", consumes = {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

@@ -4,7 +4,9 @@ import javax.websocket.server.PathParam;
 
 import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.service.NormalWorkService;
+
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -43,7 +45,6 @@ public class NormalWorkController {
     }
 
     @ExceptionHandler(StorageFileNotFoundException.class)
-
     public ResponseEntity<?> handleFileNotFound() {
         return ResponseEntity.notFound().build();
     }
