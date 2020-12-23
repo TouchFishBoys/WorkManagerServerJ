@@ -1,18 +1,18 @@
 {
   "properties": [
     {
-      "name": "workmanager.auth.jwtExpirationMs",
+      "name": "workmanager.auth.jwt-expiration-ms",
       "type": "java.lang.Integer",
-      "description": "Description for workmanager.auth.jwtExpirationMs."
+      "description": "jwt过期时间."
     },
     {
-      "name": "workmanager.auth.jwtSecret",
+      "name": "workmanager.auth.jwt-secret",
       "type": "java.lang.String",
-      "description": "Description for workmanager.auth.jwtSecret."
+      "description": "jwt密钥."
     },
     {
       "name": "workmanager.storage.root-directory",
       "type": "java.lang.String",
-      "description": "Description for workmanager.storage.root-directory."
+      "description": "存储路径."
     }
   ] }

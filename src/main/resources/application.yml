@@ -1,15 +1,15 @@
 workmanager:
   auth:
-    jwtSecret:
-    jwtExpirationMs: 86400000
+    jwt-secret: "f623c7a6-e658-4566-bbee-ecc070321553"
+    jwt-expiration-ms: 86400000
   storage:
     root-directory:
       /storage
 spring:
   jpa:
     hibernate:
-      ddl-auto: update
+      # ddl-auto: update
   datasource:
-    url: "jsbc:${WORK_DB_TYPE:mysql}://${WODK_DB_URL:localhost}:${WORK_DB_PORT:3306}/work_manager?serverTimezone=UTC"
+    url: "jdbc:${WORK_DB_TYPE:mysql}://${WODK_DB_URL:localhost}:${WORK_DB_PORT:3306}/work_management?serverTimezone=UTC"
     username: ${WORK_DB_USERNAME:root}
-    password: ${WORK_DB_PASSWORD:root}
+    password: ${WORK_DB_PASSWORD:hy1358909}
