@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.my.workmanagement.config.WMAuthConfig;
+import com.my.workmanagement.model.ERole;
 import com.my.workmanagement.model.WMUserDetails;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.Date;
 
+/**
+ * Jwt 工具类
+ */
 @Component
 public class JwtUtils {
     @Resource
@@ -31,16 +35,28 @@ public class JwtUtils {
         algorithm = Algorithm.HMAC256(wmAuthConfig.getJwtSecret());
     }
 
+    /**
+     * 生成 JwtToken
+     *
+     * @param WMUserDetails 用户信息
+     * @return 生成的 Token
+     */
     public static String generateToken(WMUserDetails WMUserDetails) {
         Date date = new Date(System.currentTimeMillis() + wmAuthConfig.getJwtExpirationMs());
         return JWT.create()
                 .withIssuer(JWT_AUTH_ISSURER)
                 .withExpiresAt(date)
                 .withClaim(JWT_CLAIM_USERNAME, WMUserDetails.getUsername())
-                .withClaim(JWT_CLAIM_ROLE, "")
+                .withClaim(JWT_CLAIM_ROLE, WMUserDetails.getRole().name())
                 .sign(algorithm); // 加密确保不会被篡改
     }
 
+    /**
+     * 验证 Token 是否有效
+     *
+     * @param token JwtToken
+     * @return 是否有效
+     */
     public static boolean validateToken(String token) {
         try {
             JWTVerifier verifier = JWT.require(algorithm)
@@ -54,7 +70,14 @@ public class JwtUtils {
         }
     }
 
+    // 仅获取不进行验证
     public static String getUsername(String token) {
         return JWT.decode(token).getClaim(JWT_CLAIM_USERNAME).asString();
+    }
+
+    // 仅获取不进行验证
+    public static ERole getRole(String token) {
+        String role = JWT.decode(token).getClaim(JWT_CLAIM_ROLE).asString();
+        return ERole.valueOf(role);
     }
 }
