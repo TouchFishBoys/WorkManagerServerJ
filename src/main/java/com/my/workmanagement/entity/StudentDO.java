@@ -12,9 +12,9 @@ public class StudentDO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int stuNumber;
+    private int studentId;
     @Column(nullable = false, unique = true)
-    private String studentId;
+    private String studentNumber;
     @Column(nullable = false)
     private String studentName;
     @Column(nullable = false)
@@ -26,20 +26,20 @@ public class StudentDO {
     @CreationTimestamp
     private Timestamp gmtModified;
 
-    public int getStuNumber() {
-        return stuNumber;
-    }
-
-    public void setStuNumber(int stuNumber) {
-        this.stuNumber = stuNumber;
-    }
-
-    public String getStudentId() {
+    public int getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setStudentId(int stuNumber) {
+        this.studentId = stuNumber;
+    }
+
+    public String getStudentNumber() {
+        return studentNumber;
+    }
+
+    public void setStudentNumber(String studentId) {
+        this.studentNumber = studentId;
     }
 
     public String getStudentName() {
@@ -85,8 +85,8 @@ public class StudentDO {
     @Override
     public String toString() {
         return "StudentDO{" +
-                "id=" + stuNumber +
-                ", studentId='" + studentId + '\'' +
+                "studentId=" + studentId +
+                ", studentNumber='" + studentNumber + '\'' +
                 ", studentName='" + studentName + '\'' +
                 ", secretKey='" + secretKey + '\'' +
                 ", className='" + className + '\'' +
@@ -98,7 +98,6 @@ public class StudentDO {
     public static StudentBuilder builder() {
         return new StudentBuilder();
     }
-
 
     public static final class StudentBuilder {
         private int stuNumber;
@@ -153,8 +152,8 @@ public class StudentDO {
 
         public StudentDO build() {
             StudentDO studentDO = new StudentDO();
-            studentDO.setStuNumber(stuNumber);
-            studentDO.setStudentId(studentId);
+            studentDO.setStudentId(stuNumber);
+            studentDO.setStudentNumber(studentId);
             studentDO.setStudentName(studentName);
             studentDO.setSecretKey(secretKey);
             studentDO.setClassName(className);

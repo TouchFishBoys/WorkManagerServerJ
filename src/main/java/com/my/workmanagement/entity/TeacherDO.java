@@ -11,9 +11,9 @@ public class TeacherDO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int teacherNumber;
+    private int teacherId;
     @Column(nullable = false, unique = true)
-    private String teacherId;
+    private String teacherNumber;
     @Column(nullable = false)
     private String teacherName;
     @Column(nullable = false)
@@ -25,20 +25,20 @@ public class TeacherDO {
     @CreationTimestamp
     private Timestamp gmtModified;
 
-    public int getTeacherNumber() {
-        return teacherNumber;
-    }
-
-    public void setTeacherNumber(int teacherNumber) {
-        this.teacherNumber = teacherNumber;
-    }
-
-    public String getTeacherId() {
+    public int getTeacherId() {
         return teacherId;
     }
 
-    public void setTeacherId(String teacherId) {
-        this.teacherId = teacherId;
+    public void setTeacherId(int teacherNumber) {
+        this.teacherId = teacherNumber;
+    }
+
+    public String getTeacherNumber() {
+        return teacherNumber;
+    }
+
+    public void setTeacherNumber(String teacherId) {
+        this.teacherNumber = teacherId;
     }
 
     public String getTeacherName() {
@@ -84,8 +84,8 @@ public class TeacherDO {
     @Override
     public String toString() {
         return "TeacherDO{" +
-                "id=" + teacherNumber +
-                ", teacherId='" + teacherId + '\'' +
+                "id=" + teacherId +
+                ", teacherId='" + teacherNumber + '\'' +
                 ", teacherName='" + teacherName + '\'' +
                 ", secretKey='" + secretKey + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
@@ -98,7 +98,6 @@ public class TeacherDO {
     public static TeacherBuilder builder() {
         return new TeacherBuilder();
     }
-
 
     public static final class TeacherBuilder {
         private int teacherNumber;
@@ -153,8 +152,8 @@ public class TeacherDO {
 
         public TeacherDO build() {
             TeacherDO teacherDO = new TeacherDO();
-            teacherDO.setTeacherNumber(teacherNumber);
-            teacherDO.setTeacherId(teacherId);
+            teacherDO.setTeacherId(teacherNumber);
+            teacherDO.setTeacherNumber(teacherId);
             teacherDO.setTeacherName(teacherName);
             teacherDO.setSecretKey(secretKey);
             teacherDO.setPhoneNumber(phoneNumber);
