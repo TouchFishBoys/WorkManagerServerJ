@@ -1,12 +1,8 @@
 package com.my.workmanagement.payload.request;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.my.workmanagement.model.ERole;
-import com.my.workmanagement.model.User;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.Date;
 
 public class LoginRequest {
     @NotEmpty

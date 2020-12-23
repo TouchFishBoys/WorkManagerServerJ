@@ -24,11 +24,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private JwtUtils jwtUtils;
 
     public static final String HEADER_AUTH = "Authorization";
+    public static final String TOKEN_HEAD = "Bearer ";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader(HEADER_AUTH);
-        if (null != token) {
+        if (null != token && token.startsWith(TOKEN_HEAD)) {
             String username = JwtUtils.getUsername(token);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails user = this.userDetailsService.loadUserByUsername(username);

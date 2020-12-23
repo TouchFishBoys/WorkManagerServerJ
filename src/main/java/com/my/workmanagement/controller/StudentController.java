@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,7 @@ public class StudentController {
 
     @PostMapping(value = "/import", consumes = {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             "application/vnd.ms-excel"})
+    @PreAuthorize("hasRole(T(model.ERole).ROLE_TEACHER)")
     public ResponseEntity<?> importStudents(@RequestParam(value = "excel", required = true) MultipartFile excelFile) {
         boolean result = studentService.importStudents(excelFile);
         return ResponseEntity.ok(result);

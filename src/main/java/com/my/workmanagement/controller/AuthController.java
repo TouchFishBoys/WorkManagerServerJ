@@ -33,10 +33,10 @@ public class AuthController {
 
         AuthService authService;
         switch (request.getRole()) {
-            case TEACHER:
+            case ROLE_TEACHER:
                 authService = (AuthService) teacherService;
                 break;
-            case STUDENT:
+            case ROLE_STUDENT:
                 authService = (AuthService) studentService;
                 break;
             default:

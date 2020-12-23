@@ -6,8 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.my.workmanagement.config.WMAuthConfig;
-import com.my.workmanagement.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.my.workmanagement.model.WMUserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -32,12 +31,12 @@ public class JwtUtils {
         algorithm = Algorithm.HMAC256(wmAuthConfig.getJwtSecret());
     }
 
-    public static String generateToken(User user) {
+    public static String generateToken(WMUserDetails WMUserDetails) {
         Date date = new Date(System.currentTimeMillis() + wmAuthConfig.getJwtExpirationMs());
         return JWT.create()
                 .withIssuer(JWT_AUTH_ISSURER)
                 .withExpiresAt(date)
-                .withClaim(JWT_CLAIM_USERNAME, user.getUsername())
+                .withClaim(JWT_CLAIM_USERNAME, WMUserDetails.getUsername())
                 .withClaim(JWT_CLAIM_ROLE, "")
                 .sign(algorithm); // 加密确保不会被篡改
     }
