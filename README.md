@@ -1,6 +1,6 @@
 #ToDo-List
 ###登录
-- [] 学生/教师登录                              GET /login/:id/:secretkey
+- [] 学生/教师登录                              POST /auth/login { username:string, password:string, role: ERole }
 ----
 ###学生操作
 - [] 学生个人信息
@@ -27,7 +27,7 @@
 - [] 学生管理
   - [] 获取课程列表                              GET /teacher/:teacherId/course   ++        
   - [] 获取某门课学生信息                         GET /student-info/:courseId
-  - [] 导入某门课学生信息(EXCEL)                  POST /student-info/:courseId
+  - [] 导入某门课学生信息(EXCEL)                  POST /course/:courseId
 - [] 作业管理
   - [] 获取课程列表                              GET /teacher/:teacherId/course   ++
   - [] 平时作业
