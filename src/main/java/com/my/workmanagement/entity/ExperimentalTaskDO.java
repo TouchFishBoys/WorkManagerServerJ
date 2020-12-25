@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 public class ExperimentalTaskDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int expId;
     @Column(nullable = false)
     private int stuNumber;
     @Column(nullable = false)
@@ -25,12 +25,12 @@ public class ExperimentalTaskDO {
     @CreationTimestamp
     private Timestamp gmtModified;
 
-    public int getId() {
-        return id;
+    public int getExpId() {
+        return expId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setExpId(int expId) {
+        this.expId = expId;
     }
 
     public int getStuNumber() {
@@ -92,7 +92,7 @@ public class ExperimentalTaskDO {
     @Override
     public String toString() {
         return "ExperimentalTaskDO{" +
-                "id=" + id +
+                "expId=" + expId +
                 ", stuNumber=" + stuNumber +
                 ", topicId='" + topicId + '\'' +
                 ", fileName='" + fileName + '\'' +
@@ -107,8 +107,9 @@ public class ExperimentalTaskDO {
         return new ExperimentalTaskBuilder();
     }
 
+
     public static final class ExperimentalTaskBuilder {
-        private int id;
+        private int expId;
         private int stuNumber;
         private String topicId;
         private String fileName;
@@ -124,8 +125,8 @@ public class ExperimentalTaskDO {
             return new ExperimentalTaskBuilder();
         }
 
-        public ExperimentalTaskBuilder withId(int id) {
-            this.id = id;
+        public ExperimentalTaskBuilder withExpId(int expId) {
+            this.expId = expId;
             return this;
         }
 
@@ -166,7 +167,7 @@ public class ExperimentalTaskDO {
 
         public ExperimentalTaskDO build() {
             ExperimentalTaskDO experimentalTaskDO = new ExperimentalTaskDO();
-            experimentalTaskDO.setId(id);
+            experimentalTaskDO.setExpId(expId);
             experimentalTaskDO.setStuNumber(stuNumber);
             experimentalTaskDO.setTopicId(topicId);
             experimentalTaskDO.setFileName(fileName);

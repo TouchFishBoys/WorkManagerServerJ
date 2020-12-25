@@ -12,9 +12,9 @@ public class StudentDO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int stuNumber;
+    private int studentId;
     @Column(nullable = false, unique = true)
-    private String studentId;
+    private String studentNumber;
     @Column(nullable = false)
     private String studentName;
     @Column(nullable = false)
@@ -26,20 +26,20 @@ public class StudentDO {
     @CreationTimestamp
     private Timestamp gmtModified;
 
-    public int getStuNumber() {
-        return stuNumber;
-    }
-
-    public void setStuNumber(int stuNumber) {
-        this.stuNumber = stuNumber;
-    }
-
-    public String getStudentId() {
+    public int getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(String studentId) {
+    public void setStudentId(int studentId) {
         this.studentId = studentId;
+    }
+
+    public String getStudentNumber() {
+        return studentNumber;
+    }
+
+    public void setStudentNumber(String studentNumber) {
+        this.studentNumber = studentNumber;
     }
 
     public String getStudentName() {
@@ -85,8 +85,8 @@ public class StudentDO {
     @Override
     public String toString() {
         return "StudentDO{" +
-                "id=" + stuNumber +
-                ", studentId='" + studentId + '\'' +
+                "studentId=" + studentId +
+                ", studentNumber='" + studentNumber + '\'' +
                 ", studentName='" + studentName + '\'' +
                 ", secretKey='" + secretKey + '\'' +
                 ", className='" + className + '\'' +
@@ -101,8 +101,8 @@ public class StudentDO {
 
 
     public static final class StudentBuilder {
-        private int stuNumber;
-        private String studentId;
+        private int studentId;
+        private String studentNumber;
         private String studentName;
         private String secretKey;
         private String className;
@@ -116,13 +116,13 @@ public class StudentDO {
             return new StudentBuilder();
         }
 
-        public StudentBuilder withStuNumber(int stuNumber) {
-            this.stuNumber = stuNumber;
+        public StudentBuilder withStudentId(int studentId) {
+            this.studentId = studentId;
             return this;
         }
 
-        public StudentBuilder withStudentId(String studentId) {
-            this.studentId = studentId;
+        public StudentBuilder withStudentNumber(String studentNumber) {
+            this.studentNumber = studentNumber;
             return this;
         }
 
@@ -153,8 +153,8 @@ public class StudentDO {
 
         public StudentDO build() {
             StudentDO studentDO = new StudentDO();
-            studentDO.setStuNumber(stuNumber);
             studentDO.setStudentId(studentId);
+            studentDO.setStudentNumber(studentNumber);
             studentDO.setStudentName(studentName);
             studentDO.setSecretKey(secretKey);
             studentDO.setClassName(className);

@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 public class FinalTaskDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private String finalId;
     @Column(nullable = false, unique = true)
     private String taskName;
     private String description;
@@ -24,12 +24,12 @@ public class FinalTaskDO {
     @CreationTimestamp
     private Timestamp gmtModified;
 
-    public String getId() {
-        return id;
+    public String getFinalId() {
+        return finalId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setFinalId(String finalId) {
+        this.finalId = finalId;
     }
 
     public String getTaskName() {
@@ -91,7 +91,7 @@ public class FinalTaskDO {
     @Override
     public String toString() {
         return "FinalTaskDO{" +
-                "id='" + id + '\'' +
+                "finalId='" + finalId + '\'' +
                 ", taskName='" + taskName + '\'' +
                 ", description='" + description + '\'' +
                 ", groupId=" + groupId +
@@ -106,8 +106,9 @@ public class FinalTaskDO {
         return new FinalTaskBuilder();
     }
 
+
     public static final class FinalTaskBuilder {
-        private String id;
+        private String finalId;
         private String taskName;
         private String description;
         private int groupId;
@@ -123,8 +124,8 @@ public class FinalTaskDO {
             return new FinalTaskBuilder();
         }
 
-        public FinalTaskBuilder withId(String id) {
-            this.id = id;
+        public FinalTaskBuilder withFinalId(String finalId) {
+            this.finalId = finalId;
             return this;
         }
 
@@ -165,7 +166,7 @@ public class FinalTaskDO {
 
         public FinalTaskDO build() {
             FinalTaskDO finalTaskDO = new FinalTaskDO();
-            finalTaskDO.setId(id);
+            finalTaskDO.setFinalId(finalId);
             finalTaskDO.setTaskName(taskName);
             finalTaskDO.setDescription(description);
             finalTaskDO.setGroupId(groupId);

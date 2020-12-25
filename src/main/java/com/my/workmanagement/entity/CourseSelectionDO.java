@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 public class CourseSelectionDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int csId;
     @Column(nullable = false)
     private int stuNumber;
     @Column(nullable = false)
@@ -18,17 +18,18 @@ public class CourseSelectionDO {
     @Column(nullable = false)
     private int groupId;
     private int qaScore;
+    private int overallScore;
     @CreationTimestamp
     private Timestamp gmtCreate;
     @CreationTimestamp
     private Timestamp gmtModified;
 
-    public int getId() {
-        return id;
+    public int getCsId() {
+        return csId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCsId(int csId) {
+        this.csId = csId;
     }
 
     public int getStuNumber() {
@@ -63,6 +64,14 @@ public class CourseSelectionDO {
         this.qaScore = qaScore;
     }
 
+    public int getOverallScore() {
+        return overallScore;
+    }
+
+    public void setOverallScore(int overallScore) {
+        this.overallScore = overallScore;
+    }
+
     public Timestamp getGmtCreate() {
         return gmtCreate;
     }
@@ -82,11 +91,12 @@ public class CourseSelectionDO {
     @Override
     public String toString() {
         return "CourseSelectionDO{" +
-                "id=" + id +
+                "csId=" + csId +
                 ", stuNumber=" + stuNumber +
                 ", courseId=" + courseId +
                 ", groupId=" + groupId +
                 ", qaScore=" + qaScore +
+                ", overallScore=" + overallScore +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';
@@ -96,12 +106,14 @@ public class CourseSelectionDO {
         return new CourseSelectionBuilder();
     }
 
+
     public static final class CourseSelectionBuilder {
-        private int id;
+        private int csId;
         private int stuNumber;
         private int courseId;
         private int groupId;
         private int qaScore;
+        private int overallScore;
         private Timestamp gmtCreate;
         private Timestamp gmtModified;
 
@@ -112,8 +124,8 @@ public class CourseSelectionDO {
             return new CourseSelectionBuilder();
         }
 
-        public CourseSelectionBuilder withId(int id) {
-            this.id = id;
+        public CourseSelectionBuilder withCsId(int csId) {
+            this.csId = csId;
             return this;
         }
 
@@ -137,6 +149,11 @@ public class CourseSelectionDO {
             return this;
         }
 
+        public CourseSelectionBuilder withOverallScore(int overallScore) {
+            this.overallScore = overallScore;
+            return this;
+        }
+
         public CourseSelectionBuilder withGmtCreate(Timestamp gmtCreate) {
             this.gmtCreate = gmtCreate;
             return this;
@@ -149,11 +166,12 @@ public class CourseSelectionDO {
 
         public CourseSelectionDO build() {
             CourseSelectionDO courseSelectionDO = new CourseSelectionDO();
-            courseSelectionDO.setId(id);
+            courseSelectionDO.setCsId(csId);
             courseSelectionDO.setStuNumber(stuNumber);
             courseSelectionDO.setCourseId(courseId);
             courseSelectionDO.setGroupId(groupId);
             courseSelectionDO.setQaScore(qaScore);
+            courseSelectionDO.setOverallScore(overallScore);
             courseSelectionDO.setGmtCreate(gmtCreate);
             courseSelectionDO.setGmtModified(gmtModified);
             return courseSelectionDO;
