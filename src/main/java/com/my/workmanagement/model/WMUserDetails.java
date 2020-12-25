@@ -5,32 +5,38 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-public class User implements UserDetails {
-    private String username;
-    private String password;
-    private ERole role;
+public class WMUserDetails implements UserDetails {
+    private final String username;
+    private final String password;
+    private final ERole role;
+    private final Collection<? extends GrantedAuthority> authorities;
 
-    public User(String username, String password, ERole role) {
+    public WMUserDetails(String username, String password, ERole role, Collection<? extends GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.authorities = authorities;
     }
 
+    // 账号未过期
     @Override
     public boolean isAccountNonExpired() {
         return false;
     }
 
+    // 账号未锁定
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
+    // 凭证未过期
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
+    // 账号已启用
     @Override
     public boolean isEnabled() {
         return true;
@@ -38,7 +44,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     public String getUsername() {
@@ -49,19 +55,7 @@ public class User implements UserDetails {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public ERole getRole() {
         return role;
-    }
-
-    public void setRole(ERole role) {
-        this.role = role;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 }
