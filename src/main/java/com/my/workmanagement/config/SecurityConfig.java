@@ -3,6 +3,8 @@ package com.my.workmanagement.config;
 import com.my.workmanagement.filter.JwtTokenFilter;
 import com.my.workmanagement.util.authprovider.StudentAuthenticationProvider;
 import com.my.workmanagement.util.authprovider.TeacherAuthenticationProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +29,7 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
     private final UserDetailsService teacherDetailsService;
     private final UserDetailsService studentDetailsService;
 
@@ -90,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // OPTIONS 请求全部放行
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 登录接口放行
-                .antMatchers("/auth/login").permitAll()
+                .antMatchers("/auth/**").permitAll()
                 // 其它接口进行验证
                 .anyRequest().authenticated();
         // 添加 Filter
