@@ -4,6 +4,8 @@ import com.my.workmanagement.entity.StudentDO;
 import com.my.workmanagement.model.ERole;
 import com.my.workmanagement.model.WMUserDetails;
 import com.my.workmanagement.repository.StudentRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
  */
 @Service("studentDetailsService")
 public class StudentDetailsServiceImpl implements UserDetailsService {
+    Logger logger = LoggerFactory.getLogger(StudentDetailsServiceImpl.class);
     StudentRepository studentRepository;
 
     @Autowired
