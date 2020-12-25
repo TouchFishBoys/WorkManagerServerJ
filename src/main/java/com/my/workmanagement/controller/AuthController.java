@@ -9,13 +9,13 @@ import com.my.workmanagement.service.StudentService;
 import com.my.workmanagement.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RestController("/auth")
+@RestController
+@RequestMapping("/auth")
+@CrossOrigin
 public class AuthController {
     private final StudentService studentService;
     private final TeacherService teacherService;
@@ -30,7 +30,6 @@ public class AuthController {
     public ResponseEntity<PackedResponse<JwtResponse>> handleLogin(
             @RequestBody @Valid LoginRequest request
     ) throws UndefinedUserRoleException {
-
         AuthService authService;
         switch (request.getRole()) {
             case ROLE_TEACHER:
@@ -46,6 +45,11 @@ public class AuthController {
         JwtResponse response = JwtResponse.JwtResponseBuilder.aJwtResponse()
                 .withToken(generatedToken)
                 .build();
-        return ResponseEntity.ok(new PackedResponse<>(response));
+        return ResponseEntity.ok(PackedResponse.success(response, ""));
+    }
+
+    @RequestMapping("/hello")
+    public ResponseEntity<PackedResponse<String>> hello() {
+        return ResponseEntity.ok(PackedResponse.success("hello","hello"));
     }
 }
