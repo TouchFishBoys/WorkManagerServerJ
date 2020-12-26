@@ -10,14 +10,14 @@ import java.sql.Timestamp;
 public class NormalWorkDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int normalId;
+    private int nworkId;
     @Column(nullable = false)
-    private int studentId;
+    private int stuId;
     @Column(nullable = false)
     private String topicId;
     @Column(nullable = false, unique = true)
-    private String fileName;
-    private int normalScore;
+    private String nworkName;
+    private int nworkScore;
     @CreationTimestamp
     private Timestamp timeUpload;
     @CreationTimestamp
@@ -25,20 +25,20 @@ public class NormalWorkDO {
     @CreationTimestamp
     private Timestamp gmtModified;
 
-    public int getNormalId() {
-        return normalId;
+    public int getNworkId() {
+        return nworkId;
     }
 
-    public void setNormalId(int normalId) {
-        this.normalId = normalId;
+    public void setNworkId(int nworkId) {
+        this.nworkId = nworkId;
     }
 
-    public int getStudentId() {
-        return studentId;
+    public int getStuId() {
+        return stuId;
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
+    public void setStuId(int stuId) {
+        this.stuId = stuId;
     }
 
     public String getTopicId() {
@@ -49,20 +49,20 @@ public class NormalWorkDO {
         this.topicId = topicId;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getNworkName() {
+        return nworkName;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setNworkName(String nworkName) {
+        this.nworkName = nworkName;
     }
 
-    public int getNormalScore() {
-        return normalScore;
+    public int getNworkScore() {
+        return nworkScore;
     }
 
-    public void setNormalScore(int normalScore) {
-        this.normalScore = normalScore;
+    public void setNworkScore(int nworkScore) {
+        this.nworkScore = nworkScore;
     }
 
     public Timestamp getTimeUpload() {
@@ -92,11 +92,11 @@ public class NormalWorkDO {
     @Override
     public String toString() {
         return "NormalWorkDO{" +
-                "normalId=" + normalId +
-                ", studentId=" + studentId +
+                "nworkId=" + nworkId +
+                ", stuId=" + stuId +
                 ", topicId='" + topicId + '\'' +
-                ", fileName='" + fileName + '\'' +
-                ", normalScore=" + normalScore +
+                ", nworkName='" + nworkName + '\'' +
+                ", nworkScore=" + nworkScore +
                 ", timeUpload=" + timeUpload +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
@@ -107,12 +107,13 @@ public class NormalWorkDO {
         return new NormalWorkBuilder();
     }
 
+
     public static final class NormalWorkBuilder {
-        private int normalId;
-        private int studentId;
+        private int nworkId;
+        private int stuId;
         private String topicId;
-        private String fileName;
-        private int normalScore;
+        private String nworkName;
+        private int nworkScore;
         private Timestamp timeUpload;
         private Timestamp gmtCreate;
         private Timestamp gmtModified;
@@ -124,13 +125,13 @@ public class NormalWorkDO {
             return new NormalWorkBuilder();
         }
 
-        public NormalWorkBuilder withNormalId(int normalId) {
-            this.normalId = normalId;
+        public NormalWorkBuilder withNworkId(int nworkId) {
+            this.nworkId = nworkId;
             return this;
         }
 
-        public NormalWorkBuilder withStudentId(int studentId) {
-            this.studentId = studentId;
+        public NormalWorkBuilder withStuId(int stuId) {
+            this.stuId = stuId;
             return this;
         }
 
@@ -139,13 +140,13 @@ public class NormalWorkDO {
             return this;
         }
 
-        public NormalWorkBuilder withFileName(String fileName) {
-            this.fileName = fileName;
+        public NormalWorkBuilder withNworkName(String nworkName) {
+            this.nworkName = nworkName;
             return this;
         }
 
-        public NormalWorkBuilder withNormalScore(int normalScore) {
-            this.normalScore = normalScore;
+        public NormalWorkBuilder withNworkScore(int nworkScore) {
+            this.nworkScore = nworkScore;
             return this;
         }
 
@@ -166,11 +167,11 @@ public class NormalWorkDO {
 
         public NormalWorkDO build() {
             NormalWorkDO normalWorkDO = new NormalWorkDO();
-            normalWorkDO.setNormalId(normalId);
-            normalWorkDO.setStudentId(studentId);
+            normalWorkDO.setNworkId(nworkId);
+            normalWorkDO.setStuId(stuId);
             normalWorkDO.setTopicId(topicId);
-            normalWorkDO.setFileName(fileName);
-            normalWorkDO.setNormalScore(normalScore);
+            normalWorkDO.setNworkName(nworkName);
+            normalWorkDO.setNworkScore(nworkScore);
             normalWorkDO.setTimeUpload(timeUpload);
             normalWorkDO.setGmtCreate(gmtCreate);
             normalWorkDO.setGmtModified(gmtModified);

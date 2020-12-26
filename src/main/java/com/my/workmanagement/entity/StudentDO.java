@@ -12,58 +12,58 @@ public class StudentDO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int studentId;
+    private int stuId;
     @Column(nullable = false, unique = true)
-    private String studentNumber;
+    private String stuNum;
     @Column(nullable = false)
-    private String studentName;
+    private String stuName;
     @Column(nullable = false)
-    private String secretKey;
+    private String stuPassword;
     @Column(nullable = false)
-    private String className;
+    private String stuClass;
     @CreationTimestamp
     private Timestamp gmtCreate;
     @CreationTimestamp
     private Timestamp gmtModified;
 
-    public int getStudentId() {
-        return studentId;
+    public int getStuId() {
+        return stuId;
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
+    public void setStuId(int stuId) {
+        this.stuId = stuId;
     }
 
-    public String getStudentNumber() {
-        return studentNumber;
+    public String getStuNum() {
+        return stuNum;
     }
 
-    public void setStudentNumber(String studentNumber) {
-        this.studentNumber = studentNumber;
+    public void setStuNum(String stuNum) {
+        this.stuNum = stuNum;
     }
 
-    public String getStudentName() {
-        return studentName;
+    public String getStuName() {
+        return stuName;
     }
 
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
+    public void setStuName(String stuName) {
+        this.stuName = stuName;
     }
 
-    public String getSecretKey() {
-        return secretKey;
+    public String getStuPassword() {
+        return stuPassword;
     }
 
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
+    public void setStuPassword(String stuPassword) {
+        this.stuPassword = stuPassword;
     }
 
-    public String getClassName() {
-        return className;
+    public String getStuClass() {
+        return stuClass;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setStuClass(String stuClass) {
+        this.stuClass = stuClass;
     }
 
     public Timestamp getGmtCreate() {
@@ -85,11 +85,11 @@ public class StudentDO {
     @Override
     public String toString() {
         return "StudentDO{" +
-                "studentId=" + studentId +
-                ", studentNumber='" + studentNumber + '\'' +
-                ", studentName='" + studentName + '\'' +
-                ", secretKey='" + secretKey + '\'' +
-                ", className='" + className + '\'' +
+                "stuId=" + stuId +
+                ", stuNum='" + stuNum + '\'' +
+                ", stuName='" + stuName + '\'' +
+                ", stuPassword='" + stuPassword + '\'' +
+                ", stuClass='" + stuClass + '\'' +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';
@@ -101,11 +101,11 @@ public class StudentDO {
 
 
     public static final class StudentBuilder {
-        private int studentId;
-        private String studentNumber;
-        private String studentName;
-        private String secretKey;
-        private String className;
+        private int stuId;
+        private String stuNum;
+        private String stuName;
+        private String stuPassword;
+        private String stuClass;
         private Timestamp gmtCreate;
         private Timestamp gmtModified;
 
@@ -116,28 +116,28 @@ public class StudentDO {
             return new StudentBuilder();
         }
 
-        public StudentBuilder withStudentId(int studentId) {
-            this.studentId = studentId;
+        public StudentBuilder withStuId(int stuId) {
+            this.stuId = stuId;
             return this;
         }
 
-        public StudentBuilder withStudentNumber(String studentNumber) {
-            this.studentNumber = studentNumber;
+        public StudentBuilder withStuNum(String stuNum) {
+            this.stuNum = stuNum;
             return this;
         }
 
-        public StudentBuilder withStudentName(String studentName) {
-            this.studentName = studentName;
+        public StudentBuilder withStuName(String stuName) {
+            this.stuName = stuName;
             return this;
         }
 
-        public StudentBuilder withSecretKey(String secretKey) {
-            this.secretKey = secretKey;
+        public StudentBuilder withStuPassword(String stuPassword) {
+            this.stuPassword = stuPassword;
             return this;
         }
 
-        public StudentBuilder withClassName(String className) {
-            this.className = className;
+        public StudentBuilder withStuClass(String stuClass) {
+            this.stuClass = stuClass;
             return this;
         }
 
@@ -153,11 +153,11 @@ public class StudentDO {
 
         public StudentDO build() {
             StudentDO studentDO = new StudentDO();
-            studentDO.setStudentId(studentId);
-            studentDO.setStudentNumber(studentNumber);
-            studentDO.setStudentName(studentName);
-            studentDO.setSecretKey(secretKey);
-            studentDO.setClassName(className);
+            studentDO.setStuId(stuId);
+            studentDO.setStuNum(stuNum);
+            studentDO.setStuName(stuName);
+            studentDO.setStuPassword(stuPassword);
+            studentDO.setStuClass(stuClass);
             studentDO.setGmtCreate(gmtCreate);
             studentDO.setGmtModified(gmtModified);
             return studentDO;

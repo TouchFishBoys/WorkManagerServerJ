@@ -13,13 +13,13 @@ public class TeacherDO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int teacherId;
     @Column(nullable = false, unique = true)
-    private String teacherNumber;
+    private String teacherNum;
     @Column(nullable = false)
     private String teacherName;
     @Column(nullable = false)
-    private String secretKey;
+    private String teacherPassword;
     @Column(unique = true)
-    private String phoneNumber;
+    private String teacherTell;
     @CreationTimestamp
     private Timestamp gmtCreate;
     @CreationTimestamp
@@ -29,16 +29,16 @@ public class TeacherDO {
         return teacherId;
     }
 
-    public void setTeacherId(int teacherNumber) {
-        this.teacherId = teacherNumber;
+    public void setTeacherId(int teacherId) {
+        this.teacherId = teacherId;
     }
 
-    public String getTeacherNumber() {
-        return teacherNumber;
+    public String getTeacherNum() {
+        return teacherNum;
     }
 
-    public void setTeacherNumber(String teacherId) {
-        this.teacherNumber = teacherId;
+    public void setTeacherNum(String teacherNum) {
+        this.teacherNum = teacherNum;
     }
 
     public String getTeacherName() {
@@ -49,20 +49,20 @@ public class TeacherDO {
         this.teacherName = teacherName;
     }
 
-    public String getSecretKey() {
-        return secretKey;
+    public String getTeacherPassword() {
+        return teacherPassword;
     }
 
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
+    public void setTeacherPassword(String teacherPassword) {
+        this.teacherPassword = teacherPassword;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getTeacherTell() {
+        return teacherTell;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setTeacherTell(String teacherTell) {
+        this.teacherTell = teacherTell;
     }
 
     public Timestamp getGmtCreate() {
@@ -84,27 +84,27 @@ public class TeacherDO {
     @Override
     public String toString() {
         return "TeacherDO{" +
-                "id=" + teacherId +
-                ", teacherId='" + teacherNumber + '\'' +
+                "teacherId=" + teacherId +
+                ", teacherNum='" + teacherNum + '\'' +
                 ", teacherName='" + teacherName + '\'' +
-                ", secretKey='" + secretKey + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
+                ", teacherPassword='" + teacherPassword + '\'' +
+                ", teacherTell='" + teacherTell + '\'' +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';
     }
 
-
     public static TeacherBuilder builder() {
         return new TeacherBuilder();
     }
 
+
     public static final class TeacherBuilder {
-        private int teacherNumber;
-        private String teacherId;
+        private int teacherId;
+        private String teacherNum;
         private String teacherName;
-        private String secretKey;
-        private String phoneNumber;
+        private String teacherPassword;
+        private String teacherTell;
         private Timestamp gmtCreate;
         private Timestamp gmtModified;
 
@@ -115,13 +115,13 @@ public class TeacherDO {
             return new TeacherBuilder();
         }
 
-        public TeacherBuilder withTeacherNumber(int teacherNumber) {
-            this.teacherNumber = teacherNumber;
+        public TeacherBuilder withTeacherId(int teacherId) {
+            this.teacherId = teacherId;
             return this;
         }
 
-        public TeacherBuilder withTeacherId(String teacherId) {
-            this.teacherId = teacherId;
+        public TeacherBuilder withTeacherNum(String teacherNum) {
+            this.teacherNum = teacherNum;
             return this;
         }
 
@@ -130,13 +130,13 @@ public class TeacherDO {
             return this;
         }
 
-        public TeacherBuilder withSecretKey(String secretKey) {
-            this.secretKey = secretKey;
+        public TeacherBuilder withTeacherPassword(String teacherPassword) {
+            this.teacherPassword = teacherPassword;
             return this;
         }
 
-        public TeacherBuilder withPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
+        public TeacherBuilder withTeacherTell(String teacherTell) {
+            this.teacherTell = teacherTell;
             return this;
         }
 
@@ -152,11 +152,11 @@ public class TeacherDO {
 
         public TeacherDO build() {
             TeacherDO teacherDO = new TeacherDO();
-            teacherDO.setTeacherId(teacherNumber);
-            teacherDO.setTeacherNumber(teacherId);
+            teacherDO.setTeacherId(teacherId);
+            teacherDO.setTeacherNum(teacherNum);
             teacherDO.setTeacherName(teacherName);
-            teacherDO.setSecretKey(secretKey);
-            teacherDO.setPhoneNumber(phoneNumber);
+            teacherDO.setTeacherPassword(teacherPassword);
+            teacherDO.setTeacherTell(teacherTell);
             teacherDO.setGmtCreate(gmtCreate);
             teacherDO.setGmtModified(gmtModified);
             return teacherDO;

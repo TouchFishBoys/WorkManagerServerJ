@@ -10,13 +10,13 @@ import java.sql.Timestamp;
 public class FinalWorkDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int finalId;
+    private int fworkId;
     @Column(nullable = false, unique = true)
-    private String workName;
-    private String finalDescription;
+    private String fworkName;
+    private String fworkDescription;
     @Column(unique = true)
     private int groupId;
-    private int finalScore;
+    private int fworkScore;
     @CreationTimestamp
     private Timestamp timeUpload;
     @CreationTimestamp
@@ -24,28 +24,28 @@ public class FinalWorkDO {
     @CreationTimestamp
     private Timestamp gmtModified;
 
-    public int getFinalId() {
-        return finalId;
+    public int getFworkId() {
+        return fworkId;
     }
 
-    public void setFinalId(int finalId) {
-        this.finalId = finalId;
+    public void setFworkId(int fworkId) {
+        this.fworkId = fworkId;
     }
 
-    public String getWorkName() {
-        return workName;
+    public String getFworkName() {
+        return fworkName;
     }
 
-    public void setWorkName(String workName) {
-        this.workName = workName;
+    public void setFworkName(String fworkName) {
+        this.fworkName = fworkName;
     }
 
-    public String getFinalDescription() {
-        return finalDescription;
+    public String getFworkDescription() {
+        return fworkDescription;
     }
 
-    public void setFinalDescription(String finalDescription) {
-        this.finalDescription = finalDescription;
+    public void setFworkDescription(String fworkDescription) {
+        this.fworkDescription = fworkDescription;
     }
 
     public int getGroupId() {
@@ -56,12 +56,12 @@ public class FinalWorkDO {
         this.groupId = groupId;
     }
 
-    public int getFinalScore() {
-        return finalScore;
+    public int getFworkScore() {
+        return fworkScore;
     }
 
-    public void setFinalScore(int finalScore) {
-        this.finalScore = finalScore;
+    public void setFworkScore(int fworkScore) {
+        this.fworkScore = fworkScore;
     }
 
     public Timestamp getTimeUpload() {
@@ -91,11 +91,11 @@ public class FinalWorkDO {
     @Override
     public String toString() {
         return "FinalWorkDO{" +
-                "finalId=" + finalId +
-                ", workName='" + workName + '\'' +
-                ", finalDescription='" + finalDescription + '\'' +
+                "fworkId=" + fworkId +
+                ", fworkName='" + fworkName + '\'' +
+                ", fworkDescription='" + fworkDescription + '\'' +
                 ", groupId=" + groupId +
-                ", finalScore=" + finalScore +
+                ", fworkScore=" + fworkScore +
                 ", timeUpload=" + timeUpload +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
@@ -108,11 +108,11 @@ public class FinalWorkDO {
 
 
     public static final class FinalWorkBuilder {
-        private int finalId;
-        private String workName;
-        private String finalDescription;
+        private int fworkId;
+        private String fworkName;
+        private String fworkDescription;
         private int groupId;
-        private int finalScore;
+        private int fworkScore;
         private Timestamp timeUpload;
         private Timestamp gmtCreate;
         private Timestamp gmtModified;
@@ -124,18 +124,18 @@ public class FinalWorkDO {
             return new FinalWorkBuilder();
         }
 
-        public FinalWorkBuilder withFinalId(int finalId) {
-            this.finalId = finalId;
+        public FinalWorkBuilder withFworkId(int fworkId) {
+            this.fworkId = fworkId;
             return this;
         }
 
-        public FinalWorkBuilder withWorkName(String workName) {
-            this.workName = workName;
+        public FinalWorkBuilder withFworkName(String fworkName) {
+            this.fworkName = fworkName;
             return this;
         }
 
-        public FinalWorkBuilder withFinalDescription(String finalDescription) {
-            this.finalDescription = finalDescription;
+        public FinalWorkBuilder withFworkDescription(String fworkDescription) {
+            this.fworkDescription = fworkDescription;
             return this;
         }
 
@@ -144,8 +144,8 @@ public class FinalWorkDO {
             return this;
         }
 
-        public FinalWorkBuilder withFinalScore(int finalScore) {
-            this.finalScore = finalScore;
+        public FinalWorkBuilder withFworkScore(int fworkScore) {
+            this.fworkScore = fworkScore;
             return this;
         }
 
@@ -166,11 +166,11 @@ public class FinalWorkDO {
 
         public FinalWorkDO build() {
             FinalWorkDO finalWorkDO = new FinalWorkDO();
-            finalWorkDO.setFinalId(finalId);
-            finalWorkDO.setWorkName(workName);
-            finalWorkDO.setFinalDescription(finalDescription);
+            finalWorkDO.setFworkId(fworkId);
+            finalWorkDO.setFworkName(fworkName);
+            finalWorkDO.setFworkDescription(fworkDescription);
             finalWorkDO.setGroupId(groupId);
-            finalWorkDO.setFinalScore(finalScore);
+            finalWorkDO.setFworkScore(fworkScore);
             finalWorkDO.setTimeUpload(timeUpload);
             finalWorkDO.setGmtCreate(gmtCreate);
             finalWorkDO.setGmtModified(gmtModified);
