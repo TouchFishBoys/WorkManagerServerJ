@@ -6,18 +6,18 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "experiment_task")
-public class ExperimentalTaskDO {
+@Table(name = "normal_work")
+public class NormalWorkDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int expId;
+    private int normalId;
     @Column(nullable = false)
-    private int stuNumber;
+    private int studentId;
     @Column(nullable = false)
     private String topicId;
     @Column(nullable = false, unique = true)
     private String fileName;
-    private int expScore;
+    private int normalScore;
     @CreationTimestamp
     private Timestamp timeUpload;
     @CreationTimestamp
@@ -25,20 +25,20 @@ public class ExperimentalTaskDO {
     @CreationTimestamp
     private Timestamp gmtModified;
 
-    public int getExpId() {
-        return expId;
+    public int getNormalId() {
+        return normalId;
     }
 
-    public void setExpId(int expId) {
-        this.expId = expId;
+    public void setNormalId(int normalId) {
+        this.normalId = normalId;
     }
 
-    public int getStuNumber() {
-        return stuNumber;
+    public int getStudentId() {
+        return studentId;
     }
 
-    public void setStuNumber(int stuNumber) {
-        this.stuNumber = stuNumber;
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
     }
 
     public String getTopicId() {
@@ -57,12 +57,12 @@ public class ExperimentalTaskDO {
         this.fileName = fileName;
     }
 
-    public int getExpScore() {
-        return expScore;
+    public int getNormalScore() {
+        return normalScore;
     }
 
-    public void setExpScore(int expScore) {
-        this.expScore = expScore;
+    public void setNormalScore(int normalScore) {
+        this.normalScore = normalScore;
     }
 
     public Timestamp getTimeUpload() {
@@ -91,91 +91,90 @@ public class ExperimentalTaskDO {
 
     @Override
     public String toString() {
-        return "ExperimentalTaskDO{" +
-                "expId=" + expId +
-                ", stuNumber=" + stuNumber +
+        return "NormalWorkDO{" +
+                "normalId=" + normalId +
+                ", studentId=" + studentId +
                 ", topicId='" + topicId + '\'' +
                 ", fileName='" + fileName + '\'' +
-                ", expScore=" + expScore +
+                ", normalScore=" + normalScore +
                 ", timeUpload=" + timeUpload +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';
     }
 
-    public static ExperimentalTaskBuilder builder() {
-        return new ExperimentalTaskBuilder();
+    public static NormalWorkBuilder builder() {
+        return new NormalWorkBuilder();
     }
 
-
-    public static final class ExperimentalTaskBuilder {
-        private int expId;
-        private int stuNumber;
+    public static final class NormalWorkBuilder {
+        private int normalId;
+        private int studentId;
         private String topicId;
         private String fileName;
-        private int expScore;
+        private int normalScore;
         private Timestamp timeUpload;
         private Timestamp gmtCreate;
         private Timestamp gmtModified;
 
-        private ExperimentalTaskBuilder() {
+        private NormalWorkBuilder() {
         }
 
-        public static ExperimentalTaskBuilder anExperimentalTaskDO() {
-            return new ExperimentalTaskBuilder();
+        public static NormalWorkBuilder aNormalWorkDO() {
+            return new NormalWorkBuilder();
         }
 
-        public ExperimentalTaskBuilder withExpId(int expId) {
-            this.expId = expId;
+        public NormalWorkBuilder withNormalId(int normalId) {
+            this.normalId = normalId;
             return this;
         }
 
-        public ExperimentalTaskBuilder withStuNumber(int stuNumber) {
-            this.stuNumber = stuNumber;
+        public NormalWorkBuilder withStudentId(int studentId) {
+            this.studentId = studentId;
             return this;
         }
 
-        public ExperimentalTaskBuilder withTopicId(String topicId) {
+        public NormalWorkBuilder withTopicId(String topicId) {
             this.topicId = topicId;
             return this;
         }
 
-        public ExperimentalTaskBuilder withFileName(String fileName) {
+        public NormalWorkBuilder withFileName(String fileName) {
             this.fileName = fileName;
             return this;
         }
 
-        public ExperimentalTaskBuilder withExpScore(int expScore) {
-            this.expScore = expScore;
+        public NormalWorkBuilder withNormalScore(int normalScore) {
+            this.normalScore = normalScore;
             return this;
         }
 
-        public ExperimentalTaskBuilder withTimeUpload(Timestamp timeUpload) {
+        public NormalWorkBuilder withTimeUpload(Timestamp timeUpload) {
             this.timeUpload = timeUpload;
             return this;
         }
 
-        public ExperimentalTaskBuilder withGmtCreate(Timestamp gmtCreate) {
+        public NormalWorkBuilder withGmtCreate(Timestamp gmtCreate) {
             this.gmtCreate = gmtCreate;
             return this;
         }
 
-        public ExperimentalTaskBuilder withGmtModified(Timestamp gmtModified) {
+        public NormalWorkBuilder withGmtModified(Timestamp gmtModified) {
             this.gmtModified = gmtModified;
             return this;
         }
 
-        public ExperimentalTaskDO build() {
-            ExperimentalTaskDO experimentalTaskDO = new ExperimentalTaskDO();
-            experimentalTaskDO.setExpId(expId);
-            experimentalTaskDO.setStuNumber(stuNumber);
-            experimentalTaskDO.setTopicId(topicId);
-            experimentalTaskDO.setFileName(fileName);
-            experimentalTaskDO.setExpScore(expScore);
-            experimentalTaskDO.setTimeUpload(timeUpload);
-            experimentalTaskDO.setGmtCreate(gmtCreate);
-            experimentalTaskDO.setGmtModified(gmtModified);
-            return experimentalTaskDO;
+        public NormalWorkDO build() {
+            NormalWorkDO normalWorkDO = new NormalWorkDO();
+            normalWorkDO.setNormalId(normalId);
+            normalWorkDO.setStudentId(studentId);
+            normalWorkDO.setTopicId(topicId);
+            normalWorkDO.setFileName(fileName);
+            normalWorkDO.setNormalScore(normalScore);
+            normalWorkDO.setTimeUpload(timeUpload);
+            normalWorkDO.setGmtCreate(gmtCreate);
+            normalWorkDO.setGmtModified(gmtModified);
+            return normalWorkDO;
         }
     }
 }
