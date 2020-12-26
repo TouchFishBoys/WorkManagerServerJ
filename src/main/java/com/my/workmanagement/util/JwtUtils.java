@@ -46,9 +46,12 @@ public class JwtUtils {
         return JWT.create()
                 .withIssuer(JWT_AUTH_ISSURER)
                 .withExpiresAt(date)
+                // 保存 Username
                 .withClaim(JWT_CLAIM_USERNAME, WMUserDetails.getUsername())
+                // 保存 Role
                 .withClaim(JWT_CLAIM_ROLE, WMUserDetails.getRole().name())
-                .sign(algorithm); // 加密确保不会被篡改
+                // 加密 Sign
+                .sign(algorithm);
     }
 
     /**
@@ -63,7 +66,7 @@ public class JwtUtils {
                     .withIssuer(JWT_AUTH_ISSURER)
                     .build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(token);
-            return jwt.getClaim(JWT_CLAIM_USERNAME).asString().equals(JWT_CLAIM_USERNAME);
+            return true;
         } catch (JWTVerificationException exception) {
             //Invalid signature/claims
             return false;

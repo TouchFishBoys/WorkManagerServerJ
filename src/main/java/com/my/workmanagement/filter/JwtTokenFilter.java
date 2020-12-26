@@ -1,6 +1,8 @@
 package com.my.workmanagement.filter;
 
 import com.my.workmanagement.util.JwtUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +24,7 @@ import java.io.IOException;
  */
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
+    private static final Logger logger = LoggerFactory.getLogger(JwtTokenFilter.class);
     @Autowired
     @Qualifier("studentDetailsService")
     private UserDetailsService studentDetailsService;
@@ -36,17 +39,20 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         String token = request.getHeader(HEADER_AUTH);
+        logger.debug("Receive token: {}", token);
 
         if (null != token && token.startsWith(TOKEN_HEAD)) {
             token = token.substring(TOKEN_HEAD.length());
             // 从 Token 中获取用户名（工号或学号）
             String username = JwtUtils.getUsername(token);
+            logger.debug("Username: {}", username);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                logger.debug("Start authentication");
                 UserDetails userDetails = null;
                 if (JwtUtils.validateToken(token)) {
+                    logger.debug(JwtUtils.getRole(token).name());
                     switch (JwtUtils.getRole(token)) {
                         case ROLE_STUDENT:
                             // 学生
@@ -57,16 +63,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                             userDetails = teacherDetailsService.loadUserByUsername(JwtUtils.getUsername(token));
                             break;
                     }
-                    //SecurityContextHolder.getContext().setAuthentication(authentication);
-                    if (JwtUtils.validateToken(token)) {
-                        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
-                        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    }
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             }
         }

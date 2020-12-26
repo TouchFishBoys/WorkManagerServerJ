@@ -21,7 +21,7 @@ public class WMUserDetails implements UserDetails {
     // 账号未过期
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     // 账号未锁定

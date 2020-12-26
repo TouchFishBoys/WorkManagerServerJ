@@ -4,6 +4,8 @@ import com.my.workmanagement.entity.TeacherDO;
 import com.my.workmanagement.model.ERole;
 import com.my.workmanagement.model.WMUserDetails;
 import com.my.workmanagement.repository.TeacherRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service("teacherDetailsService")
 public class TeacherDetailsServiceImpl implements UserDetailsService {
+    private static final Logger logger = LoggerFactory.getLogger(TeacherDetailsServiceImpl.class);
     private final TeacherRepository teacherRepository;
 
     @Autowired
@@ -35,8 +38,10 @@ public class TeacherDetailsServiceImpl implements UserDetailsService {
         TeacherDO teacher = teacherRepository.findByTeacherNumber(teacherNumber);
         String[] roles = {ERole.ROLE_TEACHER.name()};
         if (teacher == null) {
+            logger.info("Teacher {} not found", teacherNumber);
             throw new UsernameNotFoundException(String.format("No user found with teacher_id '%s'", teacherNumber));
         } else {
+            logger.info("Found teacher {}", teacher.getTeacherId());
             return new WMUserDetails(
                     teacher.getTeacherNumber(),
                     teacher.getSecretKey(),
