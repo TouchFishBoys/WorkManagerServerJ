@@ -19,6 +19,7 @@ server:
   port: 8090
 logging:
   level:
-    root: DEBUG
+    root: INFO
     com.zaxxer.hikari: INFO
     org.springframework.security: DEBUG
+    com.my.workmanagement: DEBUG

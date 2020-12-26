@@ -66,7 +66,7 @@ public class JwtUtils {
                     .withIssuer(JWT_AUTH_ISSURER)
                     .build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(token);
-            return jwt.getClaim(JWT_CLAIM_USERNAME).asString().equals(JWT_CLAIM_USERNAME);
+            return true;
         } catch (JWTVerificationException exception) {
             //Invalid signature/claims
             return false;
