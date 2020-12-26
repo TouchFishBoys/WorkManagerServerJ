@@ -6,13 +6,13 @@
 - 学生个人信息
   - [ ] 获取学生信息(姓名,班级,密码)                 GET /student-info/:stuId
 - 作业管理
-  - [ ] 获取课程列表                               GET /student/:studentId/course +
-  - [ ] 平时作业
+  - 获取课程列表                               GET /student/:studentId/course +
+  - 平时作业
     - [ ] 获取选定课程下的课题列表                   GET /course/:courseId/exp-task    /
     - [ ] 获取某课题的信息                         GET /course/:courseId/exp-task/:topicId  //
     - [ ] 上传平时作业                             POST /student/:stuId/exp-task/:topicId/file
     - [ ] 下载某个实验作业                          GET /exp-task/:expId/file        ///
-  - [ ] 大作业
+  - 大作业
     - [ ] 获取上传大作业信息(包括下载链接)             GET /final-task/:finalId        ////
     - [ ] 上传大作业                               POST /group/:groupId/final-task/file
     - [ ] 下载大作业文件                            GET /final-task/:finalId/file  /////
@@ -30,7 +30,7 @@
   - [ ] 导入某门课学生信息(EXCEL)                  POST /course/:courseId
 - 作业管理
   - [ ] 获取课程列表                              GET /teacher/:teacherId/course   ++
-  - [ ] 平时作业
+  - 平时作业
     - [ ] 获取选定课程下的课题列表                  GET /course/:courseId/exp-task   /
     - [ ] 获取某课题的信息                        GET /course/:courseId/exp-task/:topicId  //
     - [ ] 某门课某课题平时作业发布                  POST /course/:courseId/exp-task/:topicId
