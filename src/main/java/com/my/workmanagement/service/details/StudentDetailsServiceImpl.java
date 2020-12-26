@@ -43,6 +43,7 @@ public class StudentDetailsServiceImpl implements UserDetailsService {
         StudentDO student = studentRepository.findByStudentNumber(studentNumber);
         String[] roles = {ERole.ROLE_STUDENT.name()};
         if (student == null) {
+            logger.info("Student {} not found", studentNumber);
             throw new UsernameNotFoundException(String.format("No user found with student_id '%s", studentNumber));
         } else {
             return new WMUserDetails(

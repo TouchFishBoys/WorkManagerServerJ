@@ -4,9 +4,9 @@ import com.my.workmanagement.exception.UndefinedUserRoleException;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.LoginRequest;
 import com.my.workmanagement.payload.response.JwtResponse;
-import com.my.workmanagement.service.AuthService;
-import com.my.workmanagement.service.StudentService;
-import com.my.workmanagement.service.TeacherService;
+import com.my.workmanagement.service.interfaces.AuthService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,31 +17,27 @@ import javax.validation.Valid;
 @RequestMapping("/auth")
 @CrossOrigin
 public class AuthController {
-    private final StudentService studentService;
-    private final TeacherService teacherService;
+    private final AuthService authService;
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
-    public AuthController(StudentService studentService, TeacherService teacherService) {
-        this.studentService = studentService;
-        this.teacherService = teacherService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping("/login")
     public ResponseEntity<PackedResponse<JwtResponse>> handleLogin(
             @RequestBody @Valid LoginRequest request
     ) throws UndefinedUserRoleException {
-        AuthService authService;
-        switch (request.getRole()) {
-            case ROLE_TEACHER:
-                authService = (AuthService) teacherService;
-                break;
-            case ROLE_STUDENT:
-                authService = (AuthService) studentService;
-                break;
-            default:
-                throw new UndefinedUserRoleException(request.getRole().name());
-        }
-        String generatedToken = authService.login(request.getUserName(), request.getPassword());
+        logger.info("Trying login");
+        logger.info("Username: {}, Password: {}, Role: {}",
+                request.getUsername(),
+                request.getPassword(),
+                request.getRole()
+        );
+
+        String generatedToken = authService.login(request.getUsername(), request.getPassword(), request.getRole());
+
         JwtResponse response = JwtResponse.JwtResponseBuilder.aJwtResponse()
                 .withToken(generatedToken)
                 .build();
@@ -50,6 +46,6 @@ public class AuthController {
 
     @RequestMapping("/hello")
     public ResponseEntity<PackedResponse<String>> hello() {
-        return ResponseEntity.ok(PackedResponse.success("hello","hello"));
+        return ResponseEntity.ok(PackedResponse.success("hello", "hello"));
     }
 }

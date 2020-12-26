@@ -11,8 +11,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,18 +22,23 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.DigestUtils;
 
+import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
     private final UserDetailsService teacherDetailsService;
     private final UserDetailsService studentDetailsService;
+    @Resource
+    private JwtTokenFilter jwtTokenFilter;
 
     @Autowired
     SecurityConfig(
@@ -69,23 +76,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Bean
     public PasswordEncoder encoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(daoStudentAuthentication());
-        auth.authenticationProvider(daoTeacherAuthentication());
-    }
-
-    @Bean
-    public JwtTokenFilter authenticationTokenFilterBean() {
-        return new JwtTokenFilter();
+        // return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        return NoOpPasswordEncoder.getInstance();
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //super.configure(http);
         http.csrf().disable()
                 // 使用Jwt所以选择无状态
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
@@ -93,16 +89,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // OPTIONS 请求全部放行
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 登录接口放行
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/auth/login").permitAll()
                 // 其它接口进行验证
                 .anyRequest().authenticated();
         // 添加 Filter
-        http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         http.headers().cacheControl();
     }
 
-    @Override
+    @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+        DaoAuthenticationProvider dapTeacher = new DaoAuthenticationProvider();
+        dapTeacher.setUserDetailsService(teacherDetailsService);
+
+        DaoAuthenticationProvider dapStudent = new DaoAuthenticationProvider();
+        dapStudent.setUserDetailsService(studentDetailsService);
+
+        return new ProviderManager(dapTeacher, dapStudent);
     }
 }

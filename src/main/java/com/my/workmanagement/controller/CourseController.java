@@ -3,7 +3,7 @@ package com.my.workmanagement.controller;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.response.CourseInfoResponse;
 import com.my.workmanagement.payload.response.student.StudentInfoResponse;
-import com.my.workmanagement.service.StudentService;
+import com.my.workmanagement.service.interfaces.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

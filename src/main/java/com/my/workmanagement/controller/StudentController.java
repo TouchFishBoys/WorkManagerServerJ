@@ -1,11 +1,8 @@
 package com.my.workmanagement.controller;
 
-import javax.validation.Valid;
-import javax.websocket.server.PathParam;
-
 import com.my.workmanagement.payload.response.student.CourseListResponse;
 import com.my.workmanagement.payload.response.student.StudentInfoResponse;
-import com.my.workmanagement.service.StudentService;
+import com.my.workmanagement.service.interfaces.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;

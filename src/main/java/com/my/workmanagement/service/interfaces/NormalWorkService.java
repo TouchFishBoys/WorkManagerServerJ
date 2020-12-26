@@ -1,4 +1,4 @@
-package com.my.workmanagement.service;
+package com.my.workmanagement.service.interfaces;
 
 import java.util.List;
 import org.springframework.core.io.Resource;

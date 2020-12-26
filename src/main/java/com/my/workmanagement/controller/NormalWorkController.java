@@ -3,7 +3,7 @@ package com.my.workmanagement.controller;
 import javax.websocket.server.PathParam;
 
 import com.my.workmanagement.exception.StorageFileNotFoundException;
-import com.my.workmanagement.service.NormalWorkService;
+import com.my.workmanagement.service.interfaces.NormalWorkService;
 
 import java.util.List;
 

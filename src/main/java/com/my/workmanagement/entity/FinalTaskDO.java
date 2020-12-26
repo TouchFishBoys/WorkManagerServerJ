@@ -10,13 +10,13 @@ import java.sql.Timestamp;
 public class FinalTaskDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String finalId;
+    private Integer finalId;
     @Column(nullable = false, unique = true)
     private String taskName;
     private String description;
     @Column(unique = true)
     private int groupId;
-    private int word_score;
+    private int wordScore;
     @CreationTimestamp
     private Timestamp timeUpload;
     @CreationTimestamp
@@ -24,11 +24,11 @@ public class FinalTaskDO {
     @CreationTimestamp
     private Timestamp gmtModified;
 
-    public String getFinalId() {
+    public Integer getFinalId() {
         return finalId;
     }
 
-    public void setFinalId(String finalId) {
+    public void setFinalId(Integer finalId) {
         this.finalId = finalId;
     }
 
@@ -56,12 +56,12 @@ public class FinalTaskDO {
         this.groupId = groupId;
     }
 
-    public int getWord_score() {
-        return word_score;
+    public int getWordScore() {
+        return wordScore;
     }
 
-    public void setWord_score(int word_score) {
-        this.word_score = word_score;
+    public void setWordScore(int word_score) {
+        this.wordScore = word_score;
     }
 
     public Timestamp getTimeUpload() {
@@ -95,7 +95,7 @@ public class FinalTaskDO {
                 ", taskName='" + taskName + '\'' +
                 ", description='" + description + '\'' +
                 ", groupId=" + groupId +
-                ", word_score=" + word_score +
+                ", word_score=" + wordScore +
                 ", timeUpload=" + timeUpload +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
@@ -108,7 +108,7 @@ public class FinalTaskDO {
 
 
     public static final class FinalTaskBuilder {
-        private String finalId;
+        private Integer finalId;
         private String taskName;
         private String description;
         private int groupId;
@@ -124,7 +124,7 @@ public class FinalTaskDO {
             return new FinalTaskBuilder();
         }
 
-        public FinalTaskBuilder withFinalId(String finalId) {
+        public FinalTaskBuilder withFinalId(Integer finalId) {
             this.finalId = finalId;
             return this;
         }
@@ -170,7 +170,7 @@ public class FinalTaskDO {
             finalTaskDO.setTaskName(taskName);
             finalTaskDO.setDescription(description);
             finalTaskDO.setGroupId(groupId);
-            finalTaskDO.setWord_score(word_score);
+            finalTaskDO.setWordScore(word_score);
             finalTaskDO.setTimeUpload(timeUpload);
             finalTaskDO.setGmtCreate(gmtCreate);
             finalTaskDO.setGmtModified(gmtModified);

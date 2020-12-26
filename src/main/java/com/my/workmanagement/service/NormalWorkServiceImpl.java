@@ -1,5 +1,6 @@
 package com.my.workmanagement.service;
 
+import com.my.workmanagement.service.interfaces.NormalWorkService;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -7,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Service
-public class NormalWorkServiceImpl implements NormalWorkService{
+public class NormalWorkServiceImpl implements NormalWorkService {
     @Override
     public boolean store(Integer stuId, Integer topicId, MultipartFile file) {
         return false;
