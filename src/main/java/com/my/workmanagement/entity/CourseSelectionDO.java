@@ -49,4 +49,67 @@ public class CourseSelectionDO {
     public CourseSelectionDO() {
     }
 
+    public Integer getCsId() {
+        return csId;
+    }
+
+    public void setCsId(Integer csId) {
+        this.csId = csId;
+    }
+
+    public StudentDO getStu() {
+        return stu;
+    }
+
+    public void setStu(StudentDO stu) {
+        this.stu = stu;
+    }
+
+    public CourseDO getCourse() {
+        return course;
+    }
+
+    public void setCourse(CourseDO course) {
+        this.course = course;
+    }
+
+    public TeamDO getTeam() {
+        return team;
+    }
+
+    public void setTeam(TeamDO team) {
+        this.team = team;
+    }
+
+    public Integer getQaScore() {
+        return qaScore;
+    }
+
+    public void setQaScore(Integer qaScore) {
+        this.qaScore = qaScore;
+    }
+
+    public Integer getOverallScore() {
+        return overallScore;
+    }
+
+    public void setOverallScore(Integer overallScore) {
+        this.overallScore = overallScore;
+    }
+
+    public Timestamp getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Timestamp gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Timestamp getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Timestamp gmtModified) {
+        this.gmtModified = gmtModified;
+    }
 }

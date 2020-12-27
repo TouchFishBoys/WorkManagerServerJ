@@ -84,4 +84,17 @@ public class CourseDO {
     public void setGmtModified(Timestamp gmtModified) {
         this.gmtModified = gmtModified;
     }
+
+    @Override
+    public String toString() {
+        return "CourseDO{" +
+                "courseId=" + courseId +
+                ", courseName='" + courseName + '\'' +
+                ", teacher=" + teacher +
+                ", courseDescription='" + courseDescription + '\'' +
+                ", courseYear=" + courseYear +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                '}';
+    }
 }

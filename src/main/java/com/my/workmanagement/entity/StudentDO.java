@@ -92,11 +92,11 @@ public class StudentDO {
     @Override
     public String toString() {
         return "StudentDO{" +
-                "stuId=" + studentId +
-                ", stuNum='" + studentNum + '\'' +
-                ", stuName='" + studentName + '\'' +
-                ", stuPassword='" + studentPassword + '\'' +
-                ", stuClass='" + studentClass + '\'' +
+                "studentId=" + studentId +
+                ", studentName='" + studentName + '\'' +
+                ", studentNum='" + studentNum + '\'' +
+                ", studentPassword='" + studentPassword + '\'' +
+                ", studentClass='" + studentClass + '\'' +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';
