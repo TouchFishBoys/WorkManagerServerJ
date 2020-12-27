@@ -1,6 +1,7 @@
 package com.my.workmanagement.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -18,12 +19,16 @@ public class NormalWorkDO {
     @Column(nullable = false, unique = true)
     private String nworkName;
     private int nworkScore;
+
     @CreationTimestamp
     private Timestamp timeUpload;
     @CreationTimestamp
     private Timestamp gmtCreate;
-    @CreationTimestamp
+    @UpdateTimestamp
     private Timestamp gmtModified;
+
+    public NormalWorkDO() {
+    }
 
     public int getNworkId() {
         return nworkId;
@@ -101,81 +106,5 @@ public class NormalWorkDO {
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';
-    }
-
-    public static NormalWorkBuilder builder() {
-        return new NormalWorkBuilder();
-    }
-
-
-    public static final class NormalWorkBuilder {
-        private int nworkId;
-        private int stuId;
-        private String topicId;
-        private String nworkName;
-        private int nworkScore;
-        private Timestamp timeUpload;
-        private Timestamp gmtCreate;
-        private Timestamp gmtModified;
-
-        private NormalWorkBuilder() {
-        }
-
-        public static NormalWorkBuilder aNormalWorkDO() {
-            return new NormalWorkBuilder();
-        }
-
-        public NormalWorkBuilder withNworkId(int nworkId) {
-            this.nworkId = nworkId;
-            return this;
-        }
-
-        public NormalWorkBuilder withStuId(int stuId) {
-            this.stuId = stuId;
-            return this;
-        }
-
-        public NormalWorkBuilder withTopicId(String topicId) {
-            this.topicId = topicId;
-            return this;
-        }
-
-        public NormalWorkBuilder withNworkName(String nworkName) {
-            this.nworkName = nworkName;
-            return this;
-        }
-
-        public NormalWorkBuilder withNworkScore(int nworkScore) {
-            this.nworkScore = nworkScore;
-            return this;
-        }
-
-        public NormalWorkBuilder withTimeUpload(Timestamp timeUpload) {
-            this.timeUpload = timeUpload;
-            return this;
-        }
-
-        public NormalWorkBuilder withGmtCreate(Timestamp gmtCreate) {
-            this.gmtCreate = gmtCreate;
-            return this;
-        }
-
-        public NormalWorkBuilder withGmtModified(Timestamp gmtModified) {
-            this.gmtModified = gmtModified;
-            return this;
-        }
-
-        public NormalWorkDO build() {
-            NormalWorkDO normalWorkDO = new NormalWorkDO();
-            normalWorkDO.setNworkId(nworkId);
-            normalWorkDO.setStuId(stuId);
-            normalWorkDO.setTopicId(topicId);
-            normalWorkDO.setNworkName(nworkName);
-            normalWorkDO.setNworkScore(nworkScore);
-            normalWorkDO.setTimeUpload(timeUpload);
-            normalWorkDO.setGmtCreate(gmtCreate);
-            normalWorkDO.setGmtModified(gmtModified);
-            return normalWorkDO;
-        }
     }
 }

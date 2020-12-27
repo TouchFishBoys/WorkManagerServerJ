@@ -1,12 +1,13 @@
 package com.my.workmanagement.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "teacher_info")
+@Table(name = "teacher")
 public class TeacherDO {
 
     @Id
@@ -20,10 +21,14 @@ public class TeacherDO {
     private String teacherPassword;
     @Column(unique = true)
     private String teacherTell;
+
     @CreationTimestamp
     private Timestamp gmtCreate;
-    @CreationTimestamp
+    @UpdateTimestamp
     private Timestamp gmtModified;
+
+    public TeacherDO() {
+    }
 
     public int getTeacherId() {
         return teacherId;
@@ -92,74 +97,5 @@ public class TeacherDO {
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';
-    }
-
-    public static TeacherBuilder builder() {
-        return new TeacherBuilder();
-    }
-
-
-    public static final class TeacherBuilder {
-        private int teacherId;
-        private String teacherNum;
-        private String teacherName;
-        private String teacherPassword;
-        private String teacherTell;
-        private Timestamp gmtCreate;
-        private Timestamp gmtModified;
-
-        private TeacherBuilder() {
-        }
-
-        public static TeacherBuilder aTeacherDO() {
-            return new TeacherBuilder();
-        }
-
-        public TeacherBuilder withTeacherId(int teacherId) {
-            this.teacherId = teacherId;
-            return this;
-        }
-
-        public TeacherBuilder withTeacherNum(String teacherNum) {
-            this.teacherNum = teacherNum;
-            return this;
-        }
-
-        public TeacherBuilder withTeacherName(String teacherName) {
-            this.teacherName = teacherName;
-            return this;
-        }
-
-        public TeacherBuilder withTeacherPassword(String teacherPassword) {
-            this.teacherPassword = teacherPassword;
-            return this;
-        }
-
-        public TeacherBuilder withTeacherTell(String teacherTell) {
-            this.teacherTell = teacherTell;
-            return this;
-        }
-
-        public TeacherBuilder withGmtCreate(Timestamp gmtCreate) {
-            this.gmtCreate = gmtCreate;
-            return this;
-        }
-
-        public TeacherBuilder withGmtModified(Timestamp gmtModified) {
-            this.gmtModified = gmtModified;
-            return this;
-        }
-
-        public TeacherDO build() {
-            TeacherDO teacherDO = new TeacherDO();
-            teacherDO.setTeacherId(teacherId);
-            teacherDO.setTeacherNum(teacherNum);
-            teacherDO.setTeacherName(teacherName);
-            teacherDO.setTeacherPassword(teacherPassword);
-            teacherDO.setTeacherTell(teacherTell);
-            teacherDO.setGmtCreate(gmtCreate);
-            teacherDO.setGmtModified(gmtModified);
-            return teacherDO;
-        }
     }
 }

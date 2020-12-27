@@ -1,44 +1,48 @@
 package com.my.workmanagement.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "topic_task")
+@Table(name = "topic")
 public class TopicDO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int topicId;
+    private Integer topicId;
     @Column(nullable = false)
-    private int courseId;
+    private Integer courseId;
     @Column(nullable = false)
     private String topicName;
     private String topicDescription;
-    @CreationTimestamp
+
     private Timestamp topicTimeStart;
-    @CreationTimestamp
     private Timestamp topicTimeEnd;
+
     @CreationTimestamp
     private Timestamp gmtCreate;
-    @CreationTimestamp
+    @UpdateTimestamp
     private Timestamp gmtModified;
 
-    public int getTopicId() {
+    public TopicDO() {
+    }
+
+    public Integer getTopicId() {
         return topicId;
     }
 
-    public void setTopicId(int topicId) {
+    public void setTopicId(Integer topicId) {
         this.topicId = topicId;
     }
 
-    public int getCourseId() {
+    public Integer getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(int courseId) {
+    public void setCourseId(Integer courseId) {
         this.courseId = courseId;
     }
 
@@ -102,81 +106,5 @@ public class TopicDO {
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';
-    }
-
-    public static TopicBuilder builder() {
-        return new TopicBuilder();
-    }
-
-
-    public static final class TopicBuilder {
-        private int topicId;
-        private int courseId;
-        private String topicName;
-        private String topicDescription;
-        private Timestamp topicTimeStart;
-        private Timestamp topicTimeEnd;
-        private Timestamp gmtCreate;
-        private Timestamp gmtModified;
-
-        private TopicBuilder() {
-        }
-
-        public static TopicBuilder aTopicDO() {
-            return new TopicBuilder();
-        }
-
-        public TopicBuilder withTopicId(int topicId) {
-            this.topicId = topicId;
-            return this;
-        }
-
-        public TopicBuilder withCourseId(int courseId) {
-            this.courseId = courseId;
-            return this;
-        }
-
-        public TopicBuilder withTopicName(String topicName) {
-            this.topicName = topicName;
-            return this;
-        }
-
-        public TopicBuilder withTopicDescription(String topicDescription) {
-            this.topicDescription = topicDescription;
-            return this;
-        }
-
-        public TopicBuilder withTopicTimeStart(Timestamp topicTimeStart) {
-            this.topicTimeStart = topicTimeStart;
-            return this;
-        }
-
-        public TopicBuilder withTopicTimeEnd(Timestamp topicTimeEnd) {
-            this.topicTimeEnd = topicTimeEnd;
-            return this;
-        }
-
-        public TopicBuilder withGmtCreate(Timestamp gmtCreate) {
-            this.gmtCreate = gmtCreate;
-            return this;
-        }
-
-        public TopicBuilder withGmtModified(Timestamp gmtModified) {
-            this.gmtModified = gmtModified;
-            return this;
-        }
-
-        public TopicDO build() {
-            TopicDO topicDO = new TopicDO();
-            topicDO.setTopicId(topicId);
-            topicDO.setCourseId(courseId);
-            topicDO.setTopicName(topicName);
-            topicDO.setTopicDescription(topicDescription);
-            topicDO.setTopicTimeStart(topicTimeStart);
-            topicDO.setTopicTimeEnd(topicTimeEnd);
-            topicDO.setGmtCreate(gmtCreate);
-            topicDO.setGmtModified(gmtModified);
-            return topicDO;
-        }
     }
 }

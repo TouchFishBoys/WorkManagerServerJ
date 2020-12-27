@@ -41,10 +41,10 @@ public class TeacherDetailsServiceImpl implements UserDetailsService {
             logger.info("Teacher {} not found", teacherNumber);
             throw new UsernameNotFoundException(String.format("No user found with teacher_id '%s'", teacherNumber));
         } else {
-            logger.info("Found teacher {}", teacher.getTeacherId());
+            logger.info("Found teacher {}", teacher.getTeacherName());
             return new WMUserDetails(
-                    teacher.getTeacherNumber(),
-                    teacher.getSecretKey(),
+                    teacher.getTeacherNum(),
+                    teacher.getTeacherPassword(),
                     ERole.ROLE_TEACHER,
                     Arrays.stream(roles).map(SimpleGrantedAuthority::new).collect(Collectors.toList())
             );

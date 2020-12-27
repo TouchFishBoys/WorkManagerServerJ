@@ -1,29 +1,33 @@
 package com.my.workmanagement.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "group_task")
+@Table(name = "group")
 public class GroupDO {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int groupId;
+    private Integer groupId;
     @Column(nullable = false, unique = true)
     private String groupName;
+
     @CreationTimestamp
     private Timestamp gmtCreate;
-    @CreationTimestamp
+    @UpdateTimestamp
     private Timestamp gmtModified;
 
-    public int getGroupId() {
+    public GroupDO() {
+    }
+
+    public Integer getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(int groupId) {
+    public void setGroupId(Integer groupId) {
         this.groupId = groupId;
     }
 

@@ -1,6 +1,7 @@
 package com.my.workmanagement.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -10,65 +11,69 @@ import java.sql.Timestamp;
 public class CourseSelectionDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int csId;
+    private Integer csId;
     @Column(nullable = false)
-    private int stuId;
+    private Integer stuId;
     @Column(nullable = false)
-    private int courseId;
+    private Integer courseId;
     @Column(nullable = false)
-    private int groupId;
-    private int qaScore;
-    private int overallScore;
+    private Integer groupId;
+    private Integer qaScore;
+    private Integer overallScore;
+
     @CreationTimestamp
     private Timestamp gmtCreate;
-    @CreationTimestamp
+    @UpdateTimestamp
     private Timestamp gmtModified;
 
-    public int getCsId() {
+    public CourseSelectionDO() {
+    }
+
+    public Integer getCsId() {
         return csId;
     }
 
-    public void setCsId(int csId) {
+    public void setCsId(Integer csId) {
         this.csId = csId;
     }
 
-    public int getStuId() {
+    public Integer getStuId() {
         return stuId;
     }
 
-    public void setStuId(int stuId) {
+    public void setStuId(Integer stuId) {
         this.stuId = stuId;
     }
 
-    public int getCourseId() {
+    public Integer getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(int courseId) {
+    public void setCourseId(Integer courseId) {
         this.courseId = courseId;
     }
 
-    public int getGroupId() {
+    public Integer getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(int groupId) {
+    public void setGroupId(Integer groupId) {
         this.groupId = groupId;
     }
 
-    public int getQaScore() {
+    public Integer getQaScore() {
         return qaScore;
     }
 
-    public void setQaScore(int qaScore) {
+    public void setQaScore(Integer qaScore) {
         this.qaScore = qaScore;
     }
 
-    public int getOverallScore() {
+    public Integer getOverallScore() {
         return overallScore;
     }
 
-    public void setOverallScore(int overallScore) {
+    public void setOverallScore(Integer overallScore) {
         this.overallScore = overallScore;
     }
 

@@ -1,32 +1,37 @@
 package com.my.workmanagement.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "course_info")
+@Table(name = "course")
 public class CourseDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int courseId;
+    private Integer courseId;
     @Column(nullable = false, unique = true)
     private String courseName;
     @Column(nullable = false)
-    private int teacherId;
+    private Integer teacherId;
     private String courseDescription;
-    private int courseYear;
+    private Integer courseYear;
+
     @CreationTimestamp
     private Timestamp gmtCreate;
-    @CreationTimestamp
+    @UpdateTimestamp
     private Timestamp gmtModified;
 
-    public int getCourseId() {
+    public CourseDO() {
+    }
+
+    public Integer getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(int courseId) {
+    public void setCourseId(Integer courseId) {
         this.courseId = courseId;
     }
 
@@ -38,11 +43,11 @@ public class CourseDO {
         this.courseName = courseName;
     }
 
-    public int getTeacherId() {
+    public Integer getTeacherId() {
         return teacherId;
     }
 
-    public void setTeacherId(int teacherId) {
+    public void setTeacherId(Integer teacherId) {
         this.teacherId = teacherId;
     }
 
@@ -54,11 +59,11 @@ public class CourseDO {
         this.courseDescription = courseDescription;
     }
 
-    public int getCourseYear() {
+    public Integer getCourseYear() {
         return courseYear;
     }
 
-    public void setCourseYear(int courseYear) {
+    public void setCourseYear(Integer courseYear) {
         this.courseYear = courseYear;
     }
 
@@ -91,58 +96,53 @@ public class CourseDO {
                 '}';
     }
 
-    public static CourseBuilder builder() {
-        return new CourseBuilder();
-    }
-
-
-    public static final class CourseBuilder {
-        private int courseId;
+    public static final class CourseDOBuilder {
+        private Integer courseId;
         private String courseName;
-        private int teacherId;
+        private Integer teacherId;
         private String courseDescription;
-        private int courseYear;
+        private Integer courseYear;
         private Timestamp gmtCreate;
         private Timestamp gmtModified;
 
-        private CourseBuilder() {
+        private CourseDOBuilder() {
         }
 
-        public static CourseBuilder aCourseDO() {
-            return new CourseBuilder();
+        public static CourseDOBuilder aCourseDO() {
+            return new CourseDOBuilder();
         }
 
-        public CourseBuilder withCourseId(int courseId) {
+        public CourseDOBuilder withCourseId(Integer courseId) {
             this.courseId = courseId;
             return this;
         }
 
-        public CourseBuilder withCourseName(String courseName) {
+        public CourseDOBuilder withCourseName(String courseName) {
             this.courseName = courseName;
             return this;
         }
 
-        public CourseBuilder withTeacherId(int teacherId) {
+        public CourseDOBuilder withTeacherId(Integer teacherId) {
             this.teacherId = teacherId;
             return this;
         }
 
-        public CourseBuilder withCourseDescription(String courseDescription) {
+        public CourseDOBuilder withCourseDescription(String courseDescription) {
             this.courseDescription = courseDescription;
             return this;
         }
 
-        public CourseBuilder withCourseYear(int courseYear) {
+        public CourseDOBuilder withCourseYear(Integer courseYear) {
             this.courseYear = courseYear;
             return this;
         }
 
-        public CourseBuilder withGmtCreate(Timestamp gmtCreate) {
+        public CourseDOBuilder withGmtCreate(Timestamp gmtCreate) {
             this.gmtCreate = gmtCreate;
             return this;
         }
 
-        public CourseBuilder withGmtModified(Timestamp gmtModified) {
+        public CourseDOBuilder withGmtModified(Timestamp gmtModified) {
             this.gmtModified = gmtModified;
             return this;
         }

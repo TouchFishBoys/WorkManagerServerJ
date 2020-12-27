@@ -1,6 +1,7 @@
 package com.my.workmanagement.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -10,25 +11,30 @@ import java.sql.Timestamp;
 public class FinalWorkDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int fworkId;
+    private Integer fworkId;
     @Column(nullable = false, unique = true)
     private String fworkName;
     private String fworkDescription;
     @Column(unique = true)
-    private int groupId;
-    private int fworkScore;
+    private Integer groupId;
+    private Integer fworkScore;
+
     @CreationTimestamp
     private Timestamp timeUpload;
+
     @CreationTimestamp
     private Timestamp gmtCreate;
-    @CreationTimestamp
+    @UpdateTimestamp
     private Timestamp gmtModified;
 
-    public int getFworkId() {
+    public FinalWorkDO() {
+    }
+
+    public Integer getFworkId() {
         return fworkId;
     }
 
-    public void setFworkId(int fworkId) {
+    public void setFworkId(Integer fworkId) {
         this.fworkId = fworkId;
     }
 
@@ -48,19 +54,19 @@ public class FinalWorkDO {
         this.fworkDescription = fworkDescription;
     }
 
-    public int getGroupId() {
+    public Integer getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(int groupId) {
+    public void setGroupId(Integer groupId) {
         this.groupId = groupId;
     }
 
-    public int getFworkScore() {
+    public Integer getFworkScore() {
         return fworkScore;
     }
 
-    public void setFworkScore(int fworkScore) {
+    public void setFworkScore(Integer fworkScore) {
         this.fworkScore = fworkScore;
     }
 
@@ -100,81 +106,5 @@ public class FinalWorkDO {
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';
-    }
-
-    public static FinalWorkBuilder builder() {
-        return new FinalWorkBuilder();
-    }
-
-
-    public static final class FinalWorkBuilder {
-        private int fworkId;
-        private String fworkName;
-        private String fworkDescription;
-        private int groupId;
-        private int fworkScore;
-        private Timestamp timeUpload;
-        private Timestamp gmtCreate;
-        private Timestamp gmtModified;
-
-        private FinalWorkBuilder() {
-        }
-
-        public static FinalWorkBuilder aFinalWorkDO() {
-            return new FinalWorkBuilder();
-        }
-
-        public FinalWorkBuilder withFworkId(int fworkId) {
-            this.fworkId = fworkId;
-            return this;
-        }
-
-        public FinalWorkBuilder withFworkName(String fworkName) {
-            this.fworkName = fworkName;
-            return this;
-        }
-
-        public FinalWorkBuilder withFworkDescription(String fworkDescription) {
-            this.fworkDescription = fworkDescription;
-            return this;
-        }
-
-        public FinalWorkBuilder withGroupId(int groupId) {
-            this.groupId = groupId;
-            return this;
-        }
-
-        public FinalWorkBuilder withFworkScore(int fworkScore) {
-            this.fworkScore = fworkScore;
-            return this;
-        }
-
-        public FinalWorkBuilder withTimeUpload(Timestamp timeUpload) {
-            this.timeUpload = timeUpload;
-            return this;
-        }
-
-        public FinalWorkBuilder withGmtCreate(Timestamp gmtCreate) {
-            this.gmtCreate = gmtCreate;
-            return this;
-        }
-
-        public FinalWorkBuilder withGmtModified(Timestamp gmtModified) {
-            this.gmtModified = gmtModified;
-            return this;
-        }
-
-        public FinalWorkDO build() {
-            FinalWorkDO finalWorkDO = new FinalWorkDO();
-            finalWorkDO.setFworkId(fworkId);
-            finalWorkDO.setFworkName(fworkName);
-            finalWorkDO.setFworkDescription(fworkDescription);
-            finalWorkDO.setGroupId(groupId);
-            finalWorkDO.setFworkScore(fworkScore);
-            finalWorkDO.setTimeUpload(timeUpload);
-            finalWorkDO.setGmtCreate(gmtCreate);
-            finalWorkDO.setGmtModified(gmtModified);
-            return finalWorkDO;
-        }
     }
 }

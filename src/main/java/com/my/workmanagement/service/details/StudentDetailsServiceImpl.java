@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  */
 @Service("studentDetailsService")
 public class StudentDetailsServiceImpl implements UserDetailsService {
-    Logger logger = LoggerFactory.getLogger(StudentDetailsServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(StudentDetailsServiceImpl.class);
     StudentRepository studentRepository;
 
     @Autowired
@@ -46,9 +46,10 @@ public class StudentDetailsServiceImpl implements UserDetailsService {
             logger.info("Student {} not found", studentNumber);
             throw new UsernameNotFoundException(String.format("No user found with student_id '%s", studentNumber));
         } else {
+            logger.info("Found student: {}", student.getStuName());
             return new WMUserDetails(
-                    student.getStudentNumber(),
-                    student.getSecretKey(),
+                    student.getStuNum(),
+                    student.getStuPassword(),
                     ERole.ROLE_STUDENT,
                     Arrays.stream(roles).map(SimpleGrantedAuthority::new).collect(Collectors.toList())
             );

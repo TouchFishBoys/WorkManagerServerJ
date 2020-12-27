@@ -2,12 +2,13 @@ package com.my.workmanagement.entity;
 
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "student_info")
+@Table(name = "student")
 public class StudentDO {
 
     @Id
@@ -21,10 +22,14 @@ public class StudentDO {
     private String stuPassword;
     @Column(nullable = false)
     private String stuClass;
+
     @CreationTimestamp
     private Timestamp gmtCreate;
-    @CreationTimestamp
+    @UpdateTimestamp
     private Timestamp gmtModified;
+
+    public StudentDO() {
+    }
 
     public int getStuId() {
         return stuId;
@@ -93,74 +98,5 @@ public class StudentDO {
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';
-    }
-
-    public static StudentBuilder builder() {
-        return new StudentBuilder();
-    }
-
-
-    public static final class StudentBuilder {
-        private int stuId;
-        private String stuNum;
-        private String stuName;
-        private String stuPassword;
-        private String stuClass;
-        private Timestamp gmtCreate;
-        private Timestamp gmtModified;
-
-        private StudentBuilder() {
-        }
-
-        public static StudentBuilder aStudentDO() {
-            return new StudentBuilder();
-        }
-
-        public StudentBuilder withStuId(int stuId) {
-            this.stuId = stuId;
-            return this;
-        }
-
-        public StudentBuilder withStuNum(String stuNum) {
-            this.stuNum = stuNum;
-            return this;
-        }
-
-        public StudentBuilder withStuName(String stuName) {
-            this.stuName = stuName;
-            return this;
-        }
-
-        public StudentBuilder withStuPassword(String stuPassword) {
-            this.stuPassword = stuPassword;
-            return this;
-        }
-
-        public StudentBuilder withStuClass(String stuClass) {
-            this.stuClass = stuClass;
-            return this;
-        }
-
-        public StudentBuilder withGmtCreate(Timestamp gmtCreate) {
-            this.gmtCreate = gmtCreate;
-            return this;
-        }
-
-        public StudentBuilder withGmtModified(Timestamp gmtModified) {
-            this.gmtModified = gmtModified;
-            return this;
-        }
-
-        public StudentDO build() {
-            StudentDO studentDO = new StudentDO();
-            studentDO.setStuId(stuId);
-            studentDO.setStuNum(stuNum);
-            studentDO.setStuName(stuName);
-            studentDO.setStuPassword(stuPassword);
-            studentDO.setStuClass(stuClass);
-            studentDO.setGmtCreate(gmtCreate);
-            studentDO.setGmtModified(gmtModified);
-            return studentDO;
-        }
     }
 }
