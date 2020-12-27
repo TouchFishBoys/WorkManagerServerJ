@@ -41,7 +41,7 @@ public class StudentDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String studentNumber) throws UsernameNotFoundException {
         StudentDO student = studentRepository.findByStudentNum(studentNumber);
-        String[] roles = {ERole.ROLE_STUDENT.name()};
+        String[] roles = {ERole.STUDENT.name()};
         if (student == null) {
             logger.info("Student {} not found", studentNumber);
             throw new UsernameNotFoundException(String.format("No user found with student_id '%s", studentNumber));
@@ -51,7 +51,7 @@ public class StudentDetailsServiceImpl implements UserDetailsService {
                     student.getStudentId(),
                     student.getStudentNum(),
                     student.getStudentPassword(),
-                    ERole.ROLE_STUDENT,
+                    ERole.STUDENT,
                     Arrays.stream(roles).map(SimpleGrantedAuthority::new).collect(Collectors.toList())
             );
         }

@@ -57,11 +57,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 if (JwtUtils.validateToken(token)) {
                     logger.debug(JwtUtils.getRole(token).name());
                     switch (JwtUtils.getRole(token)) {
-                        case ROLE_STUDENT:
+                        case STUDENT:
                             // 学生
                             userDetails = studentDetailsService.loadUserByUsername(JwtUtils.getUsername(token));
                             break;
-                        case ROLE_TEACHER:
+                        case TEACHER:
                             // 教师
                             userDetails = teacherDetailsService.loadUserByUsername(JwtUtils.getUsername(token));
                             break;

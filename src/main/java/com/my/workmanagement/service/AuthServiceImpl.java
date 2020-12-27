@@ -41,12 +41,12 @@ public class AuthServiceImpl implements AuthService {
         UserDetails userDetails = null;
         logger.info("Entered login");
 
-        if (role == ERole.ROLE_TEACHER) {
+        if (role == ERole.TEACHER) {
             login(new UsernamePasswordAuthenticationToken(username, password));
             userDetails = teacherService.loadUserByUsername(username);
             token = JwtUtils.generateToken((WMUserDetails) userDetails);
             logger.info("teacher[{}] 登录成功", username);
-        } else if (role == ERole.ROLE_STUDENT) {
+        } else if (role == ERole.STUDENT) {
             login(new UsernamePasswordAuthenticationToken(username, password));
             userDetails = studentService.loadUserByUsername(username);
             token = JwtUtils.generateToken((WMUserDetails) userDetails);
