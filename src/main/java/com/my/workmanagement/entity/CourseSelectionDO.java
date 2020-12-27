@@ -16,21 +16,21 @@ public class CourseSelectionDO {
     /**
      * 学生
      */
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, name = "stu_id")
     @OneToOne(cascade = CascadeType.ALL)
-    private StudentDO stuId;
+    private StudentDO stu;
     /**
      * 选课
      */
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, name = "course_id")
     @OneToOne(cascade = CascadeType.ALL)
-    private CourseDO courseId;
+    private CourseDO course;
     /**
-     * 小队
+     * 小组
      */
-    @JoinColumn
+    @JoinColumn(name = "team_id")
     @OneToOne(cascade = CascadeType.ALL)
-    private TeamDO teamId;
+    private TeamDO team;
 
     /**
      * 答辩成绩

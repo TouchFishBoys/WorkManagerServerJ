@@ -1,5 +1,7 @@
 package com.my.workmanagement.payload.response.student;
 
-public class CourseListResponse {
+import java.io.Serializable;
+
+public class CourseListResponse implements Serializable {
 
 }

@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileStorageServiceImpl implements FileStorageService {
     @Override
     public boolean store(MultipartFile file) {
+
         return false;
     }
 

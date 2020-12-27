@@ -37,7 +37,7 @@ public class CourseController {
     public ResponseEntity<PackedResponse<CourseInfoResponse>> getCourseInfo(@PathVariable Integer courseId) {
         logger.info("Getting course info: {}", courseId);
         CourseInfoResponse response = new CourseInfoResponse();
-        return ResponseEntity.ok(PackedResponse.success(response, ""));
+        return PackedResponse.success(response, "");
     }
 
     /**
@@ -52,7 +52,7 @@ public class CourseController {
     ) {
         logger.info("Get student info list");
         List<StudentInfoResponse> response = new LinkedList<>();
-        return ResponseEntity.ok(PackedResponse.success(response, ""));
+        return PackedResponse.success(response, "");
     }
 
     /**

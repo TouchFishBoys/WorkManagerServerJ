@@ -1,26 +1,21 @@
 package com.my.workmanagement.payload;
 
+import org.springframework.http.ResponseEntity;
+
 import java.time.LocalDateTime;
 
-public class PackedResponse<T> {
+public final class PackedResponse<T> {
     private final T data;
     private final String message;
     private final ResponseResult result;
     private final LocalDateTime timestamp;
 
-    private PackedResponse(T data, String message, ResponseResult result) {
-        this.data = data;
-        this.message = message;
-        this.result = result;
-        timestamp = LocalDateTime.now();
+    public static <T> ResponseEntity<PackedResponse<T>> badRequest(T data, String message) {
+        return ResponseEntity.badRequest().body(new PackedResponse<>(data, message, ResponseResult.FAILED));
     }
 
-    public static <T> PackedResponse<T> success(T data, String message) {
-        return new PackedResponse<>(data, message, ResponseResult.SUCCESS);
-    }
-
-    public static <T> PackedResponse<T> failed(T data, String message) {
-        return new PackedResponse<>(data, message, ResponseResult.FAILED);
+    public static <T> ResponseEntity<PackedResponse<T>> success(T data, String message) {
+        return ResponseEntity.ok(new PackedResponse<>(data, message, ResponseResult.SUCCESS));
     }
 
     public T getData() {
@@ -38,4 +33,12 @@ public class PackedResponse<T> {
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
+
+    private PackedResponse(T data, String message, ResponseResult result) {
+        this.data = data;
+        this.message = message;
+        this.result = result;
+        timestamp = LocalDateTime.now();
+    }
+
 }

@@ -1,15 +1,18 @@
 package com.my.workmanagement.controller;
 
 import com.my.workmanagement.exception.UndefinedUserRoleException;
+import com.my.workmanagement.model.WMUserDetails;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.LoginRequest;
 import com.my.workmanagement.payload.response.JwtResponse;
+import com.my.workmanagement.payload.response.WhoAmIResponse;
 import com.my.workmanagement.service.interfaces.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -42,23 +45,26 @@ public class AuthController {
         JwtResponse response = JwtResponse.JwtResponseBuilder.aJwtResponse()
                 .withToken(generatedToken)
                 .build();
-        return ResponseEntity.ok(PackedResponse.success(response, ""));
+        return PackedResponse.success(response, "");
     }
 
     @RequestMapping("/who-am-i")
-    public ResponseEntity<PackedResponse<String>> hello() {
-        return ResponseEntity.ok(PackedResponse.success("hello", "hello"));
+    public ResponseEntity<PackedResponse<WhoAmIResponse>> hello() {
+        WMUserDetails user = (WMUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        WhoAmIResponse response = new WhoAmIResponse(user.getUsername(), user.getRole());
+        return PackedResponse.success(response, "hello");
     }
 
     @RequestMapping("/am-i-a-teacher")
     @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_TEACHER)")
     public ResponseEntity<PackedResponse<String>> helloTeacher() {
-        return ResponseEntity.ok(PackedResponse.success("hello", "hello"));
+        return PackedResponse.success("hello", "hello");
     }
 
     @RequestMapping("/am-i-a-student")
     @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_STUDENT)")
     public ResponseEntity<PackedResponse<String>> helloStudent() {
-        return ResponseEntity.ok(PackedResponse.success("hello", "hello"));
+        return PackedResponse.success("hello", "hello");
     }
 }
