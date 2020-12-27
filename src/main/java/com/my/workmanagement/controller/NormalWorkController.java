@@ -2,7 +2,11 @@ package com.my.workmanagement.controller;
 
 import javax.websocket.server.PathParam;
 
+import com.my.workmanagement.entity.TopicDO;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
+import com.my.workmanagement.payload.PackedResponse;
+import com.my.workmanagement.payload.response.normalWrok.TopicInfoResponse;
+import com.my.workmanagement.repository.TopicRepository;
 import com.my.workmanagement.service.interfaces.FileStorageService;
 import com.my.workmanagement.service.interfaces.NormalWorkService;
 
@@ -19,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/normal")
+@RequestMapping("/normal-work")
 public class NormalWorkController {
     Logger logger = LoggerFactory.getLogger(NormalWorkController.class);
 
@@ -61,5 +65,18 @@ public class NormalWorkController {
     @ExceptionHandler(StorageFileNotFoundException.class)
     public ResponseEntity<?> handleFileNotFound() {
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping(value = "/{topicId}", produces = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<PackedResponse<TopicInfoResponse>> getTopicInfo(@PathVariable("topicId") Integer topicId) {
+        TopicDO topicDemo = normalWorkService.getTopicInfo(topicId);
+        TopicInfoResponse response =TopicInfoResponse.TopicInfoResponseBuilder.aTopicInfoResponse()
+                //.withCourseName(TopicDemo.getCourseId())
+                .withTopicName(topicDemo.getTopicName())
+                .withTopicDescription(topicDemo.getTopicDescription())
+                .withTopicTimeStart(topicDemo.getTopicTimeStart())
+                .withTopicTimeEnd(topicDemo.getTopicTimeEnd()).build();
+        return PackedResponse.success(response, "");
+        //return PackedResponse.success(response,"ok");
     }
 }
