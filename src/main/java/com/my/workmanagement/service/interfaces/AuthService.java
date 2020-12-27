@@ -1,7 +1,8 @@
 package com.my.workmanagement.service.interfaces;
 
+import com.my.workmanagement.exception.UndefinedUserRoleException;
 import com.my.workmanagement.model.ERole;
 
 public interface AuthService {
-    String login(String username, String password, ERole userRole);
+    String login(String username, String password, ERole userRole) throws UndefinedUserRoleException;
 }

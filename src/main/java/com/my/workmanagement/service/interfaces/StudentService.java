@@ -6,5 +6,5 @@ import org.springframework.web.multipart.MultipartFile;
 public interface StudentService {
     Resource getStudentExcel(String courseId);
 
-    boolean importStudents(MultipartFile file);
+    boolean importStudents(Integer courseId, MultipartFile file);
 }

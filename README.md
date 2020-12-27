@@ -4,7 +4,7 @@
 ----
 ###学生操作
 - 学生个人信息
-  - [ ] 获取学生信息(姓名,班级,密码)                 GET /student-info/:stuId
+  - [ ] 获取学生信息(姓名,班级,密码)                 GET /student/:stuId
 - 作业管理
   - 获取课程列表                               GET /student/:studentId/course +
   - 平时作业
@@ -23,10 +23,10 @@
 ----
 ###教师操作
 - 教师个人信息
-  - [ ] 获取教师信息(姓名,电话,密码等)               GET /teacher-info/:teacherId
+  - [ ] 获取教师信息(姓名,电话,密码等)               GET /teacher/:teacherId
 - 学生管理
   - [ ] 获取课程列表                              GET /teacher/:teacherId/course   ++        
-  - [ ] 获取某门课学生信息                         GET /student-info/:courseId
+  - [ ] 获取某门课学生信息                         GET /student/:courseId
   - [ ] 导入某门课学生信息(EXCEL)                  POST /course/:courseId
 - 作业管理
   - [ ] 获取课程列表                              GET /teacher/:teacherId/course   ++

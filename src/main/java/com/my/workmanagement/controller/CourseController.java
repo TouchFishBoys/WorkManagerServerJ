@@ -67,8 +67,8 @@ public class CourseController {
     @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_TEACHER)")
     public ResponseEntity<?> importStudents(
             @RequestParam(value = "file", required = true) MultipartFile excelFile,
-            @PathVariable String courseId) {
-        boolean result = studentService.importStudents(excelFile);
+            @PathVariable Integer courseId) {
+        boolean result = studentService.importStudents(courseId, excelFile);
         return ResponseEntity.ok(result);
     }
 }

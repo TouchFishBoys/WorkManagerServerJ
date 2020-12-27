@@ -14,7 +14,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public boolean importStudents(MultipartFile file) {
+    public boolean importStudents(Integer courseId, MultipartFile file) {
         return false;
     }
 

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,8 +18,8 @@ import javax.validation.Valid;
 @RequestMapping("/auth")
 @CrossOrigin
 public class AuthController {
-    private final AuthService authService;
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+    private final AuthService authService;
 
     @Autowired
     public AuthController(AuthService authService) {
@@ -46,6 +47,18 @@ public class AuthController {
 
     @RequestMapping("/hello")
     public ResponseEntity<PackedResponse<String>> hello() {
+        return ResponseEntity.ok(PackedResponse.success("hello", "hello"));
+    }
+
+    @RequestMapping("/helloTeacher")
+    @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_TEACHER)")
+    public ResponseEntity<PackedResponse<String>> helloTeacher() {
+        return ResponseEntity.ok(PackedResponse.success("hello", "hello"));
+    }
+
+    @RequestMapping("/helloStudent")
+    @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_STUDENT)")
+    public ResponseEntity<PackedResponse<String>> helloStudent() {
         return ResponseEntity.ok(PackedResponse.success("hello", "hello"));
     }
 }

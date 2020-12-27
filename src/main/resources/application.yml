@@ -10,9 +10,9 @@ spring:
     hibernate:
       ddl-auto: update
     open-in-view: false
-    show-sql: true
+    show-sql: false
   datasource:
-    url: "jdbc:${WORK_DB_TYPE:mysql}://${WODK_DB_URL:localhost}:${WORK_DB_PORT:3306}/work_management?serverTimezone=UTC"
+    url: "jdbc:${WORK_DB_TYPE:mysql}://${WORK_DB_URL:localhost}:${WORK_DB_PORT:3306}/work_management?serverTimezone=UTC"
     username: ${WORK_DB_USERNAME:root}
     password: ${WORK_DB_PASSWORD:root}
 server:

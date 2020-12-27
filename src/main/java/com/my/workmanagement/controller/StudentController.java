@@ -55,8 +55,11 @@ public class StudentController {
     @PostMapping(value = "/{courseId}", consumes = {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             "application/vnd.ms-excel"})
     @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_TEACHER)")
-    public ResponseEntity<?> importStudents(@RequestParam(value = "excel", required = true) MultipartFile excelFile) {
-        boolean result = studentService.importStudents(excelFile);
+    public ResponseEntity<?> importStudents(
+            @RequestParam(value = "excel", required = true) MultipartFile excelFile,
+            @PathVariable Integer courseId
+    ) {
+        boolean result = studentService.importStudents(courseId, excelFile);
         return ResponseEntity.ok(result);
     }
 
