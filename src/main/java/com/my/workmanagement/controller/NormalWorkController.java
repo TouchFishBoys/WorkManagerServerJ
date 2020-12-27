@@ -3,6 +3,7 @@ package com.my.workmanagement.controller;
 import javax.websocket.server.PathParam;
 
 import com.my.workmanagement.exception.StorageFileNotFoundException;
+import com.my.workmanagement.service.interfaces.FileStorageService;
 import com.my.workmanagement.service.interfaces.NormalWorkService;
 
 import java.util.List;
@@ -23,10 +24,12 @@ public class NormalWorkController {
     Logger logger = LoggerFactory.getLogger(NormalWorkController.class);
 
     private final NormalWorkService normalWorkService;
+    private final FileStorageService fileStorageService;
 
     @Autowired
-    public NormalWorkController(NormalWorkService normalWorkService) {
+    public NormalWorkController(NormalWorkService normalWorkService, FileStorageService fileStorageService) {
         this.normalWorkService = normalWorkService;
+        this.fileStorageService = fileStorageService;
     }
 
     @PostMapping(value = "/{stuId}/{topicId}", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -48,7 +51,9 @@ public class NormalWorkController {
     }
 
     @GetMapping(value = "/{stuId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<String>> getNormalWorkList(@PathParam("stuId") Integer stuId) {
+    public ResponseEntity<List<String>> getNormalWorkList(
+            @PathVariable Integer stuId
+    ) {
         List<String> workList = normalWorkService.getStuSubmittedList(stuId);
         return ResponseEntity.ok(workList);
     }

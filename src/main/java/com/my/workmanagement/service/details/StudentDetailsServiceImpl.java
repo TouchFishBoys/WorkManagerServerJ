@@ -48,6 +48,7 @@ public class StudentDetailsServiceImpl implements UserDetailsService {
         } else {
             logger.info("Found student: {}", student.getStudentName());
             return new WMUserDetails(
+                    student.getStudentId(),
                     student.getStudentNum(),
                     student.getStudentPassword(),
                     ERole.ROLE_STUDENT,

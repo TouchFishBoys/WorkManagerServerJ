@@ -5,7 +5,7 @@ import com.my.workmanagement.model.ERole;
 import javax.validation.constraints.NotEmpty;
 
 public class LoginRequest {
-    @NotEmpty
+    @NotEmpty(message = "Username cant be empty")
     private String username;
     @NotEmpty
     private String password;

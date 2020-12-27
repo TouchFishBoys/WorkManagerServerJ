@@ -43,6 +43,7 @@ public class TeacherDetailsServiceImpl implements UserDetailsService {
         } else {
             logger.info("Found teacher {}", teacher.getTeacherName());
             return new WMUserDetails(
+                    teacher.getTeacherId(),
                     teacher.getTeacherNum(),
                     teacher.getTeacherPassword(),
                     ERole.ROLE_TEACHER,

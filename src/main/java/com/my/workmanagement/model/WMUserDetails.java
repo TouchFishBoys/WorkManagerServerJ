@@ -6,12 +6,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 public class WMUserDetails implements UserDetails {
+    private final Integer userId;
     private final String username;
     private final String password;
     private final ERole role;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public WMUserDetails(String username, String password, ERole role, Collection<? extends GrantedAuthority> authorities) {
+    public WMUserDetails(Integer userId, String username, String password, ERole role, Collection<? extends GrantedAuthority> authorities) {
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.role = role;
