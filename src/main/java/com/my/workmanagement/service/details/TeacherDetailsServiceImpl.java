@@ -35,7 +35,7 @@ public class TeacherDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String teacherNumber) throws UsernameNotFoundException {
-        TeacherDO teacher = teacherRepository.findByTeacherNumber(teacherNumber);
+        TeacherDO teacher = teacherRepository.findByTeacherNum(teacherNumber);
         String[] roles = {ERole.ROLE_TEACHER.name()};
         if (teacher == null) {
             logger.info("Teacher {} not found", teacherNumber);

@@ -10,18 +10,20 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "student")
 public class StudentDO {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int stuId;
+    @GeneratedValue
+    @Column(length = 8)
+    private Integer studentId;
+
+    @Column(nullable = false)
+    private String studentName;
     @Column(nullable = false, unique = true)
-    private String stuNum;
+    private String studentNum;
     @Column(nullable = false)
-    private String stuName;
+    private String studentPassword;
+
     @Column(nullable = false)
-    private String stuPassword;
-    @Column(nullable = false)
-    private String stuClass;
+    private String studentClass;
 
     @CreationTimestamp
     private Timestamp gmtCreate;
@@ -31,44 +33,44 @@ public class StudentDO {
     public StudentDO() {
     }
 
-    public int getStuId() {
-        return stuId;
+    public Integer getStudentId() {
+        return studentId;
     }
 
-    public void setStuId(int stuId) {
-        this.stuId = stuId;
+    public void setStudentId(Integer stuId) {
+        this.studentId = stuId;
     }
 
-    public String getStuNum() {
-        return stuNum;
+    public String getStudentNum() {
+        return studentNum;
     }
 
-    public void setStuNum(String stuNum) {
-        this.stuNum = stuNum;
+    public void setStudentNum(String stuNum) {
+        this.studentNum = stuNum;
     }
 
-    public String getStuName() {
-        return stuName;
+    public String getStudentName() {
+        return studentName;
     }
 
-    public void setStuName(String stuName) {
-        this.stuName = stuName;
+    public void setStudentName(String stuName) {
+        this.studentName = stuName;
     }
 
-    public String getStuPassword() {
-        return stuPassword;
+    public String getStudentPassword() {
+        return studentPassword;
     }
 
-    public void setStuPassword(String stuPassword) {
-        this.stuPassword = stuPassword;
+    public void setStudentPassword(String stuPassword) {
+        this.studentPassword = stuPassword;
     }
 
-    public String getStuClass() {
-        return stuClass;
+    public String getStudentClass() {
+        return studentClass;
     }
 
-    public void setStuClass(String stuClass) {
-        this.stuClass = stuClass;
+    public void setStudentClass(String stuClass) {
+        this.studentClass = stuClass;
     }
 
     public Timestamp getGmtCreate() {
@@ -90,11 +92,11 @@ public class StudentDO {
     @Override
     public String toString() {
         return "StudentDO{" +
-                "stuId=" + stuId +
-                ", stuNum='" + stuNum + '\'' +
-                ", stuName='" + stuName + '\'' +
-                ", stuPassword='" + stuPassword + '\'' +
-                ", stuClass='" + stuClass + '\'' +
+                "stuId=" + studentId +
+                ", stuNum='" + studentNum + '\'' +
+                ", stuName='" + studentName + '\'' +
+                ", stuPassword='" + studentPassword + '\'' +
+                ", stuClass='" + studentClass + '\'' +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';

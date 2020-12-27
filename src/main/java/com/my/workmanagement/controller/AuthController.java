@@ -45,18 +45,18 @@ public class AuthController {
         return ResponseEntity.ok(PackedResponse.success(response, ""));
     }
 
-    @RequestMapping("/hello")
+    @RequestMapping("/who-am-i")
     public ResponseEntity<PackedResponse<String>> hello() {
         return ResponseEntity.ok(PackedResponse.success("hello", "hello"));
     }
 
-    @RequestMapping("/helloTeacher")
+    @RequestMapping("/am-i-a-teacher")
     @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_TEACHER)")
     public ResponseEntity<PackedResponse<String>> helloTeacher() {
         return ResponseEntity.ok(PackedResponse.success("hello", "hello"));
     }
 
-    @RequestMapping("/helloStudent")
+    @RequestMapping("/am-i-a-student")
     @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_STUDENT)")
     public ResponseEntity<PackedResponse<String>> helloStudent() {
         return ResponseEntity.ok(PackedResponse.success("hello", "hello"));

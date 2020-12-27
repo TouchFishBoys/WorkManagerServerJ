@@ -40,16 +40,16 @@ public class StudentDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String studentNumber) throws UsernameNotFoundException {
-        StudentDO student = studentRepository.findByStudentNumber(studentNumber);
+        StudentDO student = studentRepository.findByStudentNum(studentNumber);
         String[] roles = {ERole.ROLE_STUDENT.name()};
         if (student == null) {
             logger.info("Student {} not found", studentNumber);
             throw new UsernameNotFoundException(String.format("No user found with student_id '%s", studentNumber));
         } else {
-            logger.info("Found student: {}", student.getStuName());
+            logger.info("Found student: {}", student.getStudentName());
             return new WMUserDetails(
-                    student.getStuNum(),
-                    student.getStuPassword(),
+                    student.getStudentNum(),
+                    student.getStudentPassword(),
                     ERole.ROLE_STUDENT,
                     Arrays.stream(roles).map(SimpleGrantedAuthority::new).collect(Collectors.toList())
             );

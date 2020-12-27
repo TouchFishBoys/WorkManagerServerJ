@@ -12,7 +12,7 @@ public class TeacherDO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int teacherId;
+    private Integer teacherId;
     @Column(nullable = false, unique = true)
     private String teacherNum;
     @Column(nullable = false)
@@ -30,11 +30,11 @@ public class TeacherDO {
     public TeacherDO() {
     }
 
-    public int getTeacherId() {
+    public Integer getTeacherId() {
         return teacherId;
     }
 
-    public void setTeacherId(int teacherId) {
+    public void setTeacherId(Integer teacherId) {
         this.teacherId = teacherId;
     }
 

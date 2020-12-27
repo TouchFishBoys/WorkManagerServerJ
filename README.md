@@ -7,18 +7,18 @@
   - [ ] 获取学生信息(姓名,班级,密码)                 GET /student/:stuId
 - 作业管理
   - 获取课程列表                               GET /student/:studentId/course +
-  - 平时作业
-    - [ ] 获取选定课程下的课题列表                   GET /course/:courseId/exp-task    /
-    - [ ] 获取某课题的信息                         GET /course/:courseId/exp-task/:topicId  //
-    - [ ] 上传平时作业                             POST /student/:stuId/exp-task/:topicId/file
-    - [ ] 下载某个实验作业                          GET /exp-task/:expId/file        ///
-  - 大作业
-    - [ ] 获取上传大作业信息(包括下载链接)             GET /final-task/:finalId        ////
-    - [ ] 上传大作业                               POST /group/:groupId/final-task/file
-    - [ ] 下载大作业文件                            GET /final-task/:finalId/file  /////
+  - 平时作业 (NormalWorkController)
+    - [ ] 获取选定课程下的课题列表                   GET /course/:courseId/topic    /
+    - [ ] 获取某课题的信息                         GET /course/:courseId/topic/:topicId  //
+    - [ ] 上传平时作业                             POST /student/:stuId/topic/:topicId/file
+    - [ ] 下载某个实验作业                          GET /student/topic/:topicId/file        ///
+  - 大作业 (FinalWorkController)
+    - [ ] 获取上传大作业信息(包括下载链接)             GET /team/:groupId        ////
+    - [ ] 上传大作业                               POST /team/:groupId/file
+    - [ ] 下载大作业文件                            GET /team/:groupId/file  /////
 - 课程管理
   - [ ] 获取课程列表                               GET /student/:studentId/course +
-  - [ ] 选课                                     POST /student/:studentId/course/:courseId
+  - [ ] 选课                                     POST /course/:courseId/student/:studentId
   - [ ] 获取某课程的信息                           GET /course/:courseId   //////
 ----
 ###教师操作
@@ -26,7 +26,7 @@
   - [ ] 获取教师信息(姓名,电话,密码等)               GET /teacher/:teacherId
 - 学生管理
   - [ ] 获取课程列表                              GET /teacher/:teacherId/course   ++        
-  - [ ] 获取某门课学生信息                         GET /student/:courseId
+  - [ ] 获取某门课学生信息                         GET /course/:courseId
   - [ ] 导入某门课学生信息(EXCEL)                  POST /course/:courseId
 - 作业管理
   - [ ] 获取课程列表                              GET /teacher/:teacherId/course   ++

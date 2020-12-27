@@ -7,25 +7,19 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "course")
-public class CourseDO {
+@Table(name = "team")
+public class TeamDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer courseId;
+    private Integer teamId;
     @Column(nullable = false, unique = true)
-    private String courseName;
-    @JoinColumn(nullable = false)
-    @OneToOne
-    private TeacherDO teacherId;
-
-    private String courseDescription;
-    private Integer courseYear;
+    private String teamName;
 
     @CreationTimestamp
     private Timestamp gmtCreate;
     @UpdateTimestamp
     private Timestamp gmtModified;
 
-    public CourseDO() {
+    public TeamDO() {
     }
 }

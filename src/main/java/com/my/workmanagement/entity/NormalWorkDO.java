@@ -12,15 +12,18 @@ public class NormalWorkDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int nworkId;
-    @Column(nullable = false)
-    private int stuId;
-    @Column(nullable = false)
-    private String topicId;
-    @Column(nullable = false, unique = true)
-    private String nworkName;
-    private int nworkScore;
 
-    @CreationTimestamp
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    private StudentDO stuId;
+    @JoinColumn(nullable = false)
+    @OneToOne
+    private TopicDO topicId;
+
+    @JoinColumn(nullable = false, unique = true)
+    private String nworkName;
+    private Integer nworkScore;
+
     private Timestamp timeUpload;
     @CreationTimestamp
     private Timestamp gmtCreate;
@@ -28,83 +31,5 @@ public class NormalWorkDO {
     private Timestamp gmtModified;
 
     public NormalWorkDO() {
-    }
-
-    public int getNworkId() {
-        return nworkId;
-    }
-
-    public void setNworkId(int nworkId) {
-        this.nworkId = nworkId;
-    }
-
-    public int getStuId() {
-        return stuId;
-    }
-
-    public void setStuId(int stuId) {
-        this.stuId = stuId;
-    }
-
-    public String getTopicId() {
-        return topicId;
-    }
-
-    public void setTopicId(String topicId) {
-        this.topicId = topicId;
-    }
-
-    public String getNworkName() {
-        return nworkName;
-    }
-
-    public void setNworkName(String nworkName) {
-        this.nworkName = nworkName;
-    }
-
-    public int getNworkScore() {
-        return nworkScore;
-    }
-
-    public void setNworkScore(int nworkScore) {
-        this.nworkScore = nworkScore;
-    }
-
-    public Timestamp getTimeUpload() {
-        return timeUpload;
-    }
-
-    public void setTimeUpload(Timestamp timeUpload) {
-        this.timeUpload = timeUpload;
-    }
-
-    public Timestamp getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Timestamp gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Timestamp getGmtModified() {
-        return gmtModified;
-    }
-
-    public void setGmtModified(Timestamp gmtModified) {
-        this.gmtModified = gmtModified;
-    }
-
-    @Override
-    public String toString() {
-        return "NormalWorkDO{" +
-                "nworkId=" + nworkId +
-                ", stuId=" + stuId +
-                ", topicId='" + topicId + '\'' +
-                ", nworkName='" + nworkName + '\'' +
-                ", nworkScore=" + nworkScore +
-                ", timeUpload=" + timeUpload +
-                ", gmtCreate=" + gmtCreate +
-                ", gmtModified=" + gmtModified +
-                '}';
     }
 }

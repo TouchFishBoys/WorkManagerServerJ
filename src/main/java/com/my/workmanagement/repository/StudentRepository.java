@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface StudentRepository extends CrudRepository<StudentDO, Integer> {
-    StudentDO findByStudentNumber(String studentNumber);
+    StudentDO findByStudentNum(String studentNumber);
 }
