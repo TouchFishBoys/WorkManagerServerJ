@@ -18,9 +18,9 @@ public class TopicDO {
     private String topicName;
     private String topicDescription;
     @CreationTimestamp
-    private Timestamp timeStart;
+    private Timestamp topicTimeStart;
     @CreationTimestamp
-    private Timestamp timeEnd;
+    private Timestamp topicTimeEnd;
     @CreationTimestamp
     private Timestamp gmtCreate;
     @CreationTimestamp
@@ -58,20 +58,20 @@ public class TopicDO {
         this.topicDescription = topicDescription;
     }
 
-    public Timestamp getTimeStart() {
-        return timeStart;
+    public Timestamp getTopicTimeStart() {
+        return topicTimeStart;
     }
 
-    public void setTimeStart(Timestamp timeStart) {
-        this.timeStart = timeStart;
+    public void setTopicTimeStart(Timestamp topicTimeStart) {
+        this.topicTimeStart = topicTimeStart;
     }
 
-    public Timestamp getTimeEnd() {
-        return timeEnd;
+    public Timestamp getTopicTimeEnd() {
+        return topicTimeEnd;
     }
 
-    public void setTimeEnd(Timestamp timeEnd) {
-        this.timeEnd = timeEnd;
+    public void setTopicTimeEnd(Timestamp topicTimeEnd) {
+        this.topicTimeEnd = topicTimeEnd;
     }
 
     public Timestamp getGmtCreate() {
@@ -97,8 +97,8 @@ public class TopicDO {
                 ", courseId=" + courseId +
                 ", topicName='" + topicName + '\'' +
                 ", topicDescription='" + topicDescription + '\'' +
-                ", timeStart=" + timeStart +
-                ", timeEnd=" + timeEnd +
+                ", topicTimeStart=" + topicTimeStart +
+                ", topicTimeEnd=" + topicTimeEnd +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';
@@ -108,13 +108,14 @@ public class TopicDO {
         return new TopicBuilder();
     }
 
+
     public static final class TopicBuilder {
         private int topicId;
         private int courseId;
         private String topicName;
         private String topicDescription;
-        private Timestamp timeStart;
-        private Timestamp timeEnd;
+        private Timestamp topicTimeStart;
+        private Timestamp topicTimeEnd;
         private Timestamp gmtCreate;
         private Timestamp gmtModified;
 
@@ -145,13 +146,13 @@ public class TopicDO {
             return this;
         }
 
-        public TopicBuilder withTimeStart(Timestamp timeStart) {
-            this.timeStart = timeStart;
+        public TopicBuilder withTopicTimeStart(Timestamp topicTimeStart) {
+            this.topicTimeStart = topicTimeStart;
             return this;
         }
 
-        public TopicBuilder withTimeEnd(Timestamp timeEnd) {
-            this.timeEnd = timeEnd;
+        public TopicBuilder withTopicTimeEnd(Timestamp topicTimeEnd) {
+            this.topicTimeEnd = topicTimeEnd;
             return this;
         }
 
@@ -171,8 +172,8 @@ public class TopicDO {
             topicDO.setCourseId(courseId);
             topicDO.setTopicName(topicName);
             topicDO.setTopicDescription(topicDescription);
-            topicDO.setTimeStart(timeStart);
-            topicDO.setTimeEnd(timeEnd);
+            topicDO.setTopicTimeStart(topicTimeStart);
+            topicDO.setTopicTimeEnd(topicTimeEnd);
             topicDO.setGmtCreate(gmtCreate);
             topicDO.setGmtModified(gmtModified);
             return topicDO;

@@ -15,8 +15,8 @@ public class CourseDO {
     private String courseName;
     @Column(nullable = false)
     private int teacherId;
-    private String description;
-    private int year;
+    private String courseDescription;
+    private int courseYear;
     @CreationTimestamp
     private Timestamp gmtCreate;
     @CreationTimestamp
@@ -46,20 +46,20 @@ public class CourseDO {
         this.teacherId = teacherId;
     }
 
-    public String getDescription() {
-        return description;
+    public String getCourseDescription() {
+        return courseDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setCourseDescription(String courseDescription) {
+        this.courseDescription = courseDescription;
     }
 
-    public int getYear() {
-        return year;
+    public int getCourseYear() {
+        return courseYear;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setCourseYear(int courseYear) {
+        this.courseYear = courseYear;
     }
 
     public Timestamp getGmtCreate() {
@@ -84,8 +84,8 @@ public class CourseDO {
                 "courseId=" + courseId +
                 ", courseName='" + courseName + '\'' +
                 ", teacherId=" + teacherId +
-                ", description='" + description + '\'' +
-                ", year=" + year +
+                ", courseDescription='" + courseDescription + '\'' +
+                ", courseYear=" + courseYear +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';
@@ -95,12 +95,13 @@ public class CourseDO {
         return new CourseBuilder();
     }
 
+
     public static final class CourseBuilder {
         private int courseId;
         private String courseName;
         private int teacherId;
-        private String description;
-        private int year;
+        private String courseDescription;
+        private int courseYear;
         private Timestamp gmtCreate;
         private Timestamp gmtModified;
 
@@ -126,13 +127,13 @@ public class CourseDO {
             return this;
         }
 
-        public CourseBuilder withDescription(String description) {
-            this.description = description;
+        public CourseBuilder withCourseDescription(String courseDescription) {
+            this.courseDescription = courseDescription;
             return this;
         }
 
-        public CourseBuilder withYear(int year) {
-            this.year = year;
+        public CourseBuilder withCourseYear(int courseYear) {
+            this.courseYear = courseYear;
             return this;
         }
 
@@ -151,8 +152,8 @@ public class CourseDO {
             courseDO.setCourseId(courseId);
             courseDO.setCourseName(courseName);
             courseDO.setTeacherId(teacherId);
-            courseDO.setDescription(description);
-            courseDO.setYear(year);
+            courseDO.setCourseDescription(courseDescription);
+            courseDO.setCourseYear(courseYear);
             courseDO.setGmtCreate(gmtCreate);
             courseDO.setGmtModified(gmtModified);
             return courseDO;

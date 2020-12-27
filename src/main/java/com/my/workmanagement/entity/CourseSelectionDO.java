@@ -12,7 +12,7 @@ public class CourseSelectionDO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int csId;
     @Column(nullable = false)
-    private int stuNumber;
+    private int stuId;
     @Column(nullable = false)
     private int courseId;
     @Column(nullable = false)
@@ -32,12 +32,12 @@ public class CourseSelectionDO {
         this.csId = csId;
     }
 
-    public int getStuNumber() {
-        return stuNumber;
+    public int getStuId() {
+        return stuId;
     }
 
-    public void setStuNumber(int stuNumber) {
-        this.stuNumber = stuNumber;
+    public void setStuId(int stuId) {
+        this.stuId = stuId;
     }
 
     public int getCourseId() {
@@ -92,7 +92,7 @@ public class CourseSelectionDO {
     public String toString() {
         return "CourseSelectionDO{" +
                 "csId=" + csId +
-                ", stuNumber=" + stuNumber +
+                ", stuId=" + stuId +
                 ", courseId=" + courseId +
                 ", groupId=" + groupId +
                 ", qaScore=" + qaScore +
@@ -109,7 +109,7 @@ public class CourseSelectionDO {
 
     public static final class CourseSelectionBuilder {
         private int csId;
-        private int stuNumber;
+        private int stuId;
         private int courseId;
         private int groupId;
         private int qaScore;
@@ -129,8 +129,8 @@ public class CourseSelectionDO {
             return this;
         }
 
-        public CourseSelectionBuilder withStuNumber(int stuNumber) {
-            this.stuNumber = stuNumber;
+        public CourseSelectionBuilder withStuId(int stuId) {
+            this.stuId = stuId;
             return this;
         }
 
@@ -167,7 +167,7 @@ public class CourseSelectionDO {
         public CourseSelectionDO build() {
             CourseSelectionDO courseSelectionDO = new CourseSelectionDO();
             courseSelectionDO.setCsId(csId);
-            courseSelectionDO.setStuNumber(stuNumber);
+            courseSelectionDO.setStuId(stuId);
             courseSelectionDO.setCourseId(courseId);
             courseSelectionDO.setGroupId(groupId);
             courseSelectionDO.setQaScore(qaScore);
