@@ -20,6 +20,10 @@ public class WMUserDetails implements UserDetails {
         this.authorities = authorities;
     }
 
+    public Integer getUserId() {
+        return userId;
+    }
+
     // 账号未过期
     @Override
     public boolean isAccountNonExpired() {
