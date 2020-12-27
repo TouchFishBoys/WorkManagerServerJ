@@ -25,17 +25,20 @@ import java.io.IOException;
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenFilter.class);
-    @Autowired
-    @Qualifier("studentDetailsService")
-    private UserDetailsService studentDetailsService;
-    @Autowired
-    @Qualifier("teacherDetailsService")
-    private UserDetailsService teacherDetailsService;
-    @Autowired
-    private JwtUtils jwtUtils;
-
     public static final String HEADER_AUTH = "Authorization";
     public static final String TOKEN_HEAD = "Bearer ";
+
+    private final UserDetailsService studentDetailsService;
+    private final UserDetailsService teacherDetailsService;
+
+    @Autowired
+    public JwtTokenFilter(
+            @Qualifier("studentDetailsService") UserDetailsService studentDetailsService,
+            @Qualifier("teacherDetailsService") UserDetailsService teacherDetailsService
+    ) {
+        this.teacherDetailsService = teacherDetailsService;
+        this.studentDetailsService = studentDetailsService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

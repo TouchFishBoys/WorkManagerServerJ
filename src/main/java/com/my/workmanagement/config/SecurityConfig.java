@@ -3,8 +3,6 @@ package com.my.workmanagement.config;
 import com.my.workmanagement.filter.JwtTokenFilter;
 import com.my.workmanagement.util.authprovider.StudentAuthenticationProvider;
 import com.my.workmanagement.util.authprovider.TeacherAuthenticationProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -13,28 +11,23 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
-import java.nio.charset.StandardCharsets;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+
     private final UserDetailsService teacherDetailsService;
     private final UserDetailsService studentDetailsService;
     @Resource
@@ -49,31 +42,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.teacherDetailsService = teacherDetailsService;
     }
 
-    /**
-     * 注入 教师验证 Provider
-     *
-     * @return
-     */
     @Bean("TeacherAuthenticationProvider")
     DaoAuthenticationProvider daoTeacherAuthentication() {
         return new TeacherAuthenticationProvider(encoder(), teacherDetailsService);
     }
 
-    /**
-     * 注入 学生验证 Provider
-     *
-     * @return
-     */
     @Bean("StudentAuthenticationProvider")
     DaoAuthenticationProvider daoStudentAuthentication() {
         return new StudentAuthenticationProvider(encoder(), studentDetailsService);
     }
 
-    /**
-     * 注入 encoder
-     *
-     * @return
-     */
     @Bean
     public PasswordEncoder encoder() {
         // return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -98,7 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
+    public AuthenticationManager authenticationManagerBean() {
         DaoAuthenticationProvider dapTeacher = new DaoAuthenticationProvider();
         dapTeacher.setUserDetailsService(teacherDetailsService);
 
