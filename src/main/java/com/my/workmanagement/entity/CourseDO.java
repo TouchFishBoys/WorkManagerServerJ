@@ -16,7 +16,7 @@ public class CourseDO {
     private String courseName;
     @JoinColumn(nullable = false)
     @OneToOne
-    private TeacherDO teacherId;
+    private TeacherDO teacher;
 
     private String courseDescription;
     private Integer courseYear;
