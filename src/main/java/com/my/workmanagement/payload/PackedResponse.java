@@ -1,5 +1,6 @@
 package com.my.workmanagement.payload;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
@@ -8,6 +9,8 @@ public final class PackedResponse<T> {
     private final T data;
     private final String message;
     private final ResponseResult result;
+    @JsonFormat(shape = JsonFormat.Shape.STRING,
+            pattern = "yyyy-MM-dd hh:mm:ss")
     private final LocalDateTime timestamp;
 
     public static <T> ResponseEntity<PackedResponse<T>> badRequest(T data, String message) {
