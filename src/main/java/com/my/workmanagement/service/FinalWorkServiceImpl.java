@@ -26,8 +26,8 @@ public class FinalWorkServiceImpl implements FinalWorkService {
                 .withFworkName(finalWorkDO.getFworkName())
                 .withFworkDescreption(finalWorkDO.getFworkDescription())
                 .withFworkScore(finalWorkDO.getFworkScore())
-                .withTeamId(finalWorkDO.getTeamId().getTeamId())
-                .withTeamName(finalWorkDO.getTeamId().getTeamName())
+                .withTeamId(teamDO.getTeamId())
+                .withTeamName(teamDO.getTeamName())
                 .withTimeUpload(finalWorkDO.getTimeUpload())
                 .build();
     }
