@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface FinalWorkService {
-    FinalWorkInfoResponse getFinalWorkInfo(Integer teamId);
+    FinalWorkInfoResponse getFinalWorkInfo(Integer teamId) throws IdNotFoundException;
 
     boolean setFinalWorkScore(Integer finalWork, Integer score) throws IdNotFoundException;
 }
