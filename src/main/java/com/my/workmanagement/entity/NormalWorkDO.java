@@ -15,10 +15,10 @@ public class NormalWorkDO {
 
     @JoinColumn(nullable = false)
     @ManyToOne
-    private StudentDO stuId;
+    private StudentDO student;
     @JoinColumn(nullable = false)
     @OneToOne
-    private TopicDO topicId;
+    private TopicDO topic;
 
     @JoinColumn(nullable = false, unique = true)
     private String nworkName;
@@ -41,20 +41,20 @@ public class NormalWorkDO {
         this.nworkId = nworkId;
     }
 
-    public StudentDO getStuId() {
-        return stuId;
+    public StudentDO getStudent() {
+        return student;
     }
 
-    public void setStuId(StudentDO stuId) {
-        this.stuId = stuId;
+    public void setStudent(StudentDO stuId) {
+        this.student = stuId;
     }
 
-    public TopicDO getTopicId() {
-        return topicId;
+    public TopicDO getTopic() {
+        return topic;
     }
 
-    public void setTopicId(TopicDO topicId) {
-        this.topicId = topicId;
+    public void setTopic(TopicDO topicId) {
+        this.topic = topicId;
     }
 
     public String getNworkName() {
@@ -101,8 +101,8 @@ public class NormalWorkDO {
     public String toString() {
         return "NormalWorkDO{" +
                 "nworkId=" + nworkId +
-                ", stuId=" + stuId +
-                ", topicId=" + topicId +
+                ", stuId=" + student +
+                ", topicId=" + topic +
                 ", nworkName='" + nworkName + '\'' +
                 ", nworkScore=" + nworkScore +
                 ", timeUpload=" + timeUpload +
