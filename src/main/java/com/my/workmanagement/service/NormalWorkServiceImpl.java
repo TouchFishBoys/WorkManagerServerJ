@@ -1,7 +1,7 @@
 package com.my.workmanagement.service;
 
 import com.my.workmanagement.entity.TopicDO;
-import com.my.workmanagement.payload.response.normalWork.TopicInfoResponse;
+import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import com.my.workmanagement.repository.CourseRepository;
 import com.my.workmanagement.repository.TopicRepository;
 import com.my.workmanagement.service.interfaces.NormalWorkService;

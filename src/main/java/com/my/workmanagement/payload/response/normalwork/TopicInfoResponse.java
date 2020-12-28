@@ -1,4 +1,4 @@
-package com.my.workmanagement.payload.response.normalWork;
+package com.my.workmanagement.payload.response.normalwork;
 
 import java.sql.Timestamp;
 
