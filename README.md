@@ -8,7 +8,7 @@
   - [ ] 获取学生信息(姓名,班级)                  GET /student/:stuId?selectedColumn=[]
 - 作业管理
   - 平时作业 (NormalWorkController)
-    - [ ] 获取题目信息                         GET  /normal-work/:topicId
+    - [x] 获取题目信息                         GET  /normal-work/:topicId
     - [ ] 上传平时作业                         POST /normal-work/:topicId/file
   - 大作业 (FinalWorkController)
     - [ ] 获取大作业信息                       GET  /final-work/:teamId

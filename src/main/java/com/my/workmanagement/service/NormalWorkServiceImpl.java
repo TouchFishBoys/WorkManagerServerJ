@@ -1,7 +1,8 @@
 package com.my.workmanagement.service;
 
 import com.my.workmanagement.entity.TopicDO;
-import com.my.workmanagement.payload.response.normalWrok.TopicInfoResponse;
+import com.my.workmanagement.payload.response.normalWork.TopicInfoResponse;
+import com.my.workmanagement.repository.CourseRepository;
 import com.my.workmanagement.repository.TopicRepository;
 import com.my.workmanagement.service.interfaces.NormalWorkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,14 @@ import java.util.List;
 @Service
 public class NormalWorkServiceImpl implements NormalWorkService {
     private final TopicRepository topicRepository;
+    private final CourseRepository courseRepository;
 
     @Autowired
-    public NormalWorkServiceImpl(TopicRepository topicRepository) {
+    public NormalWorkServiceImpl(TopicRepository topicRepository, CourseRepository courseRepository) {
         this.topicRepository = topicRepository;
+        this.courseRepository = courseRepository;
     }
+
     @Override
     public boolean store(Integer stuId, Integer topicId, MultipartFile file) {
         return false;
@@ -40,8 +44,14 @@ public class NormalWorkServiceImpl implements NormalWorkService {
     }
 
     @Override
-    public TopicDO getTopicInfo(Integer topicId){
-        return topicRepository.findByTopicId(topicId);
+    public TopicInfoResponse getTopicInfo(Integer topicId) {
+        TopicDO topicDemo = topicRepository.findByTopicId(topicId);
+        return TopicInfoResponse.TopicInfoResponseBuilder.aTopicInfoResponse()
+                .withCourseName(courseRepository.findByCourseId(topicId).getCourseName())
+                .withTopicName(topicDemo.getTopicName())
+                .withTopicDescription(topicDemo.getTopicDescription())
+                .withTopicTimeStart(topicDemo.getTopicTimeStart())
+                .withTopicTimeEnd(topicDemo.getTopicTimeEnd()).build();
     }
 
 
