@@ -1,8 +1,10 @@
 package com.my.workmanagement.controller;
 
+import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.response.CourseInfoResponse;
 import com.my.workmanagement.payload.response.student.StudentInfoResponse;
+import com.my.workmanagement.service.interfaces.CourseService;
 import com.my.workmanagement.service.interfaces.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +23,12 @@ public class CourseController {
     private static final Logger logger = LoggerFactory.getLogger(CourseController.class);
 
     private final StudentService studentService;
+    private final CourseService courseService;
 
     @Autowired
-    public CourseController(StudentService studentService) {
+    public CourseController(StudentService studentService,CourseService courseService) {
         this.studentService = studentService;
+        this.courseService=courseService;
     }
 
     /**
@@ -34,9 +38,9 @@ public class CourseController {
      * @return 课程信息
      */
     @GetMapping("/{courseId}")
-    public ResponseEntity<PackedResponse<CourseInfoResponse>> getCourseInfo(@PathVariable Integer courseId) {
+    public ResponseEntity<PackedResponse<CourseInfoResponse>> getCourseInfo(@PathVariable Integer courseId) throws IdNotFoundException {
         logger.info("Getting course info: {}", courseId);
-        CourseInfoResponse response = new CourseInfoResponse();
+        CourseInfoResponse response=courseService.getCourseInfo(courseId);
         return PackedResponse.success(response, "");
     }
 

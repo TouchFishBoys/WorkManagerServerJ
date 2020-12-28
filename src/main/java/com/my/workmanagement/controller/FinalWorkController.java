@@ -1,5 +1,6 @@
 package com.my.workmanagement.controller;
 
+import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.response.finalWork.FinalWorkInfoResponse;
 import com.my.workmanagement.service.interfaces.FinalWorkService;
@@ -26,7 +27,7 @@ public class FinalWorkController {
     }
 
     @GetMapping(value = "/{teamId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PackedResponse<FinalWorkInfoResponse>> getFinalWorkInfo(@PathVariable Integer teamId) {
+    public ResponseEntity<PackedResponse<FinalWorkInfoResponse>> getFinalWorkInfo(@PathVariable Integer teamId) throws IdNotFoundException {
         FinalWorkInfoResponse response = finalWorkService.getFinalWorkInfo(teamId);
         return PackedResponse.success(response, "");
     }
