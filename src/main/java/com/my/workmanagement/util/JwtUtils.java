@@ -26,6 +26,7 @@ public class JwtUtils {
     private static Algorithm algorithm;
 
     public static final String JWT_CLAIM_USERNAME = "username";
+    public static final String JWT_CLAIM_USER_ID = "user_id";
     public static final String JWT_CLAIM_ROLE = "role";
     public static final String JWT_AUTH_ISSURER = "issurer";
 
@@ -50,6 +51,7 @@ public class JwtUtils {
                 .withClaim(JWT_CLAIM_USERNAME, WMUserDetails.getUsername())
                 // 保存 Role
                 .withClaim(JWT_CLAIM_ROLE, WMUserDetails.getRole().name())
+                .withClaim(JWT_CLAIM_USER_ID, WMUserDetails.getUserId())
                 // 加密 Sign
                 .sign(algorithm);
     }
