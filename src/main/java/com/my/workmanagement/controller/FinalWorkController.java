@@ -31,7 +31,7 @@ public class FinalWorkController {
     }
 
     @PostMapping(value = "/{finalId}/score", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    // @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).TEACHER)")
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     public ResponseEntity<PackedResponse<Void>> setFinalWorkScore(
             @PathVariable Integer finalId,
             @RequestBody SetFinalScoreRequest request

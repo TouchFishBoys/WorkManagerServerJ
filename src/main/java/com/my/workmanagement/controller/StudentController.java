@@ -25,6 +25,7 @@ public class StudentController {
 
     /**
      * 获取学生信息
+     *
      * @param stuId 学生 Id
      * @return 学生信息
      */
@@ -42,6 +43,7 @@ public class StudentController {
 
     /**
      * 获取学生参加的课程列表
+     *
      * @param stuId 学生 Id
      * @return 学生参加的课程列表
      */
@@ -55,6 +57,7 @@ public class StudentController {
 
     /**
      * 导入学生
+     *
      * @param excelFile 文件
      * @return 无
      */

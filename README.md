@@ -24,7 +24,7 @@
 - 学生管理
   - [ ] 导入学生信息             POST  /course/:courseId/student?courseName=
   - [ ] 获取学生信息             GET   /course/:courseId/student
-  - [ ] 修改学生信息             PATCH /student/:student
+  - [ ] 修改学生信息             PATCH /student/:studentId
 - 作业管理
   - 平时作业
     - [ ] 获取题目列表           GET  /course/:courseId/normal-work
@@ -36,11 +36,12 @@
   - 大作业
     - [ ] 获取大作业列表         GET /course/:courseId/final-work
     - [ ] 获取大作业信息         GET /final/:finalId
+    - [x] 设置大作业分数         GET /final/:finalId/score
     - 文件相关
       - [ ] 下载大作业文件       GET /final/:finalId/file
     - 文档相关
-      - [ ] 下载大作业文档       GET  /final/:teamId/docuement
-      - [ ] 大作业文档评分       POST /final/:finalId/score
+      - [ ] 下载大作业文档       GET  /final/:finalId/document
+      - [ ] 大作业文档评分       POST /final/:finalId/document/score
     - 答辩相关
       - [ ] 获取答辩记录表       GET  /qa-table/:courseId/:studentId   // Json or Word
       - [ ] 提交答辩记录表       POST /qa-table/:courseId/:studentId

@@ -36,7 +36,7 @@ public class TeacherDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String teacherNumber) throws UsernameNotFoundException {
         TeacherDO teacher = teacherRepository.findByTeacherNum(teacherNumber);
-        String[] roles = {ERole.TEACHER.name()};
+        String[] roles = {ERole.ROLE_TEACHER.name()};
         if (teacher == null) {
             logger.info("Teacher {} not found", teacherNumber);
             throw new UsernameNotFoundException(String.format("No user found with teacher_id '%s'", teacherNumber));
@@ -46,7 +46,7 @@ public class TeacherDetailsServiceImpl implements UserDetailsService {
                     teacher.getTeacherId(),
                     teacher.getTeacherNum(),
                     teacher.getTeacherPassword(),
-                    ERole.TEACHER,
+                    ERole.ROLE_TEACHER,
                     Arrays.stream(roles).map(SimpleGrantedAuthority::new).collect(Collectors.toList())
             );
         }
