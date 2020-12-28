@@ -1,6 +1,8 @@
 package com.my.workmanagement.service;
 
 import com.my.workmanagement.entity.TopicDO;
+import com.my.workmanagement.exception.IdNotFoundException;
+import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import com.my.workmanagement.repository.CourseRepository;
 import com.my.workmanagement.repository.TopicRepository;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -57,7 +60,17 @@ public class NormalWorkServiceImpl implements NormalWorkService {
 
     @Override
     @Transactional
-    public boolean createTopic(String topicName, String topicDescription, Integer courseId) {
-        return false;
+    public Integer createTopic(String topicName, String topicDescription, Integer courseId, Date startTime, Date finishTime) {
+        return null;
+    }
+
+    @Override
+    public List<TopicInfoBO> getTopicInfosAsStudent(Integer courseId, Integer studentId) throws IdNotFoundException {
+        return null;
+    }
+
+    @Override
+    public List<TopicInfoBO> getTopicInfosAsTeacher(Integer courseId, Integer teacherId) throws IdNotFoundException {
+        return null;
     }
 }
