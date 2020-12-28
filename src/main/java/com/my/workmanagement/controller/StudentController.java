@@ -36,9 +36,7 @@ public class StudentController {
             ) {
 
 
-
-        StudentInfoResponse response = new StudentInfoResponse();
-        return ResponseEntity.ok(response);
+        return null;
     }
 
     /**
