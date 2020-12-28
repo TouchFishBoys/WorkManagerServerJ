@@ -2,24 +2,31 @@ package com.my.workmanagement.service;
 
 import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.entity.TeacherDO;
+import com.my.workmanagement.entity.TopicDO;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.payload.response.CourseInfoResponse;
+import com.my.workmanagement.payload.response.normalWork.TopicInfoResponse;
 import com.my.workmanagement.repository.CourseRepository;
 import com.my.workmanagement.repository.TeacherRepository;
 import com.my.workmanagement.repository.TeamRepository;
+import com.my.workmanagement.repository.TopicRepository;
 import com.my.workmanagement.service.interfaces.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     private final TeacherRepository teacherRepository;
+    private final TopicRepository topicRepository;
 
     @Autowired
-    public CourseServiceImpl(CourseRepository courseRepository,TeacherRepository teacherRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository, TeacherRepository teacherRepository, TopicRepository topicRepository) {
         this.courseRepository = courseRepository;
-        this.teacherRepository=teacherRepository;
+        this.teacherRepository = teacherRepository;
+        this.topicRepository = topicRepository;
     }
 
     @Override
@@ -35,14 +42,15 @@ public class CourseServiceImpl implements CourseService {
         }
         return course.getCourseName();
     }
+
     @Override
     public CourseInfoResponse getCourseInfo(Integer courseId) throws IdNotFoundException {
-        CourseDO courseDO=courseRepository.findByCourseId(courseId);
-        if(courseDO==null){
+        CourseDO courseDO = courseRepository.findByCourseId(courseId);
+        if (courseDO == null) {
             throw new IdNotFoundException("course");
         }
-        TeacherDO teacherDO=teacherRepository.findByTeacherId(courseDO.getTeacher().getTeacherId());
-        if(teacherDO==null){
+        TeacherDO teacherDO = teacherRepository.findByTeacherId(courseDO.getTeacher().getTeacherId());
+        if (teacherDO == null) {
             throw new IdNotFoundException("teacher");
         }
         return CourseInfoResponse.CourseInfoResponseBuilder.aCourseInfoResponse()
@@ -51,7 +59,26 @@ public class CourseServiceImpl implements CourseService {
                 .withCourseId(courseId)
                 .withCourseName(courseDO.getCourseName())
                 .withTeacher(teacherDO.getTeacherName())
-                .withStudentCount(courseRepository.getStuNum(courseId))
+                .withStudentCount(topicRepository.countAllByCourseId(courseId))
                 .build();
+    }
+
+    @Override
+    public List<TopicInfoResponse> getTopicResponses(Integer courseId) throws IdNotFoundException {
+        List<TopicDO> Topics = topicRepository.findAllByCourseId(courseId);
+        if(Topics==null){
+            throw new IdNotFoundException("topic");
+        }
+        List<TopicInfoResponse> responses=null;
+        for (Integer i = 0; i < Topics.size(); i++) {
+            responses.add(TopicInfoResponse.TopicInfoResponseBuilder.aTopicInfoResponse()
+            .withCourseName(getCourseName(courseId))
+            .withTopicName(Topics.get(i).getTopicName())
+            .withTopicDescription(Topics.get(i).getTopicDescription())
+            .withTopicTimeStart(Topics.get(i).getTopicTimeStart())
+            .withTopicTimeEnd(Topics.get(i).getTopicTimeEnd())
+            .build());
+        }
+        return responses;
     }
 }

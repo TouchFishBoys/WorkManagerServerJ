@@ -3,6 +3,7 @@ package com.my.workmanagement.controller;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.response.CourseInfoResponse;
+import com.my.workmanagement.payload.response.normalWork.TopicInfoResponse;
 import com.my.workmanagement.payload.response.student.StudentInfoResponse;
 import com.my.workmanagement.service.interfaces.CourseService;
 import com.my.workmanagement.service.interfaces.StudentService;
@@ -74,5 +75,19 @@ public class CourseController {
             @PathVariable Integer courseId) {
         boolean result = studentService.importStudents(courseId, excelFile);
         return ResponseEntity.ok(result);
+    }
+    /**
+     * 获取题目列表
+     *
+     * @param courseId  课程 Id
+     * @return 题目列表
+     */
+    @GetMapping("/{courseId}/topic")
+    public ResponseEntity<PackedResponse<List<TopicInfoResponse>>> getTopicInfoList(
+            @PathVariable Integer courseId
+    ) throws IdNotFoundException {
+        logger.info("Get topic info list");
+        List<TopicInfoResponse> response =courseService.getTopicResponses(courseId);
+        return PackedResponse.success(response, "");
     }
 }

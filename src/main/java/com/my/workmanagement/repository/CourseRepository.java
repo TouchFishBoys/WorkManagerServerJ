@@ -13,9 +13,6 @@ import java.util.List;
 public interface CourseRepository extends PagingAndSortingRepository<CourseDO, Integer> {
     CourseDO findByCourseId(Integer courseId);
 
-    @Query("SELECT count(StudentDO.studentId) FROM CourseSelectionDO WHERE CourseDO.courseId = :courseId")
-    Integer getStuNum(@Param("courseId") Integer courseId);
-    
     List<CourseDO> findAllByTeacherOrderByCourseId(TeacherDO teacher);
 
 }
