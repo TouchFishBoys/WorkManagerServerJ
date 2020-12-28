@@ -8,6 +8,7 @@ import com.my.workmanagement.service.interfaces.NormalWorkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -54,5 +55,9 @@ public class NormalWorkServiceImpl implements NormalWorkService {
                 .withTopicTimeEnd(topicDemo.getTopicTimeEnd()).build();
     }
 
-
+    @Override
+    @Transactional
+    public boolean createTopic(String topicName, String topicDescription, Integer courseId) {
+        return false;
+    }
 }
