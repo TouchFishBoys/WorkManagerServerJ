@@ -1,8 +1,11 @@
 package com.my.workmanagement.controller;
 
+import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.response.CourseInfoResponse;
+import com.my.workmanagement.payload.response.normalWork.TopicInfoResponse;
 import com.my.workmanagement.payload.response.student.StudentInfoResponse;
+import com.my.workmanagement.service.interfaces.CourseService;
 import com.my.workmanagement.service.interfaces.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +24,12 @@ public class CourseController {
     private static final Logger logger = LoggerFactory.getLogger(CourseController.class);
 
     private final StudentService studentService;
+    private final CourseService courseService;
 
     @Autowired
-    public CourseController(StudentService studentService) {
+    public CourseController(StudentService studentService,CourseService courseService) {
         this.studentService = studentService;
+        this.courseService=courseService;
     }
 
     /**
@@ -34,9 +39,9 @@ public class CourseController {
      * @return 课程信息
      */
     @GetMapping("/{courseId}")
-    public ResponseEntity<PackedResponse<CourseInfoResponse>> getCourseInfo(@PathVariable Integer courseId) {
+    public ResponseEntity<PackedResponse<CourseInfoResponse>> getCourseInfo(@PathVariable Integer courseId) throws IdNotFoundException {
         logger.info("Getting course info: {}", courseId);
-        CourseInfoResponse response = new CourseInfoResponse();
+        CourseInfoResponse response=courseService.getCourseInfo(courseId);
         return PackedResponse.success(response, "");
     }
 
@@ -70,5 +75,19 @@ public class CourseController {
             @PathVariable Integer courseId) {
         boolean result = studentService.importStudents(courseId, excelFile);
         return ResponseEntity.ok(result);
+    }
+    /**
+     * 获取题目列表
+     *
+     * @param courseId  课程 Id
+     * @return 题目列表
+     */
+    @GetMapping("/{courseId}/topic")
+    public ResponseEntity<PackedResponse<List<TopicInfoResponse>>> getTopicInfoList(
+            @PathVariable Integer courseId
+    ) throws IdNotFoundException {
+        logger.info("Get topic info list");
+        List<TopicInfoResponse> response =courseService.getTopicResponses(courseId);
+        return PackedResponse.success(response, "");
     }
 }

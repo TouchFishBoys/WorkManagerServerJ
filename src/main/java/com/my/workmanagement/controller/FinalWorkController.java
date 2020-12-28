@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.*;
 
 
 import javax.annotation.Resource;
@@ -21,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/final")
 public class FinalWorkController {
-    Logger logger = LoggerFactory.getLogger(NormalWorkController.class);
+    private static final Logger logger = LoggerFactory.getLogger(NormalWorkController.class);
     private final FinalWorkService finalWorkService;
 
     @Autowired
@@ -30,7 +31,7 @@ public class FinalWorkController {
     }
 
     @GetMapping(value = "/{teamId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PackedResponse<FinalWorkInfoResponse>> getFinalWorkInfo(@PathVariable Integer teamId) {
+    public ResponseEntity<PackedResponse<FinalWorkInfoResponse>> getFinalWorkInfo(@PathVariable Integer teamId) throws IdNotFoundException {
         FinalWorkInfoResponse response = finalWorkService.getFinalWorkInfo(teamId);
         return PackedResponse.success(response, "");
     }

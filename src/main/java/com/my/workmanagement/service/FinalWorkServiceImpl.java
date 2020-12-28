@@ -23,9 +23,15 @@ public class FinalWorkServiceImpl implements FinalWorkService {
     }
 
     @Override
-    public FinalWorkInfoResponse getFinalWorkInfo(Integer teamId) {
-        TeamDO teamDO = teamRepository.findByTeamId(teamId);
+    public FinalWorkInfoResponse getFinalWorkInfo(Integer teamId) throws IdNotFoundException {
+        TeamDO teamDO=teamRepository.findByTeamId(teamId);
+        if(teamDO==null) {
+            throw new IdNotFoundException("team");
+        }
         FinalWorkDO finalWorkDO = finalWorkRepository.findFinalWorkDOByTeamId(teamDO);
+        if(finalWorkDO==null) {
+            throw new IdNotFoundException("finalWork");
+        }
         return FinalWorkInfoResponse.FinalWorkInfoResponseBuilder.aFinalWorkInfoResponse()
                 .withFworkId(finalWorkDO.getFworkId())
                 .withFworkName(finalWorkDO.getFworkName())

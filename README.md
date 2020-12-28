@@ -11,12 +11,12 @@
     - [x] 获取题目信息                         GET  /normal-work/:topicId
     - [ ] 上传平时作业                         POST /normal-work/:topicId/file
   - 大作业 (FinalWorkController)
-    - [ ] 获取大作业信息                       GET  /final-work/:teamId
+    - [x] 获取大作业信息                       GET  /final-work/:teamId
     - [ ] 上传大作业文件                       POST /final-work/:teamId/file
 - 课程管理
   - [ ] 获取已选课程列表                       GET /course
-  - [ ] 获取某课程的信息                       GET /course/:courseId
-  - [ ] 获取课程题目列表                       GET /course/:courseId/topic
+  - [x] 获取某课程的信息                       GET /course/:courseId
+  - [x] 获取课程题目列表                       GET /course/:courseId/topic
 ----
 ###教师操作
 - 教师个人信息

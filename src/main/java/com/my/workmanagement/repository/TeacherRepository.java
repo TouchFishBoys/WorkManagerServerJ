@@ -8,6 +8,9 @@ import java.util.List;
 
 @Repository
 public interface TeacherRepository extends CrudRepository<TeacherDO, Integer> {
+
     TeacherDO findByTeacherNum(String teacherNum);
+
+    TeacherDO findByTeacherId(Integer teacherId);
 
 }
