@@ -2,24 +2,27 @@ package com.my.workmanagement.service;
 
 import com.my.workmanagement.entity.FinalWorkDO;
 import com.my.workmanagement.entity.TeamDO;
+import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.payload.response.finalWork.FinalWorkInfoResponse;
 import com.my.workmanagement.payload.response.normalWork.TopicInfoResponse;
 import com.my.workmanagement.repository.FinalWorkRepository;
 import com.my.workmanagement.repository.TeamRepository;
 import com.my.workmanagement.service.interfaces.FinalWorkService;
 
+import javax.transaction.Transactional;
+
 public class FinalWorkServiceImpl implements FinalWorkService {
     private FinalWorkRepository finalWorkRepository;
     private TeamRepository teamRepository;
 
-    FinalWorkServiceImpl(FinalWorkRepository finalWorkRepository,TeamRepository teamRepository) {
+    FinalWorkServiceImpl(FinalWorkRepository finalWorkRepository, TeamRepository teamRepository) {
         this.finalWorkRepository = finalWorkRepository;
-        this.teamRepository=teamRepository;
+        this.teamRepository = teamRepository;
     }
 
     @Override
     public FinalWorkInfoResponse getFinalWorkInfo(Integer teamId) {
-        TeamDO teamDO=teamRepository.findByTeamId(teamId);
+        TeamDO teamDO = teamRepository.findByTeamId(teamId);
         FinalWorkDO finalWorkDO = finalWorkRepository.findFinalWorkDOByTeamId(teamDO);
         return FinalWorkInfoResponse.FinalWorkInfoResponseBuilder.aFinalWorkInfoResponse()
                 .withFworkId(finalWorkDO.getFworkId())
@@ -30,5 +33,14 @@ public class FinalWorkServiceImpl implements FinalWorkService {
                 .withTeamName(teamDO.getTeamName())
                 .withTimeUpload(finalWorkDO.getTimeUpload())
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public boolean setFinalWorkScore(Integer finalWork, Integer score) throws IdNotFoundException {
+        if (!finalWorkRepository.existsById(finalWork)) {
+            throw new IdNotFoundException("finalWorkId");
+        }
+        return finalWorkRepository.setScoreByFinalWorkId(finalWork, score);
     }
 }

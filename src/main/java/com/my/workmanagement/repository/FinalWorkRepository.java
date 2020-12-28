@@ -2,9 +2,16 @@ package com.my.workmanagement.repository;
 
 import com.my.workmanagement.entity.FinalWorkDO;
 import com.my.workmanagement.entity.TeamDO;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-public interface FinalWorkRepository extends CrudRepository<FinalWorkDO,Integer> {
+public interface FinalWorkRepository extends CrudRepository<FinalWorkDO, Integer> {
     FinalWorkDO findFinalWorkDOByTeamId(TeamDO teamDO);
 
+    boolean existsByFworkId(Integer fworkId);
+
+    @Modifying
+    @Query("UPDATE FinalWorkDO fw SET fw.fworkScore = :score WHERE fw.fworkId = :finalWorkId AND fw.fworkScore IS NULL")
+    boolean setScoreByFinalWorkId(Integer finalWorkId, Integer score);
 }

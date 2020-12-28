@@ -7,6 +7,7 @@ import com.my.workmanagement.payload.request.LoginRequest;
 import com.my.workmanagement.payload.response.JwtResponse;
 import com.my.workmanagement.payload.response.WhoAmIResponse;
 import com.my.workmanagement.service.interfaces.AuthService;
+import com.my.workmanagement.util.AuthUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class AuthController {
 
     @RequestMapping("/who-am-i")
     public ResponseEntity<PackedResponse<WhoAmIResponse>> hello() {
-        WMUserDetails user = (WMUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        WMUserDetails user = AuthUtil.getUserDetail();
 
         WhoAmIResponse response = new WhoAmIResponse(user.getUsername(), user.getRole());
         return PackedResponse.success(response, "hello");
