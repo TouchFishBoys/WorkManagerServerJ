@@ -19,6 +19,8 @@ public class FinalWorkDO {
     @JoinColumn(unique = true)
     @OneToOne
     private TeamDO teamId;
+
+    private Integer documentScore;
     private Integer fworkScore;
 
     @CreationTimestamp
@@ -30,6 +32,14 @@ public class FinalWorkDO {
     private Timestamp gmtModified;
 
     public FinalWorkDO() {
+    }
+
+    public Integer getDocumentScore() {
+        return documentScore;
+    }
+
+    public void setDocumentScore(Integer documentScore) {
+        this.documentScore = documentScore;
     }
 
     public Integer getFworkId() {
@@ -103,6 +113,7 @@ public class FinalWorkDO {
                 ", fworkName='" + fworkName + '\'' +
                 ", fworkDescription='" + fworkDescription + '\'' +
                 ", teamId=" + teamId +
+                ", documentScore=" + documentScore +
                 ", fworkScore=" + fworkScore +
                 ", timeUpload=" + timeUpload +
                 ", gmtCreate=" + gmtCreate +
