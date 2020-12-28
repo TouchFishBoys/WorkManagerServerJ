@@ -1,7 +1,6 @@
 package com.my.workmanagement.service.interfaces;
 
-import com.my.workmanagement.entity.TopicDO;
-import com.my.workmanagement.payload.response.normalWrok.TopicInfoResponse;
+import com.my.workmanagement.payload.response.normalWork.TopicInfoResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,5 +11,5 @@ public interface NormalWorkService {
     Resource loadResource(Integer stuId, Integer topicId);
     List<String> getStuSubmittedList(Integer stuId);
     List<String> getTopicSubmittedList(Integer topicId);
-    TopicDO getTopicInfo(Integer topicId);
+    TopicInfoResponse getTopicInfo(Integer topicId);
 }

@@ -1,10 +1,5 @@
-package com.my.workmanagement.payload.response.normalWrok;
+package com.my.workmanagement.payload.response.normalWork;
 
-import com.my.workmanagement.payload.response.JwtResponse;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import javax.persistence.Column;
 import java.sql.Timestamp;
 
 public class TopicInfoResponse {
@@ -20,7 +15,7 @@ public class TopicInfoResponse {
     //题目截止时间
     private Timestamp topicTimeEnd;
 
-    public TopicInfoResponse() {
+    private TopicInfoResponse() {
     }
 
     public TopicInfoResponse(String courseName, String topicName, String topicDescription, Timestamp topicTimeStart, Timestamp topicTimeEnd) {
@@ -111,7 +106,7 @@ public class TopicInfoResponse {
 
         public TopicInfoResponse build() {
             TopicInfoResponse topicInfoResponse = new TopicInfoResponse();
-            //topicInfoResponse.setCourseName();
+            topicInfoResponse.setCourseName(this.courseName);
             topicInfoResponse.setTopicName(this.topicName);
             topicInfoResponse.setTopicDescription(this.topicDescription);
             topicInfoResponse.setTopicTimeStart(this.topicTimeStart);
