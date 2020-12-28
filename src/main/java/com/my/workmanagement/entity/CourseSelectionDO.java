@@ -1,5 +1,6 @@
 package com.my.workmanagement.entity;
 
+import com.my.workmanagement.entity.upk.CourseSelectionUPK;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -8,20 +9,19 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "course_selection")
+@IdClass(CourseSelectionUPK.class)
 public class CourseSelectionDO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer csId;
-
     /**
      * 学生
      */
+    @Id
     @JoinColumn(nullable = false, name = "stu_id")
     @OneToOne(cascade = CascadeType.ALL)
-    private StudentDO stu;
+    private StudentDO student;
     /**
      * 选课
      */
+    @Id
     @JoinColumn(nullable = false, name = "course_id")
     @OneToOne(cascade = CascadeType.ALL)
     private CourseDO course;
@@ -49,20 +49,12 @@ public class CourseSelectionDO {
     public CourseSelectionDO() {
     }
 
-    public Integer getCsId() {
-        return csId;
+    public StudentDO getStudent() {
+        return student;
     }
 
-    public void setCsId(Integer csId) {
-        this.csId = csId;
-    }
-
-    public StudentDO getStu() {
-        return stu;
-    }
-
-    public void setStu(StudentDO stu) {
-        this.stu = stu;
+    public void setStudent(StudentDO student) {
+        this.student = student;
     }
 
     public CourseDO getCourse() {
@@ -111,5 +103,18 @@ public class CourseSelectionDO {
 
     public void setGmtModified(Timestamp gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    @Override
+    public String toString() {
+        return "CourseSelectionDO{" +
+                "student=" + student +
+                ", course=" + course +
+                ", team=" + team +
+                ", qaScore=" + qaScore +
+                ", overallScore=" + overallScore +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                '}';
     }
 }
