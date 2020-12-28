@@ -8,9 +8,11 @@ import com.my.workmanagement.payload.response.normalWork.TopicInfoResponse;
 import com.my.workmanagement.repository.FinalWorkRepository;
 import com.my.workmanagement.repository.TeamRepository;
 import com.my.workmanagement.service.interfaces.FinalWorkService;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+@Service
 public class FinalWorkServiceImpl implements FinalWorkService {
     private FinalWorkRepository finalWorkRepository;
     private TeamRepository teamRepository;
