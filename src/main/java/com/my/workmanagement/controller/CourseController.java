@@ -3,7 +3,7 @@ package com.my.workmanagement.controller;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.response.CourseInfoResponse;
-import com.my.workmanagement.payload.response.normalWork.TopicInfoResponse;
+import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import com.my.workmanagement.payload.response.student.StudentInfoResponse;
 import com.my.workmanagement.service.interfaces.CourseService;
 import com.my.workmanagement.service.interfaces.StudentService;

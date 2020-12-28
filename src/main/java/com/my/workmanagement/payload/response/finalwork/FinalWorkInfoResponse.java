@@ -1,12 +1,5 @@
-package com.my.workmanagement.payload.response.finalWork;
+package com.my.workmanagement.payload.response.finalwork;
 
-import com.my.workmanagement.entity.TeamDO;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import java.sql.Timestamp;
 
 public class FinalWorkInfoResponse {

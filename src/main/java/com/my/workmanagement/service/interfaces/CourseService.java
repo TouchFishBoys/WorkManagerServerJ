@@ -1,9 +1,8 @@
 package com.my.workmanagement.service.interfaces;
 
-import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.payload.response.CourseInfoResponse;
-import com.my.workmanagement.payload.response.normalWork.TopicInfoResponse;
+import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

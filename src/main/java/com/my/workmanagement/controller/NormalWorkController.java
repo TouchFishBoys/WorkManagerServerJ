@@ -4,7 +4,7 @@ import javax.websocket.server.PathParam;
 
 import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.payload.PackedResponse;
-import com.my.workmanagement.payload.response.normalWork.TopicInfoResponse;
+import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import com.my.workmanagement.service.interfaces.FileStorageService;
 import com.my.workmanagement.service.interfaces.NormalWorkService;
 

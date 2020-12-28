@@ -1,7 +1,7 @@
 package com.my.workmanagement.service.interfaces;
 
 import com.my.workmanagement.exception.IdNotFoundException;
-import com.my.workmanagement.payload.response.finalWork.FinalWorkInfoResponse;
+import com.my.workmanagement.payload.response.finalwork.FinalWorkInfoResponse;
 import org.springframework.stereotype.Service;
 
 @Service

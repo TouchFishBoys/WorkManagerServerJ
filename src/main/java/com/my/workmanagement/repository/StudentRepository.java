@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface StudentRepository extends CrudRepository<StudentDO, Integer> {
     StudentDO findByStudentNum(String studentNumber);
+    StudentDO findBysAndStudentId(Integer studentId);
 }

@@ -11,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/student")
 public class StudentController {
@@ -29,10 +31,12 @@ public class StudentController {
      */
     @GetMapping(value = "/{stuId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StudentInfoResponse> getStudentInfo(
-            @PathVariable Integer stuId
-    ) {
-        StudentInfoResponse response = new StudentInfoResponse();
-        return ResponseEntity.ok(response);
+            @PathVariable Integer stuId,
+            @RequestParam List<String> selectedColumn
+            ) {
+
+
+        return null;
     }
 
     /**

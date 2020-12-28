@@ -1,6 +1,6 @@
 package com.my.workmanagement.service.interfaces;
 
-import com.my.workmanagement.payload.response.normalWork.TopicInfoResponse;
+import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
