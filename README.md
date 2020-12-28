@@ -27,26 +27,26 @@
   - [ ] 修改学生信息             PATCH /student/:studentId
 - 作业管理
   - 平时作业
-    - [ ] 获取题目列表           GET  /course/:courseId/normal-work
+    - [ ] 获取题目列表           GET  /course/:courseId/topic
     - [ ] 获取题目信息           GET  /topic/:topicId
-    - [ ] 发布平时作业           POST /course/:courseId/noraml-work
+    - [x] 发布平时作业           POST /course/:courseId/topic
     - [ ] 平时作业信息           GET  /topic/:topicId/:studentId
     - [ ] 下载平时作业           GET  /topic/:topicId/:studentId/file
     - [ ] 平时作业评分           POST /topic/:topicId/:stidentId/score
   - 大作业
-    - [ ] 获取大作业列表         GET /course/:courseId/final-work
-    - [ ] 获取大作业信息         GET /final/:finalId
-    - [x] 设置大作业分数         GET /final/:finalId/score
+    - [ ] 获取大作业列表         GET  /course/:courseId/final-work
+    - [ ] 获取大作业信息         GET  /final-work/:finalId
+    - [x] 设置大作业分数         POST /final-work/:finalId/score
     - 文件相关
-      - [ ] 下载大作业文件       GET /final/:finalId/file
+      - [ ] 下载大作业文件       GET /final-work/:finalId/file
     - 文档相关
-      - [ ] 下载大作业文档       GET  /final/:finalId/document
-      - [ ] 大作业文档评分       POST /final/:finalId/document/score
+      - [ ] 下载大作业文档       GET  /final-work/:finalId/document
+      - [ ] 大作业文档评分       POST /final-work/:finalId/document/score
     - 答辩相关
       - [ ] 获取答辩记录表       GET  /qa-table/:courseId/:studentId   // Json or Word
       - [ ] 提交答辩记录表       POST /qa-table/:courseId/:studentId
 - 课程管理
-  - [ ] 获取某课程的信息         GET /course/:courseId
+  - [ ] 获取某课程信息           GET /course/:courseId
 ----
 ###存储目录结构
 /storage
@@ -59,5 +59,3 @@
         - document
         - file
         - qa-table
-
-
