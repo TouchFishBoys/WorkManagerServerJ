@@ -18,6 +18,8 @@ public class StudentInfoResponse {
     private String studentClass;
     //已选课程id
     private List<Integer> selectedCourseId;
+    //已选课程名
+    private List<String> selectedCourseName;
 
     private StudentInfoResponse() {
 
@@ -28,12 +30,14 @@ public class StudentInfoResponse {
             , String studentName
             , String studentNum
             , String studentClass
-            , List<Integer> selectedCourseId) {
+            , List<Integer> selectedCourseId
+            , List<String> selectedCourseName) {
         this.studentId = studentId;
         this.studentName = studentName;
         this.studentNum = studentNum;
         this.studentClass = studentClass;
         this.selectedCourseId = selectedCourseId;
+        this.selectedCourseName=selectedCourseName;
     }
 
     public Integer getStudentId() {
@@ -76,6 +80,14 @@ public class StudentInfoResponse {
         this.selectedCourseId = selectedCourseId;
     }
 
+    public List<String> getSelectedCourseName() {
+        return selectedCourseName;
+    }
+
+    public void setSelectedCourseName(List<String> selectedCourseName) {
+        this.selectedCourseName = selectedCourseName;
+    }
+
     public final static class StudentInfoResponseBuilder {
         //学生id
         private Integer studentId;
@@ -87,39 +99,51 @@ public class StudentInfoResponse {
         private String studentClass;
         //已选课程id
         private List<Integer> selectedCourseId;
+        //已选课程名
+        private List<String> selectedCourseName;
+
 
         public StudentInfoResponse.StudentInfoResponseBuilder aStudentInfoResponseBuilder() {
             return new StudentInfoResponseBuilder();
         }
 
-        public StudentInfoResponse.StudentInfoResponseBuilder withStudentId(Integer studentId){
-            this.studentId=studentId;
-            return this;
-        }
-        public StudentInfoResponse.StudentInfoResponseBuilder withStudentName(String studentName){
-            this.studentName=studentName;
-            return this;
-        }
-        public StudentInfoResponse.StudentInfoResponseBuilder withStudentNum(String studentNum){
-            this.studentNum=studentNum;
-            return this;
-        }
-        public StudentInfoResponse.StudentInfoResponseBuilder withStudentClass(String studentClass){
-            this.studentClass=studentClass;
-            return this;
-        }
-        public StudentInfoResponse.StudentInfoResponseBuilder withSelectedCourseId(List<Integer> selectedCourseId){
-            this.selectedCourseId=selectedCourseId;
+        public StudentInfoResponse.StudentInfoResponseBuilder withStudentId(Integer studentId) {
+            this.studentId = studentId;
             return this;
         }
 
-        public StudentInfoResponse build(){
-            StudentInfoResponse studentInfoResponse=new StudentInfoResponse();
+        public StudentInfoResponse.StudentInfoResponseBuilder withStudentName(String studentName) {
+            this.studentName = studentName;
+            return this;
+        }
+
+        public StudentInfoResponse.StudentInfoResponseBuilder withStudentNum(String studentNum) {
+            this.studentNum = studentNum;
+            return this;
+        }
+
+        public StudentInfoResponse.StudentInfoResponseBuilder withStudentClass(String studentClass) {
+            this.studentClass = studentClass;
+            return this;
+        }
+
+        public StudentInfoResponse.StudentInfoResponseBuilder withSelectedCourseId(List<Integer> selectedCourseId) {
+            this.selectedCourseId = selectedCourseId;
+            return this;
+        }
+        public StudentInfoResponse.StudentInfoResponseBuilder withSelectedCourseName(List<String> selectedCourseName) {
+            this.selectedCourseName = selectedCourseName;
+            return this;
+        }
+
+        public StudentInfoResponse build() {
+            StudentInfoResponse studentInfoResponse = new StudentInfoResponse();
             studentInfoResponse.setStudentId(this.studentId);
             studentInfoResponse.setStudentName(this.studentName);
             studentInfoResponse.setStudentNum(this.studentNum);
             studentInfoResponse.setStudentClass(this.studentClass);
             studentInfoResponse.setSelectedCourseId(this.selectedCourseId);
+            studentInfoResponse.setSelectedCourseName(this.selectedCourseName);
             return studentInfoResponse;
         }
 
