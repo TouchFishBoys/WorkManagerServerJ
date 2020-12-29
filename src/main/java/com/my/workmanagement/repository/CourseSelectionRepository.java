@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface CourseSelectionRepository extends CrudRepository<CourseSelectionDO, Integer> {
     List<CourseDO> findAllByStudent(StudentDO student);
+
 }
