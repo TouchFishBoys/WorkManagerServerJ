@@ -63,11 +63,17 @@ public class TopicController {
         return ResponseEntity.ok(workList);
     }
 
+    /**
+     * 获取题目信息
+     *
+     * @param topicId 题目Id
+     * @return 题目信息
+     */
     @GetMapping(value = "/{topicId}")
     public ResponseEntity<PackedResponse<TopicInfoResponse>> getTopicInfo(
             @PathVariable("topicId") Integer topicId
     ) {
-        TopicInfoResponse response =normalWorkService.getTopicInfo(topicId);
+        TopicInfoResponse response = normalWorkService.getTopicInfo(topicId);
         return PackedResponse.success(response, "");
     }
 }
