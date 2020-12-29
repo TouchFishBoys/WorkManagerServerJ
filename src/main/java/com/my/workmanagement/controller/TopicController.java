@@ -63,11 +63,6 @@ public class TopicController {
         return ResponseEntity.ok(workList);
     }
 
-    @ExceptionHandler(StorageFileNotFoundException.class)
-    public ResponseEntity<?> handleFileNotFound() {
-        return ResponseEntity.notFound().build();
-    }
-
     @GetMapping(value = "/{topicId}")
     public ResponseEntity<PackedResponse<TopicInfoResponse>> getTopicInfo(
             @PathVariable("topicId") Integer topicId
