@@ -3,11 +3,17 @@ package com.my.workmanagement.repository;
 import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.entity.CourseSelectionDO;
 import com.my.workmanagement.entity.StudentDO;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
 public interface CourseSelectionRepository extends CrudRepository<CourseSelectionDO, Integer> {
     List<CourseDO> findAllByStudent(StudentDO student);
+
+    List<CourseSelectionDO> findAllByStudent_StudentId(Integer studentId);
+
+    @Query("SELECT TeamDO.teamId FROM CourseSelectionDO cs WHERE cs.student.studentId = :studentId AND cs.course.courseId = :courseId")
+    Integer getTeamIdByStudentIdAndCourseId(Integer studentId, Integer courseId);
 
 }

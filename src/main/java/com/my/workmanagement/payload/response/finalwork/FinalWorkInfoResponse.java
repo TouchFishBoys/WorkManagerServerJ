@@ -1,160 +1,51 @@
 package com.my.workmanagement.payload.response.finalwork;
 
-import java.sql.Timestamp;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.my.workmanagement.model.bo.FinalWorkBO;
+import com.my.workmanagement.model.status.FinalWorkStatus;
 
 public class FinalWorkInfoResponse {
-    //大作业id
     private Integer fworkId;
-    //大作业名
-    private String fworkName;
-    //大作业描述
-    private String fworkDescription;
-    //小组id
-    private Integer teamId;
-    //小组名
-    private String teamName;
-    //大作业成绩
-    private Integer fworkScore;
-    //上传时间
-    private Timestamp timeUpload;
 
-    private FinalWorkInfoResponse() {
-    }
+    private FinalWorkBO detail;
+
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+    private FinalWorkStatus status;
 
 
-    public FinalWorkInfoResponse(
-            Integer fworkId
-            , String fworkName
-            , String fworkDescription
-            , Integer teamId
-            , String teamName
-            , Integer fworkScore
-            , Timestamp timeUpload) {
-        this.fworkId = fworkId;
-        this.fworkName = fworkName;
-        this.fworkDescription = fworkDescription;
-        this.teamId = teamId;
-        this.teamName = teamName;
-        this.fworkScore = fworkScore;
-        this.timeUpload = timeUpload;
-    }
-
-    public Integer getFworkId() {
-        return fworkId;
-    }
-
-    public void setFworkId(Integer fworkId) {
-        this.fworkId = fworkId;
-    }
-
-    public String getFworkName() {
-        return fworkName;
-    }
-
-    public void setFworkName(String fworkName) {
-        this.fworkName = fworkName;
-    }
-
-    public String getFworkDescription() {
-        return fworkDescription;
-    }
-
-    public void setFworkDescription(String fworkDescription) {
-        this.fworkDescription = fworkDescription;
-    }
-
-    public Integer getTeamId() {
-        return teamId;
-    }
-
-    public void setTeamId(Integer teamId) {
-        this.teamId = teamId;
-    }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
-    }
-
-    public Integer getFworkScore() {
-        return fworkScore;
-    }
-
-    public void setFworkScore(Integer fworkScore) {
-        this.fworkScore = fworkScore;
-    }
-
-    public Timestamp getTimeUpload() {
-        return timeUpload;
-    }
-
-    public void setTimeUpload(Timestamp timeUpload) {
-        this.timeUpload = timeUpload;
-    }
-
-    public final static class FinalWorkInfoResponseBuilder {
+    public static final class FinalWorkInfoResponseBuilder {
         private Integer fworkId;
-        private String fworkName;
-        private String fworkDescription;
-        private Integer teamId;
-        private String teamName;
-        private Integer fworkScore;
-        private Timestamp timeUpload;
+        private FinalWorkBO detail;
+        private FinalWorkStatus status;
 
-        public static FinalWorkInfoResponse.FinalWorkInfoResponseBuilder aFinalWorkInfoResponse() {
+        private FinalWorkInfoResponseBuilder() {
+        }
+
+        public static FinalWorkInfoResponseBuilder aFinalWorkInfoResponse() {
             return new FinalWorkInfoResponseBuilder();
         }
 
-
-        public FinalWorkInfoResponse.FinalWorkInfoResponseBuilder withFworkId(Integer fworkId) {
+        public FinalWorkInfoResponseBuilder withFworkId(Integer fworkId) {
             this.fworkId = fworkId;
             return this;
         }
 
-        public FinalWorkInfoResponse.FinalWorkInfoResponseBuilder withFworkName(String fworkName) {
-            this.fworkName = fworkName;
+        public FinalWorkInfoResponseBuilder withDetail(FinalWorkBO detail) {
+            this.detail = detail;
             return this;
         }
 
-        public FinalWorkInfoResponse.FinalWorkInfoResponseBuilder withFworkDescreption(String fworkDescription) {
-            this.fworkDescription = fworkDescription;
-            return this;
-        }
-
-        public FinalWorkInfoResponse.FinalWorkInfoResponseBuilder withTeamId(Integer teamId) {
-            this.teamId = teamId;
-            return this;
-        }
-
-        public FinalWorkInfoResponse.FinalWorkInfoResponseBuilder withTeamName(String teamName) {
-            this.teamName = teamName;
-            return this;
-        }
-
-        public FinalWorkInfoResponse.FinalWorkInfoResponseBuilder withFworkScore(Integer fworkScore) {
-            this.fworkScore = fworkScore;
-            return this;
-        }
-
-        public FinalWorkInfoResponse.FinalWorkInfoResponseBuilder withTimeUpload(Timestamp timeUpload) {
-            this.timeUpload = timeUpload;
+        public FinalWorkInfoResponseBuilder withStatus(FinalWorkStatus status) {
+            this.status = status;
             return this;
         }
 
         public FinalWorkInfoResponse build() {
             FinalWorkInfoResponse finalWorkInfoResponse = new FinalWorkInfoResponse();
-            finalWorkInfoResponse.setFworkId(this.fworkId);
-            finalWorkInfoResponse.setFworkName(this.fworkName);
-            finalWorkInfoResponse.setFworkDescription(this.fworkDescription);
-            finalWorkInfoResponse.setTeamId(this.teamId);
-            finalWorkInfoResponse.setTeamName(this.teamName);
-            finalWorkInfoResponse.setFworkScore(this.fworkScore);
-            finalWorkInfoResponse.setTimeUpload(this.timeUpload);
+            finalWorkInfoResponse.fworkId = this.fworkId;
+            finalWorkInfoResponse.detail = this.detail;
+            finalWorkInfoResponse.status = this.status;
             return finalWorkInfoResponse;
         }
-
     }
 }

@@ -1,9 +1,9 @@
 package com.my.workmanagement.controller;
 
 import com.my.workmanagement.exception.IdNotFoundException;
+import com.my.workmanagement.model.bo.FinalWorkBO;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.finalwork.SetFinalScoreRequest;
-import com.my.workmanagement.payload.response.finalwork.FinalWorkInfoResponse;
 import com.my.workmanagement.service.interfaces.FinalWorkService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +25,28 @@ public class FinalWorkController {
         this.finalWorkService = finalWorkService;
     }
 
+    /**
+     * 获取大作业信息
+     *
+     * @param teamId 队伍Id
+     * @return 大作业信息
+     * @throws IdNotFoundException 队伍不存在
+     */
     @GetMapping(value = "/{teamId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PackedResponse<FinalWorkInfoResponse>> getFinalWorkInfo(@PathVariable Integer teamId) throws IdNotFoundException {
-        FinalWorkInfoResponse response = finalWorkService.getFinalWorkInfo(teamId);
+    public ResponseEntity<PackedResponse<FinalWorkBO>> getFinalWorkInfo(@PathVariable Integer teamId) throws IdNotFoundException {
+        FinalWorkBO response = finalWorkService.getFinalWorkInfo(teamId);
+        // TODO: 2020/12/29 remake
         return PackedResponse.success(response, "");
     }
 
+    /**
+     * 设置大作业分数
+     *
+     * @param finalId 大作业Id
+     * @param request 请求
+     * @return httpok or conflict(成绩已经设置)
+     * @throws IdNotFoundException 大作业Id不存在
+     */
     @PostMapping(value = "/{finalId}/score", consumes = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_TEACHER)")
     public ResponseEntity<PackedResponse<Void>> setFinalWorkScore(

@@ -14,6 +14,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -48,31 +49,37 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentInfoBO getStudentInfo(Integer studentId) throws IdNotFoundException {
-        StudentDO studentDO = studentRepository.findByStudentId(studentId);
+        StudentDO student = studentRepository.findByStudentId(studentId);
+        if (student == null) {
+            throw new IdNotFoundException("studentId");
+        }
         StudentInfoBO studentInfoBO = new StudentInfoBO();
-        studentInfoBO.setStudentNum(studentDO.getStudentNum());
-        studentInfoBO.setStudentName(studentDO.getStudentName());
+        studentInfoBO.setStudentNum(student.getStudentNum());
+        studentInfoBO.setStudentName(student.getStudentName());
         studentInfoBO.setStudentId(studentId);
-        studentInfoBO.setStudentClass(studentDO.getStudentClass());
+        studentInfoBO.setStudentClass(student.getStudentClass());
         return studentInfoBO;
     }
 
     @Override
-    public List<CourseInfoBO> getCourseSelectionInfo(Integer studentId) throws IdNotFoundException {
-        List<CourseInfoBO> list = null;
-        StudentDO studentDO = studentRepository.findByStudentId(studentId);
-        List<CourseDO> courseDOS = courseSelectionRepository.findAllByStudent(studentDO);
-        for (int i = 0; i < courseDOS.size(); i++) {
+    public List<CourseInfoBO> getSelectedCourseInfo(Integer studentId) throws IdNotFoundException {
+        List<CourseInfoBO> list = new LinkedList<>();
+        if (studentRepository.existsByStudentId(studentId)) {
+            throw new IdNotFoundException("studentId");
+        }
+
+        StudentDO tmpStudent = new StudentDO(studentId);
+        List<CourseDO> courses = courseSelectionRepository.findAllByStudent(tmpStudent);
+        for (CourseDO course : courses) {
             list.add(CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBOBuilder()
-                    .withCourseName(courseDOS.get(i).getCourseName())
-                    .withCourseId(courseDOS.get(i).getCourseId())
-                    .withCourseTeacherName(courseDOS.get(i).getTeacher().getTeacherName())
-                    .withFinishCount(normalWorkRepository.countAllByStudent(studentDO))
-                    .withTotalCount(topicRepository.countAllByCourseId(courseDOS.get(i).getCourseId()))
+                    .withCourseName(course.getCourseName())
+                    .withCourseId(course.getCourseId())
+                    .withCourseTeacherName(course.getTeacher().getTeacherName())
+                    .withFinishCount(normalWorkRepository.countAllByStudent(tmpStudent))
+                    .withTotalCount(topicRepository.countAllByCourseId(course.getCourseId()))
                     .build()
             );
         }
         return list;
     }
-
 }
