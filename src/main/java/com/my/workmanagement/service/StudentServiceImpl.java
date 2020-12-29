@@ -3,6 +3,7 @@ package com.my.workmanagement.service;
 import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.entity.StudentDO;
 import com.my.workmanagement.exception.IdNotFoundException;
+import com.my.workmanagement.model.bo.CourseInfoBO;
 import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.payload.response.student.StudentInfoResponse;
 import com.my.workmanagement.repository.CourseRepository;
@@ -46,6 +47,25 @@ public class StudentServiceImpl implements StudentService {
         studentInfoBO.setStudentId(studentId);
         studentInfoBO.setStudentClass(studentDO.getStudentClass());
         return studentInfoBO;
+    }
+
+    @Override
+    public List<CourseInfoBO> getCourseSelectionInfo(Integer studentId) throws IdNotFoundException
+    {
+        List<CourseInfoBO> list=null;
+        StudentDO studentDO = studentRepository.findByStudentId(studentId);
+        List<CourseDO> courseDOS=courseSelectionRepository.findAllByStudent(studentDO);
+        for(int i=0;i<courseDOS.size();i++){
+            list.add(CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBOBuilder()
+                    .withCourseName(courseDOS.get(i).getCourseName())
+                    .withCourseId(courseDOS.get(i).getCourseId())
+                    .withCourseTeacherName(courseDOS.get(i).getTeacher().getTeacherName())
+                    //.withFinishCount()
+                    //.withTotalCount()
+                    .build()
+            );
+        }
+        return list;
     }
 
 }
