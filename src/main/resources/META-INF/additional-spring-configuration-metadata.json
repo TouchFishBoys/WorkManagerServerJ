@@ -14,5 +14,10 @@
       "name": "workmanager.storage.root-directory",
       "type": "java.lang.String",
       "description": "存储路径."
+    },
+    {
+      "name": "workmanager.storage.qa-table-template-location",
+      "type": "java.lang.String",
+      "description": "答辩记录模板."
     }
   ] }

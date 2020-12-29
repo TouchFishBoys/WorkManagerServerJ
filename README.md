@@ -1,6 +1,7 @@
 #ToDo-List
 ###登录
-- [x] 学生/教师登录                              POST /auth/login { username:string, password:string, role: ERole }
+- [x] 学生/教师登录           POST  /auth/login { username:string, password:string, role: ERole }
+- [ ] 修改密码               PATCH /auth/password
 ----
 ###学生操作   
 学生信息从 Token 中获取
@@ -42,9 +43,9 @@
       - [ ] 下载大作业文档       GET  /final-work/:finalId/document
       - [ ] 大作业文档评分       POST /final-work/:finalId/document/score
     - 答辩相关
-      - [ ] 获取小组的成员       GET  /qa-table/:courseId/student
+      - [ ] 获取小组的成员       GET  /team/:teamId/student
       - [ ] 获取答辩记录表       GET  /qa-table/:courseId/:studentId      //Json
-      - [ ] 下载答辩记录表       GET  /qa-table/:courseId/:studentId/file //Word
+      - [x] 下载答辩记录表       GET  /qa-table/:courseId/:studentId/file //Word
       - [ ] 提交答辩记录表       POST /qa-table/:courseId/:studentId
 - 课程管理
   - [ ] 获取某课程信息           GET /course/:courseId
@@ -59,4 +60,4 @@
       - :teamId
         - document
         - file
-        - qa-table
+        - qa-table.docx
