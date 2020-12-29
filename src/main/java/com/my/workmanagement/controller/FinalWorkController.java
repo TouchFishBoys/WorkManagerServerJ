@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/final")
 public class FinalWorkController {
-    private static final Logger logger = LoggerFactory.getLogger(NormalWorkController.class);
+    private static final Logger logger = LoggerFactory.getLogger(TopicController.class);
     private final FinalWorkService finalWorkService;
 
     @Autowired

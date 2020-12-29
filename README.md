@@ -7,9 +7,9 @@
 - 学生个人信息
   - [ ] 获取学生信息(姓名,班级)                  GET /student/:stuId?selectedColumn=[]
 - 作业管理
-  - 平时作业 (NormalWorkController)
-    - [x] 获取题目信息                         GET  /normal-work/:topicId
-    - [ ] 上传平时作业                         POST /normal-work/:topicId/file
+  - 平时作业 (TopicController)
+    - [x] 获取题目信息                         GET  /topic/:topicId
+    - [ ] 上传平时作业                         POST /topic/:topicId/file
   - 大作业 (FinalWorkController)
     - [x] 获取大作业信息                       GET  /final-work/:teamId
     - [ ] 上传大作业文件                       POST /final-work/:teamId/file
@@ -24,13 +24,12 @@
 - 学生管理
   - [ ] 导入学生信息             POST  /course/:courseId/student?courseName=
   - [ ] 获取学生信息             GET   /course/:courseId/student
-  - [ ] 修改学生信息             PATCH /student/:studentId
 - 作业管理
   - 平时作业
-    - [ ] 获取题目列表           GET  /course/:courseId/topic
-    - [ ] 获取题目信息           GET  /topic/:topicId
+    - [x] 获取题目列表           GET  /course/:courseId/topic //同上
+    - [x] 获取题目信息           GET  /topic/:topicId //同上
     - [x] 发布平时作业           POST /course/:courseId/topic
-    - [ ] 平时作业信息           GET  /topic/:topicId/:studentId
+    - [ ] 平时作业信息           GET  /topic/:topicId/:studentId //生成图表
     - [ ] 下载平时作业           GET  /topic/:topicId/:studentId/file
     - [ ] 平时作业评分           POST /topic/:topicId/:stidentId/score
   - 大作业

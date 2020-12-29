@@ -55,7 +55,9 @@ public class CourseController {
      * @return 课程信息
      */
     @GetMapping("/{courseId}")
-    public ResponseEntity<PackedResponse<CourseInfoResponse>> getCourseInfo(@PathVariable Integer courseId) throws IdNotFoundException {
+    public ResponseEntity<PackedResponse<CourseInfoResponse>> getCourseInfo(
+            @PathVariable Integer courseId
+    ) throws IdNotFoundException {
         logger.info("Getting course info: {}", courseId);
         CourseInfoResponse response = courseService.getCourseInfo(courseId);
         return PackedResponse.success(response, "");
@@ -88,7 +90,8 @@ public class CourseController {
     @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_TEACHER)")
     public ResponseEntity<?> importStudents(
             @RequestParam(value = "file", required = true) MultipartFile excelFile,
-            @PathVariable Integer courseId) {
+            @PathVariable Integer courseId
+    ) {
         boolean result = studentService.importStudents(courseId, excelFile);
         return ResponseEntity.ok(result);
     }

@@ -21,15 +21,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/normal-work")
-public class NormalWorkController {
-    Logger logger = LoggerFactory.getLogger(NormalWorkController.class);
+@RequestMapping("/topic")
+public class TopicController {
+    Logger logger = LoggerFactory.getLogger(TopicController.class);
 
     private final NormalWorkService normalWorkService;
     private final FileStorageService fileStorageService;
 
     @Autowired
-    public NormalWorkController(NormalWorkService normalWorkService, FileStorageService fileStorageService) {
+    public TopicController(NormalWorkService normalWorkService, FileStorageService fileStorageService) {
         this.normalWorkService = normalWorkService;
         this.fileStorageService = fileStorageService;
     }
@@ -45,8 +45,11 @@ public class NormalWorkController {
         return ResponseEntity.ok("ok");
     }
 
-    @GetMapping(value = "/{stuId}/{topicId}", produces = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Resource> getNormalWork(@PathParam("stuId") Integer stuId, @PathParam("topicId") Integer topicId) {
+    @GetMapping(value = "/{stuId}/{topicId}")
+    public ResponseEntity<Resource> getNormalWork(
+            @PathVariable Integer stuId,
+            @PathVariable Integer topicId
+    ) {
         Resource file = normalWorkService.loadResource(stuId, topicId);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" +
                 file.getFilename()).body(file);
@@ -65,8 +68,10 @@ public class NormalWorkController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping(value = "/{topicId}", produces = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<PackedResponse<TopicInfoResponse>> getTopicInfo(@PathVariable("topicId") Integer topicId) {
+    @GetMapping(value = "/{topicId}")
+    public ResponseEntity<PackedResponse<TopicInfoResponse>> getTopicInfo(
+            @PathVariable("topicId") Integer topicId
+    ) {
         TopicInfoResponse response =normalWorkService.getTopicInfo(topicId);
         return PackedResponse.success(response, "");
     }
