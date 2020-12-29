@@ -1,6 +1,7 @@
 package com.my.workmanagement.handler;
 
 import com.my.workmanagement.exception.BaseException;
+import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.payload.PackedResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
