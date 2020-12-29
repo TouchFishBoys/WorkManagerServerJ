@@ -15,6 +15,7 @@ public class TopicDO {
     private Integer topicId;
     @Column(nullable = false)
     private Integer courseId;
+
     @Column(nullable = false)
     private String topicName;
     private String topicDescription;

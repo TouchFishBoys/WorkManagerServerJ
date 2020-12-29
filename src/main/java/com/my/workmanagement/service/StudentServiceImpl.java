@@ -14,6 +14,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -58,17 +59,21 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<CourseInfoBO> getCourseSelectionInfo(Integer studentId) throws IdNotFoundException {
-        List<CourseInfoBO> list = null;
-        StudentDO studentDO = studentRepository.findByStudentId(studentId);
-        List<CourseDO> courseDOS = courseSelectionRepository.findAllByStudent(studentDO);
-        for (CourseDO courseDO : courseDOS) {
+    public List<CourseInfoBO> getSelectedCourseInfo(Integer studentId) throws IdNotFoundException {
+        List<CourseInfoBO> list = new LinkedList<>();
+        if (studentRepository.existsByStudentId(studentId)) {
+            throw new IdNotFoundException("studentId");
+        }
+
+        StudentDO tmpStudent = new StudentDO(studentId);
+        List<CourseDO> courses = courseSelectionRepository.findAllByStudent(tmpStudent);
+        for (CourseDO course : courses) {
             list.add(CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBOBuilder()
-                    .withCourseName(courseDO.getCourseName())
-                    .withCourseId(courseDO.getCourseId())
-                    .withCourseTeacherName(courseDO.getTeacher().getTeacherName())
-                    .withFinishCount(normalWorkRepository.countAllByStudent(studentDO))
-                    .withTotalCount(topicRepository.countAllByCourseId(courseDO.getCourseId()))
+                    .withCourseName(course.getCourseName())
+                    .withCourseId(course.getCourseId())
+                    .withCourseTeacherName(course.getTeacher().getTeacherName())
+                    .withFinishCount(normalWorkRepository.countAllByStudent(tmpStudent))
+                    .withTotalCount(topicRepository.countAllByCourseId(course.getCourseId()))
                     .build()
             );
         }

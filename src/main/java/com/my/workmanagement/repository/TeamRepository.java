@@ -6,4 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface TeamRepository extends CrudRepository<TeamDO,Integer> {
     TeamDO findByTeamId(Integer teamId);
+
 }

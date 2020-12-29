@@ -4,18 +4,15 @@ import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.UndefinedUserRoleException;
 import com.my.workmanagement.model.ERole;
 import com.my.workmanagement.model.WMUserDetails;
-import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.topic.ReleaseTopicRequest;
 import com.my.workmanagement.payload.response.CourseInfoResponse;
 import com.my.workmanagement.payload.response.TopicInfoListResponse;
-import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import com.my.workmanagement.payload.response.student.StudentInfoResponse;
 import com.my.workmanagement.service.interfaces.CourseService;
 import com.my.workmanagement.service.interfaces.NormalWorkService;
 import com.my.workmanagement.service.interfaces.StudentService;
 import com.my.workmanagement.util.AuthUtil;
-import org.apache.poi.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +49,7 @@ public class CourseController {
      * 获取课程信息
      *
      * @param courseId 课程 Id
-     * @return 课程信息
+     * @return 课程信息（ID,名称，教师，描述，学生数量，年份）
      */
     @GetMapping("/{courseId}")
     public ResponseEntity<PackedResponse<CourseInfoResponse>> getCourseInfo(

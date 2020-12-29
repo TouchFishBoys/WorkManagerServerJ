@@ -16,5 +16,5 @@ public interface StudentService {
 
     StudentInfoBO getStudentInfo(Integer studentId) throws IdNotFoundException;
 
-    List<CourseInfoBO> getCourseSelectionInfo(Integer studentId) throws IdNotFoundException;
+    List<CourseInfoBO> getSelectedCourseInfo(Integer studentId) throws IdNotFoundException;
 }

@@ -5,6 +5,8 @@ workmanager:
   storage:
     root-directory:
       /storage
+    qa-table-template-location:
+      /storage/qatemplate.docx
 spring:
   jpa:
     hibernate:
