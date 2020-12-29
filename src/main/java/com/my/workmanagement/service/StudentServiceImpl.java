@@ -62,13 +62,13 @@ public class StudentServiceImpl implements StudentService {
         List<CourseInfoBO> list = null;
         StudentDO studentDO = studentRepository.findByStudentId(studentId);
         List<CourseDO> courseDOS = courseSelectionRepository.findAllByStudent(studentDO);
-        for (int i = 0; i < courseDOS.size(); i++) {
+        for (CourseDO courseDO : courseDOS) {
             list.add(CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBOBuilder()
-                    .withCourseName(courseDOS.get(i).getCourseName())
-                    .withCourseId(courseDOS.get(i).getCourseId())
-                    .withCourseTeacherName(courseDOS.get(i).getTeacher().getTeacherName())
+                    .withCourseName(courseDO.getCourseName())
+                    .withCourseId(courseDO.getCourseId())
+                    .withCourseTeacherName(courseDO.getTeacher().getTeacherName())
                     .withFinishCount(normalWorkRepository.countAllByStudent(studentDO))
-                    .withTotalCount(topicRepository.countAllByCourseId(courseDOS.get(i).getCourseId()))
+                    .withTotalCount(topicRepository.countAllByCourseId(courseDO.getCourseId()))
                     .build()
             );
         }
