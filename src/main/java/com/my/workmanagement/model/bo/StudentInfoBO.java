@@ -3,36 +3,14 @@ package com.my.workmanagement.model.bo;
 import java.util.List;
 
 public class StudentInfoBO {
-    //学生id
-    private Integer studentId;
     //学生姓名
     private String studentName;
     //学生学号
     private String studentNum;
-    //学生班级
+    //学生班级（行政班）
     private String studentClass;
 
     public StudentInfoBO() {
-    }
-
-    public StudentInfoBO(
-            Integer studentId
-            , String studentName
-            , String studentNum
-            , String studentClass
-    ) {
-        this.studentId=studentId;
-        this.studentName=studentName;
-        this.studentNum=studentNum;
-        this.studentClass=studentClass;
-    }
-
-    public Integer getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(Integer studentId) {
-        this.studentId = studentId;
     }
 
     public String getStudentName() {
@@ -59,6 +37,12 @@ public class StudentInfoBO {
         this.studentClass = studentClass;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "StudentInfoBO{" +
+                ", studentName='" + studentName + '\'' +
+                ", studentNum='" + studentNum + '\'' +
+                ", studentClass='" + studentClass + '\'' +
+                '}';
+    }
 }
