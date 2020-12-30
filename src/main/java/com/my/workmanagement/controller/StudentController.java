@@ -1,13 +1,19 @@
 package com.my.workmanagement.controller;
 
+import com.my.workmanagement.exception.IdNotFoundException;
+import com.my.workmanagement.model.WMUserDetails;
+import com.my.workmanagement.model.bo.CourseInfoBO;
+import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.payload.response.student.CourseListResponse;
 import com.my.workmanagement.payload.response.student.StudentInfoResponse;
 import com.my.workmanagement.service.interfaces.StudentService;
+import com.my.workmanagement.util.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,23 +39,23 @@ public class StudentController {
     public ResponseEntity<StudentInfoResponse> getStudentInfo(
             @PathVariable Integer stuId,
             @RequestParam List<String> selectedColumn
-            ) {
-
-
-
+    ) throws IdNotFoundException {
+        StudentInfoBO studentInfoBO = studentService.getStudentInfo(stuId);
         return null;
     }
 
     /**
-     * 获取学生参加的课程列表
+     * 获取学生已选课程列表
      *
-     * @param stuId 学生 Id
      * @return 学生参加的课程列表
      */
-    @GetMapping("/{stuId}/course")
+    @GetMapping("/course")
     public ResponseEntity<CourseListResponse> getCourseList(
-            @PathVariable Integer stuId
-    ) {
+    ) throws IdNotFoundException {
+        WMUserDetails user = AuthUtil.getUserDetail();
+        Integer studentId = user.getUserId();
+        List<CourseInfoBO> courseInfoBOS = studentService.getSelectedCourseInfo(studentId);
+
         CourseListResponse response = new CourseListResponse();
         return ResponseEntity.ok(response);
     }

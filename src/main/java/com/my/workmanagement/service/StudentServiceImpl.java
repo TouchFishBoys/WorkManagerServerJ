@@ -53,7 +53,6 @@ public class StudentServiceImpl implements StudentService {
         StudentInfoBO studentInfoBO = new StudentInfoBO();
         studentInfoBO.setStudentNum(studentDO.getStudentNum());
         studentInfoBO.setStudentName(studentDO.getStudentName());
-        studentInfoBO.setStudentId(studentId);
         studentInfoBO.setStudentClass(studentDO.getStudentClass());
         return studentInfoBO;
     }
@@ -64,8 +63,8 @@ public class StudentServiceImpl implements StudentService {
         if (studentRepository.existsByStudentId(studentId)) {
             throw new IdNotFoundException("studentId");
         }
-
-        StudentDO tmpStudent = new StudentDO(studentId);
+        //StudentDO tmpStudent = new StudentDO(studentId);
+        StudentDO tmpStudent = studentRepository.findByStudentId(studentId);
         List<CourseDO> courses = courseSelectionRepository.findAllByStudent(tmpStudent);
         for (CourseDO course : courses) {
             list.add(CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBOBuilder()

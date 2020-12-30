@@ -1,5 +1,6 @@
 package com.my.workmanagement.payload.response.student;
 
+import com.my.workmanagement.model.bo.CourseInfoBO;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,10 +17,8 @@ public class StudentInfoResponse {
     private String studentNum;
     //学生班级
     private String studentClass;
-    //已选课程id
-    private List<Integer> selectedCourseId;
-    //已选课程名
-    private List<String> selectedCourseName;
+    //已选课程信息
+    private List<CourseInfoBO> selectedCourseInfo;
 
     private StudentInfoResponse() {
 
@@ -30,14 +29,12 @@ public class StudentInfoResponse {
             , String studentName
             , String studentNum
             , String studentClass
-            , List<Integer> selectedCourseId
-            , List<String> selectedCourseName) {
+            ,List<CourseInfoBO> selectedCourseInfo) {
         this.studentId = studentId;
         this.studentName = studentName;
         this.studentNum = studentNum;
         this.studentClass = studentClass;
-        this.selectedCourseId = selectedCourseId;
-        this.selectedCourseName=selectedCourseName;
+        this.selectedCourseInfo=selectedCourseInfo;
     }
 
     public Integer getStudentId() {
@@ -72,23 +69,15 @@ public class StudentInfoResponse {
         this.studentClass = studentClass;
     }
 
-    public List<Integer> getSelectedCourseId() {
-        return selectedCourseId;
+
+    public List<CourseInfoBO> getSelectedCourseInfo() {
+        return selectedCourseInfo;
     }
 
-    public void setSelectedCourseId(List<Integer> selectedCourseId) {
-        this.selectedCourseId = selectedCourseId;
+    public void setSelectedCourseInfo(List<CourseInfoBO> selectedCourseInfo) {
+        this.selectedCourseInfo = selectedCourseInfo;
     }
-
-    public List<String> getSelectedCourseName() {
-        return selectedCourseName;
-    }
-
-    public void setSelectedCourseName(List<String> selectedCourseName) {
-        this.selectedCourseName = selectedCourseName;
-    }
-
-    public final static class StudentInfoResponseBuilder {
+    public static final class StudentInfoResponseBuilder {
         //学生id
         private Integer studentId;
         //学生姓名
@@ -97,13 +86,13 @@ public class StudentInfoResponse {
         private String studentNum;
         //学生班级
         private String studentClass;
-        //已选课程id
-        private List<Integer> selectedCourseId;
-        //已选课程名
-        private List<String> selectedCourseName;
+        //已选课程信息
+        private List<CourseInfoBO> selectedCourseInfo;
 
+        private StudentInfoResponseBuilder() {
+        }
 
-        public StudentInfoResponse.StudentInfoResponseBuilder aStudentInfoResponseBuilder() {
+        public static StudentInfoResponse.StudentInfoResponseBuilder aStudentInfoResponse() {
             return new StudentInfoResponseBuilder();
         }
 
@@ -127,25 +116,22 @@ public class StudentInfoResponse {
             return this;
         }
 
-        public StudentInfoResponse.StudentInfoResponseBuilder withSelectedCourseId(List<Integer> selectedCourseId) {
-            this.selectedCourseId = selectedCourseId;
-            return this;
-        }
-        public StudentInfoResponse.StudentInfoResponseBuilder withSelectedCourseName(List<String> selectedCourseName) {
-            this.selectedCourseName = selectedCourseName;
+        public StudentInfoResponse.StudentInfoResponseBuilder withSelectedCourseInfo(List<CourseInfoBO> selectedCourseInfo) {
+            this.selectedCourseInfo = selectedCourseInfo;
             return this;
         }
 
         public StudentInfoResponse build() {
             StudentInfoResponse studentInfoResponse = new StudentInfoResponse();
-            studentInfoResponse.setStudentId(this.studentId);
-            studentInfoResponse.setStudentName(this.studentName);
-            studentInfoResponse.setStudentNum(this.studentNum);
-            studentInfoResponse.setStudentClass(this.studentClass);
-            studentInfoResponse.setSelectedCourseId(this.selectedCourseId);
-            studentInfoResponse.setSelectedCourseName(this.selectedCourseName);
+            studentInfoResponse.setStudentId(studentId);
+            studentInfoResponse.setStudentName(studentName);
+            studentInfoResponse.setStudentNum(studentNum);
+            studentInfoResponse.setStudentClass(studentClass);
+            studentInfoResponse.setSelectedCourseInfo(selectedCourseInfo);
             return studentInfoResponse;
         }
-
     }
+
+
+
 }

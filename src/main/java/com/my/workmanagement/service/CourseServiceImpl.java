@@ -13,6 +13,7 @@ import com.my.workmanagement.service.interfaces.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -68,15 +69,15 @@ public class CourseServiceImpl implements CourseService {
         if(Topics==null){
             throw new IdNotFoundException("topic");
         }
-        List<TopicInfoResponse> responses=null;
-        for (Integer i = 0; i < Topics.size(); i++) {
+        List<TopicInfoResponse> responses=new LinkedList<>();
+        for (TopicDO topic : Topics) {
             responses.add(TopicInfoResponse.TopicInfoResponseBuilder.aTopicInfoResponse()
-            .withCourseName(getCourseName(courseId))
-            .withTopicName(Topics.get(i).getTopicName())
-            .withTopicDescription(Topics.get(i).getTopicDescription())
-            .withTopicTimeStart(Topics.get(i).getTopicTimeStart())
-            .withTopicTimeEnd(Topics.get(i).getTopicTimeEnd())
-            .build());
+                    .withCourseName(getCourseName(courseId))
+                    .withTopicName(topic.getTopicName())
+                    .withTopicDescription(topic.getTopicDescription())
+                    .withTopicTimeStart(topic.getTopicTimeStart())
+                    .withTopicTimeEnd(topic.getTopicTimeEnd())
+                    .build());
         }
         return responses;
     }
