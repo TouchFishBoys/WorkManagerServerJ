@@ -50,6 +50,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentInfoBO getStudentInfo(Integer studentId) throws IdNotFoundException {
         StudentDO studentDO = studentRepository.findByStudentId(studentId);
+        if(studentDO==null) {
+            throw new IdNotFoundException("studentId");
+        }
         StudentInfoBO studentInfoBO = new StudentInfoBO();
         studentInfoBO.setStudentNum(studentDO.getStudentNum());
         studentInfoBO.setStudentName(studentDO.getStudentName());

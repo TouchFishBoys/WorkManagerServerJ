@@ -19,7 +19,7 @@ public interface NormalWorkService {
 
     List<String> getTopicSubmittedList(Integer topicId);
 
-    TopicInfoResponse getTopicInfo(Integer topicId);
+    TopicInfoResponse getTopicInfo(Integer topicId)throws IdNotFoundException;
 
     Integer createTopic(String topicName, String topicDescription, Integer courseId, Date startTime, Date finishTime);
 
