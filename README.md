@@ -6,7 +6,7 @@
 ###学生操作   
 学生信息从 Token 中获取
 - 学生个人信息
-  - [ ] 获取学生信息(姓名,班级)                  GET /student/:stuId?selectedColumn=[]
+  - [ ] 获取学生信息(姓名,班级)                  GET /student/:stuId
 - 作业管理
   - 平时作业 (TopicController)
     - [x] 获取题目信息                         GET  /topic/:topicId
@@ -21,7 +21,7 @@
 ----
 ###教师操作
 - 教师个人信息
-  - [ ] 获取教师信息             GET /teacher/:teacherId?selectedColum=[]
+  - [ ] 获取教师信息             GET /teacher/:teacherId
 - 学生管理
   - [ ] 导入学生信息             POST  /course/:courseId/student?courseName=
   - [ ] 获取学生信息             GET   /course/:courseId/student
