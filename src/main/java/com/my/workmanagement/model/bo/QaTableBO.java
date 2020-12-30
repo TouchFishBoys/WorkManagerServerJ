@@ -8,7 +8,7 @@ public class QaTableBO {
     private String productName; // 项目名称
     private String author; // 参与者
     private Date qaTime; // 答辩时间
-    private Integer score;
+    private Integer score;// 成绩
 
     private List<QaTableItemBO> tables;
 
@@ -96,6 +96,7 @@ public class QaTableBO {
                 ", productName='" + productName + '\'' +
                 ", author='" + author + '\'' +
                 ", qaTime=" + qaTime +
+                ", score=" + score +
                 ", tables=" + tables +
                 '}';
     }
