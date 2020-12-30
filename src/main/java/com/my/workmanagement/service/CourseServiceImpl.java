@@ -58,7 +58,7 @@ public class CourseServiceImpl implements CourseService {
                 .withCourseYear(courseDO.getCourseYear())
                 .withCourseTeacherName(courseDO.getTeacher().getTeacherName())
                 .withStudentCount(courseSelectionRepository.countAllByCourse_CourseId(courseId))
-                .withTotalCount(courseSelectionRepository.countAllByCourseIdGroupByTeam(courseId))
+                //.withTotalCount(courseSelectionRepository.countAllByCourseIdGroupByTeam(courseId))
                 .withFinishCount(courseSelectionRepository.countAllByCourse_CourseIdAndTeam_FinalWork_TimeUploadNot(courseId,null))
                 .build();
     }

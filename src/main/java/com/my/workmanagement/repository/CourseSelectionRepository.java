@@ -16,8 +16,8 @@ public interface CourseSelectionRepository extends CrudRepository<CourseSelectio
 
     Integer countAllByCourse_CourseId(Integer courseId);
 
-    @Query(value = "SELECT COUNT(CourseSelectionDO.team) FROM CourseSelectionDO cs WHERE cs.course.courseId = ?1 GROUP BY cs.team.teamId")
-    Integer countAllByCourseIdGroupByTeam(Integer courseId);
+    //@Query(value = "SELECT COUNT(CourseSelectionDO.team) FROM CourseSelectionDO cs WHERE cs.course.courseId = ?1 GROUP BY cs.team.teamId")
+    //Integer countAllByCourseIdGroupByTeam(Integer courseId);
 
     Integer countAllByCourse_CourseIdAndTeam_FinalWork_TimeUploadNot(Integer courseId,Timestamp timestamp);
 /*
