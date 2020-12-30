@@ -179,19 +179,5 @@ public class CourseController {
         return PackedResponse.success(response, "");
     }
 
-    /**
-     * 获取课程题目列表
-     *
-     * @param courseId 课程 ID
-     * @return 题目列表
-     */
-    @GetMapping("/{courseId}/topic")
-    public ResponseEntity<PackedResponse<TopicListResponse>> getTopics(
-            @RequestBody ReleaseTopicRequest request,
-            @PathVariable Integer courseId
-    ) throws IdNotFoundException {
-        List<TopicInfoBO> topicInfoBOS = courseService.getTopicInfoByCourseId(courseId);
-        return PackedResponse.success(new TopicListResponse(topicInfoBOS), "");
-    }
 }
 

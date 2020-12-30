@@ -4,11 +4,12 @@ import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
-
+@Service
 public interface NormalWorkService {
     boolean store(Integer stuId, Integer topicId, MultipartFile file);
 

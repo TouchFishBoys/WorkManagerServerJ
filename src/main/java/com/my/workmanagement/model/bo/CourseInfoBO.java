@@ -80,6 +80,7 @@ public class CourseInfoBO {
         this.courseDescription = courseDescription;
     }
 
+
     public static final class CourseInfoBOBuilder {
         private Integer courseId;
         private String courseName;
@@ -142,6 +143,7 @@ public class CourseInfoBO {
             courseInfoBO.setCourseDescription(courseDescription);
             return courseInfoBO;
         }
+
     }
 
     @Override

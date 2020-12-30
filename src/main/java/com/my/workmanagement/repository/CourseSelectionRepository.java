@@ -14,8 +14,8 @@ public interface CourseSelectionRepository extends CrudRepository<CourseSelectio
     List<CourseSelectionDO> findAllByStudent_StudentId(Integer studentId);
 
     Integer countAllByCourse_CourseId(Integer courseId);
-
+/*
     @Query("SELECT TeamDO.teamId FROM CourseSelectionDO cs WHERE cs.student.studentId = :studentId AND cs.course.courseId = :courseId")
     Integer getTeamIdByStudentIdAndCourseId(Integer studentId, Integer courseId);
-
+*/
 }

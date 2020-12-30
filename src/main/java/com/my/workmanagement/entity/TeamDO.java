@@ -15,6 +15,10 @@ public class TeamDO {
     @Column(nullable = false, unique = true)
     private String teamName;
 
+    @JoinColumn(unique = true)
+    @OneToOne
+    private FinalWorkDO finalWork;
+
     @CreationTimestamp
     private Timestamp gmtCreate;
     @UpdateTimestamp
@@ -53,6 +57,14 @@ public class TeamDO {
 
     public void setGmtModified(Timestamp gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public FinalWorkDO getFinalWork() {
+        return finalWork;
+    }
+
+    public void setFinalWork(FinalWorkDO finalWork) {
+        this.finalWork = finalWork;
     }
 
     @Override
