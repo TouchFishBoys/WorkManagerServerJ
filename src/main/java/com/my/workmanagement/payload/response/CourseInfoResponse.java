@@ -16,6 +16,8 @@ public class CourseInfoResponse {
     //课程年份
     private Integer courseYear;
 
+    private Integer studentCount;
+
     public Integer getCourseId() {
         return courseId;
     }
@@ -72,6 +74,15 @@ public class CourseInfoResponse {
         this.courseYear = courseYear;
     }
 
+    public Integer getStudentCount() {
+        return studentCount;
+    }
+
+    public void setStudentCount(Integer studentCount) {
+        this.studentCount = studentCount;
+    }
+
+
     public static final class CourseInfoResponseBuilder {
         // 课程 Id
         private Integer courseId;
@@ -87,6 +98,7 @@ public class CourseInfoResponse {
         private Integer finishCount;
         //课程年份
         private Integer courseYear;
+        private Integer studentCount;
 
         private CourseInfoResponseBuilder() {
         }
@@ -130,6 +142,11 @@ public class CourseInfoResponse {
             return this;
         }
 
+        public CourseInfoResponseBuilder withStudentCount(Integer studentCount) {
+            this.studentCount = studentCount;
+            return this;
+        }
+
         public CourseInfoResponse build() {
             CourseInfoResponse courseInfoResponse = new CourseInfoResponse();
             courseInfoResponse.setCourseId(courseId);
@@ -139,6 +156,7 @@ public class CourseInfoResponse {
             courseInfoResponse.setTotalCount(totalCount);
             courseInfoResponse.setFinishCount(finishCount);
             courseInfoResponse.setCourseYear(courseYear);
+            courseInfoResponse.setStudentCount(studentCount);
             return courseInfoResponse;
         }
     }
@@ -153,6 +171,7 @@ public class CourseInfoResponse {
                 ", totalCount=" + totalCount +
                 ", finishCount=" + finishCount +
                 ", courseYear=" + courseYear +
+                ", studentCount=" + studentCount +
                 '}';
     }
 }

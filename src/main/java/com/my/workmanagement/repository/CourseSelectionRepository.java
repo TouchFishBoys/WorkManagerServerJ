@@ -6,6 +6,7 @@ import com.my.workmanagement.entity.StudentDO;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface CourseSelectionRepository extends CrudRepository<CourseSelectionDO, Integer> {
@@ -14,6 +15,11 @@ public interface CourseSelectionRepository extends CrudRepository<CourseSelectio
     List<CourseSelectionDO> findAllByStudent_StudentId(Integer studentId);
 
     Integer countAllByCourse_CourseId(Integer courseId);
+
+    @Query(value = "SELECT COUNT(CourseSelectionDO.team) FROM CourseSelectionDO cs WHERE cs.course.courseId = ?1 GROUP BY cs.team.teamId")
+    Integer countAllByCourseIdGroupByTeam(Integer courseId);
+
+    Integer countAllByCourse_CourseIdAndTeam_FinalWork_TimeUploadNot(Integer courseId,Timestamp timestamp);
 /*
     @Query("SELECT TeamDO.teamId FROM CourseSelectionDO cs WHERE cs.student.studentId = :studentId AND cs.course.courseId = :courseId")
     Integer getTeamIdByStudentIdAndCourseId(Integer studentId, Integer courseId);

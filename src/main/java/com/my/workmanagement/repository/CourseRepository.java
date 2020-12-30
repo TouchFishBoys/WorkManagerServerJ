@@ -8,11 +8,13 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public interface CourseRepository extends PagingAndSortingRepository<CourseDO, Integer> {
     CourseDO findByCourseId(Integer courseId);
 
     List<CourseDO> findAllByTeacherOrderByCourseId(TeacherDO teacher);
+
 
 }

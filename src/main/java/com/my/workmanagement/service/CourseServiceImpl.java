@@ -57,8 +57,9 @@ public class CourseServiceImpl implements CourseService {
                 .withCourseDescription(courseDO.getCourseDescription())
                 .withCourseYear(courseDO.getCourseYear())
                 .withCourseTeacherName(courseDO.getTeacher().getTeacherName())
-                .withTotalCount(courseSelectionRepository.countAllByCourse_CourseId(courseId))
-                .withFinishCount(normalWorkRepository.countAllByTopic_CourseId(courseId))
+                .withStudentCount(courseSelectionRepository.countAllByCourse_CourseId(courseId))
+                .withTotalCount(courseSelectionRepository.countAllByCourseIdGroupByTeam(courseId))
+                .withFinishCount(courseSelectionRepository.countAllByCourse_CourseIdAndTeam_FinalWork_TimeUploadNot(courseId,null))
                 .build();
     }
 
@@ -73,6 +74,7 @@ public class CourseServiceImpl implements CourseService {
                 .withCourseName(courseDO.getCourseName())
                 .withCourseDescription(courseDO.getCourseDescription())
                 .withCourseYear(courseDO.getCourseYear())
+                .withStudentCount(1)
                 .withCourseTeacherName(courseDO.getTeacher().getTeacherName())
                 .withTotalCount(normalWorkRepository.countAllByTopic_CourseIdAndStudent_StudentId(courseId,studentId))
                 .withFinishCount(normalWorkRepository.countAllByTopic_CourseId(courseId))

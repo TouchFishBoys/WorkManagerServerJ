@@ -10,19 +10,7 @@ public class CourseInfoBO {
     private Integer totalCount;
     private Integer courseYear;
     private String courseDescription;
-
-    private CourseInfoBO() {
-    }
-
-    ;
-
-    public CourseInfoBO(Integer courseId, String courseName, String courseTeacherName, Integer finishCount, Integer totalCount) {
-        this.courseId = courseId;
-        this.courseName = courseName;
-        this.courseTeacherName = courseTeacherName;
-        this.finishCount = finishCount;
-        this.totalCount = totalCount;
-    }
+    private  Integer studentCount;
 
     public Integer getCourseId() {
         return courseId;
@@ -80,6 +68,14 @@ public class CourseInfoBO {
         this.courseDescription = courseDescription;
     }
 
+    public Integer getStudentCount() {
+        return studentCount;
+    }
+
+    public void setStudentCount(Integer studentCount) {
+        this.studentCount = studentCount;
+    }
+
 
     public static final class CourseInfoBOBuilder {
         private Integer courseId;
@@ -89,6 +85,7 @@ public class CourseInfoBO {
         private Integer totalCount;
         private Integer courseYear;
         private String courseDescription;
+        private  Integer studentCount;
 
         private CourseInfoBOBuilder() {
         }
@@ -132,6 +129,11 @@ public class CourseInfoBO {
             return this;
         }
 
+        public CourseInfoBOBuilder withStudentCount(Integer studentCount) {
+            this.studentCount = studentCount;
+            return this;
+        }
+
         public CourseInfoBO build() {
             CourseInfoBO courseInfoBO = new CourseInfoBO();
             courseInfoBO.setCourseId(courseId);
@@ -141,9 +143,9 @@ public class CourseInfoBO {
             courseInfoBO.setTotalCount(totalCount);
             courseInfoBO.setCourseYear(courseYear);
             courseInfoBO.setCourseDescription(courseDescription);
+            courseInfoBO.setStudentCount(studentCount);
             return courseInfoBO;
         }
-
     }
 
     @Override
@@ -156,6 +158,7 @@ public class CourseInfoBO {
                 ", totalCount=" + totalCount +
                 ", courseYear=" + courseYear +
                 ", courseDescription='" + courseDescription + '\'' +
+                ", studentCount=" + studentCount +
                 '}';
     }
 }
