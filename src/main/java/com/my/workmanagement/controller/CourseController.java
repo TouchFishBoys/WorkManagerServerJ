@@ -4,11 +4,14 @@ import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.UndefinedUserRoleException;
 import com.my.workmanagement.model.ERole;
 import com.my.workmanagement.model.WMUserDetails;
+import com.my.workmanagement.model.bo.CourseInfoBO;
 import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.topic.ReleaseTopicRequest;
 import com.my.workmanagement.payload.response.CourseInfoResponse;
 import com.my.workmanagement.payload.response.TopicInfoListResponse;
+import com.my.workmanagement.payload.response.normalwork.TopicListResponse;
+import com.my.workmanagement.payload.response.student.CourseListResponse;
 import com.my.workmanagement.payload.response.student.StudentInfoResponse;
 import com.my.workmanagement.service.interfaces.CourseService;
 import com.my.workmanagement.service.interfaces.NormalWorkService;
@@ -50,14 +53,43 @@ public class CourseController {
      * 获取课程信息
      *
      * @param courseId 课程 Id
-     * @return 课程信息（ID,名称，教师，描述，学生数量，年份）
+     * @return 课程信息
      */
     @GetMapping("/{courseId}")
     public ResponseEntity<PackedResponse<CourseInfoResponse>> getCourseInfo(
             @PathVariable Integer courseId
-    ) throws IdNotFoundException {
+    ) throws IdNotFoundException, UndefinedUserRoleException {
         logger.info("Getting course info: {}", courseId);
-        CourseInfoResponse response = courseService.getCourseInfo(courseId);
+        WMUserDetails userDetails = AuthUtil.getUserDetail();
+        CourseInfoResponse response = new CourseInfoResponse();
+        if (userDetails.getRole() == ERole.ROLE_TEACHER) {
+            CourseInfoBO courseInfoBO = courseService.getCourseInfo_Teacher(courseId);
+            response = CourseInfoResponse.CourseInfoResponseBuilder.aCourseInfoResponse()
+                    .withCourseId(courseId)
+                    .withCourseName(courseInfoBO.getCourseName())
+                    .withCourseYear(courseInfoBO.getCourseYear())
+                    .withCourseDescription(courseInfoBO.getCourseDescription())
+                    .withTeacherName(courseInfoBO.getCourseTeacherName())
+                    .withTotalCount(courseInfoBO.getTotalCount())
+                    .withFinishCount(courseInfoBO.getFinishCount())
+                    .build();
+        } else {
+            if (userDetails.getRole() == ERole.ROLE_STUDENT) {
+                CourseInfoBO courseInfoBO = courseService.getCourseInfo_Student(courseId, userDetails.getUserId());
+                response = CourseInfoResponse.CourseInfoResponseBuilder.aCourseInfoResponse()
+                        .withCourseId(courseId)
+                        .withCourseName(courseInfoBO.getCourseName())
+                        .withCourseYear(courseInfoBO.getCourseYear())
+                        .withCourseDescription(courseInfoBO.getCourseDescription())
+                        .withTeacherName(courseInfoBO.getCourseTeacherName())
+                        .withTotalCount(courseInfoBO.getTotalCount())
+                        .withFinishCount(courseInfoBO.getFinishCount())
+                        .build();
+            } else {
+                logger.info("No User");
+                throw new UndefinedUserRoleException("");
+            }
+        }
         return PackedResponse.success(response, "");
     }
 
@@ -146,6 +178,7 @@ public class CourseController {
         }
         return PackedResponse.success(response, "");
     }
+
     /**
      * 获取课程题目列表
      *
@@ -153,12 +186,12 @@ public class CourseController {
      * @return 题目列表
      */
     @GetMapping("/{courseId}/topic")
-    public ResponseEntity<PackedResponse<CourseInfoResponse>> getTopics(
+    public ResponseEntity<PackedResponse<TopicListResponse>> getTopics(
             @RequestBody ReleaseTopicRequest request,
             @PathVariable Integer courseId
     ) throws IdNotFoundException {
-        List<TopicInfoBO> topicInfoBOS=courseService.getTopicInfoByCourseId(courseId);
-        return null;
+        List<TopicInfoBO> topicInfoBOS = courseService.getTopicInfoByCourseId(courseId);
+        return PackedResponse.success(new TopicListResponse(topicInfoBOS), "");
     }
 }
 

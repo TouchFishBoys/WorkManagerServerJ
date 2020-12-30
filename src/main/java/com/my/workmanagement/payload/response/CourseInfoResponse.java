@@ -4,23 +4,36 @@ public class CourseInfoResponse {
     // 课程 Id
     private Integer courseId;
     // 开课教师
-    private String teacher;
+    private String teacherName;
     // 课程名称
     private String courseName;
     // 课程描述
     private String courseDescription;
-    // 学生数量
-    private Integer studentCount;
+    // 总数量
+    private Integer totalCount;
+    //完成数量
+    private Integer finishCount;
     //课程年份
     private Integer courseYear;
 
+    public Integer getCourseId() {
+        return courseId;
+    }
 
     public void setCourseId(Integer courseId) {
         this.courseId = courseId;
     }
 
-    public void setTeacherId(String teacher) {
-        this.teacher = teacher;
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
+
+    public String getCourseName() {
+        return courseName;
     }
 
     public void setCourseName(String courseName) {
@@ -35,8 +48,20 @@ public class CourseInfoResponse {
         this.courseDescription = courseDescription;
     }
 
-    public void setStudentCount(Integer studentCount) {
-        this.studentCount = studentCount;
+    public Integer getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
+    }
+
+    public Integer getFinishCount() {
+        return finishCount;
+    }
+
+    public void setFinishCount(Integer finishCount) {
+        this.finishCount = finishCount;
     }
 
     public Integer getCourseYear() {
@@ -47,46 +72,20 @@ public class CourseInfoResponse {
         this.courseYear = courseYear;
     }
 
-    public CourseInfoResponse() {
-    }
-
-    public CourseInfoResponse(Integer courseId, String teacher, String courseName,String courseDescription, Integer studentCount,Integer courseYear) {
-        this.courseId = courseId;
-        this.teacher = teacher;
-        this.courseName = courseName;
-        this.courseDescription=courseDescription;
-        this.studentCount = studentCount;
-        this.courseYear=courseYear;
-    }
-
-    public Integer getCourseId() {
-        return courseId;
-    }
-
-    public String getTeacherId() {
-        return teacher;
-    }
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public Integer getStudentCount() {
-        return studentCount;
-    }
-
     public static final class CourseInfoResponseBuilder {
         // 课程 Id
         private Integer courseId;
         // 开课教师
-        private String teacher;
+        private String teacherName;
         // 课程名称
         private String courseName;
         // 课程描述
         private String courseDescription;
-        // 学生数量
-        private Integer studentCount;
-        // 课程年份
+        // 总数量
+        private Integer totalCount;
+        //完成数量
+        private Integer finishCount;
+        //课程年份
         private Integer courseYear;
 
         private CourseInfoResponseBuilder() {
@@ -101,8 +100,8 @@ public class CourseInfoResponse {
             return this;
         }
 
-        public CourseInfoResponseBuilder withTeacher(String teacher) {
-            this.teacher = teacher;
+        public CourseInfoResponseBuilder withTeacherName(String teacherName) {
+            this.teacherName = teacherName;
             return this;
         }
 
@@ -112,22 +111,48 @@ public class CourseInfoResponse {
         }
 
         public CourseInfoResponseBuilder withCourseDescription(String courseDescription) {
-            this.courseDescription=courseDescription;
+            this.courseDescription = courseDescription;
             return this;
         }
 
-        public CourseInfoResponseBuilder withStudentCount(Integer studentCount) {
-            this.studentCount = studentCount;
+        public CourseInfoResponseBuilder withTotalCount(Integer totalCount) {
+            this.totalCount = totalCount;
+            return this;
+        }
+
+        public CourseInfoResponseBuilder withFinishCount(Integer finishCount) {
+            this.finishCount = finishCount;
             return this;
         }
 
         public CourseInfoResponseBuilder withCourseYear(Integer courseYear) {
-            this.courseYear=courseYear;
+            this.courseYear = courseYear;
             return this;
         }
 
         public CourseInfoResponse build() {
-            return new CourseInfoResponse(courseId, teacher, courseName, courseDescription,studentCount,courseYear);
+            CourseInfoResponse courseInfoResponse = new CourseInfoResponse();
+            courseInfoResponse.setCourseId(courseId);
+            courseInfoResponse.setTeacherName(teacherName);
+            courseInfoResponse.setCourseName(courseName);
+            courseInfoResponse.setCourseDescription(courseDescription);
+            courseInfoResponse.setTotalCount(totalCount);
+            courseInfoResponse.setFinishCount(finishCount);
+            courseInfoResponse.setCourseYear(courseYear);
+            return courseInfoResponse;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "CourseInfoResponse{" +
+                "courseId=" + courseId +
+                ", teacherName='" + teacherName + '\'' +
+                ", courseName='" + courseName + '\'' +
+                ", courseDescription='" + courseDescription + '\'' +
+                ", totalCount=" + totalCount +
+                ", finishCount=" + finishCount +
+                ", courseYear=" + courseYear +
+                '}';
     }
 }
