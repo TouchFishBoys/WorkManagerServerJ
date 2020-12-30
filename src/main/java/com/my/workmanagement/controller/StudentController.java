@@ -1,6 +1,8 @@
 package com.my.workmanagement.controller;
 
 import com.my.workmanagement.exception.IdNotFoundException;
+import com.my.workmanagement.exception.UndefinedUserRoleException;
+import com.my.workmanagement.model.ERole;
 import com.my.workmanagement.model.WMUserDetails;
 import com.my.workmanagement.model.bo.CourseInfoBO;
 import com.my.workmanagement.model.bo.StudentInfoBO;
@@ -52,8 +54,8 @@ public class StudentController {
     @GetMapping("/course")
     public ResponseEntity<CourseListResponse> getCourseList(
     ) throws IdNotFoundException {
-        WMUserDetails user = AuthUtil.getUserDetail();
-        Integer studentId = user.getUserId();
+        WMUserDetails userDetails = AuthUtil.getUserDetail();
+        Integer studentId = userDetails.getUserId();
         List<CourseInfoBO> courseInfoBOS = studentService.getSelectedCourseInfo(studentId);
 
         CourseListResponse response = new CourseListResponse();

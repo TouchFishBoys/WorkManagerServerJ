@@ -4,6 +4,7 @@ import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.UndefinedUserRoleException;
 import com.my.workmanagement.model.ERole;
 import com.my.workmanagement.model.WMUserDetails;
+import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.topic.ReleaseTopicRequest;
 import com.my.workmanagement.payload.response.CourseInfoResponse;
@@ -145,4 +146,19 @@ public class CourseController {
         }
         return PackedResponse.success(response, "");
     }
+    /**
+     * 获取课程题目列表
+     *
+     * @param courseId 课程 ID
+     * @return 题目列表
+     */
+    @GetMapping("/{courseId}/topic")
+    public ResponseEntity<PackedResponse<CourseInfoResponse>> getTopics(
+            @RequestBody ReleaseTopicRequest request,
+            @PathVariable Integer courseId
+    ) throws IdNotFoundException {
+        List<TopicInfoBO> topicInfoBOS=courseService.getTopicInfoByCourseId(courseId);
+        return null;
+    }
 }
+

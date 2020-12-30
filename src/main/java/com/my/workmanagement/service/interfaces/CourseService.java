@@ -1,6 +1,7 @@
 package com.my.workmanagement.service.interfaces;
 
 import com.my.workmanagement.exception.IdNotFoundException;
+import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.response.CourseInfoResponse;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import org.springframework.stereotype.Service;
@@ -15,5 +16,5 @@ public interface CourseService {
 
     String getCourseName(Integer courseId) throws IdNotFoundException;
 
-    List<TopicInfoResponse> getTopicResponses(Integer courseId) throws IdNotFoundException;
+    List<TopicInfoBO> getTopicInfoByCourseId(Integer courseId) throws IdNotFoundException;
 }

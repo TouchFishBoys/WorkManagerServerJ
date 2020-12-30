@@ -8,4 +8,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface NormalWorkRepository extends CrudRepository<NormalWorkDO,Integer> {
 
     Integer countAllByStudent(StudentDO studentDO);
+    Integer countAllByTopic_CourseId(Integer courseId);
 }

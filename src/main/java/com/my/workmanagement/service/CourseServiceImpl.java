@@ -4,9 +4,11 @@ import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.entity.TeacherDO;
 import com.my.workmanagement.entity.TopicDO;
 import com.my.workmanagement.exception.IdNotFoundException;
+import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.response.CourseInfoResponse;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import com.my.workmanagement.repository.CourseRepository;
+import com.my.workmanagement.repository.NormalWorkRepository;
 import com.my.workmanagement.repository.TeacherRepository;
 import com.my.workmanagement.repository.TopicRepository;
 import com.my.workmanagement.service.interfaces.CourseService;
@@ -21,12 +23,14 @@ public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     private final TeacherRepository teacherRepository;
     private final TopicRepository topicRepository;
+    private final NormalWorkRepository normalWorkRepository;
 
     @Autowired
-    public CourseServiceImpl(CourseRepository courseRepository, TeacherRepository teacherRepository, TopicRepository topicRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository, TeacherRepository teacherRepository, TopicRepository topicRepository,NormalWorkRepository normalWorkRepository) {
         this.courseRepository = courseRepository;
         this.teacherRepository = teacherRepository;
         this.topicRepository = topicRepository;
+        this.normalWorkRepository=normalWorkRepository;
     }
 
     @Override
@@ -64,21 +68,23 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<TopicInfoResponse> getTopicResponses(Integer courseId) throws IdNotFoundException {
-        List<TopicDO> Topics = topicRepository.findAllByCourseId(courseId);
-        if(Topics==null){
+    public List<TopicInfoBO> getTopicInfoByCourseId(Integer courseId) throws IdNotFoundException {
+        List<TopicDO> topics = topicRepository.findAllByCourseId(courseId);
+        List<TopicInfoBO> topicInfoBOS = new LinkedList<>();
+        if (topics == null) {
             throw new IdNotFoundException("topic");
         }
-        List<TopicInfoResponse> responses=new LinkedList<>();
-        for (TopicDO topic : Topics) {
-            responses.add(TopicInfoResponse.TopicInfoResponseBuilder.aTopicInfoResponse()
-                    .withCourseName(getCourseName(courseId))
+        for (TopicDO topic : topics) {
+            topicInfoBOS.add(TopicInfoBO.TopicInfoBOBuilder.aTopicInfoBO()
+                    .withTopicId(topic.getTopicId())
                     .withTopicName(topic.getTopicName())
                     .withTopicDescription(topic.getTopicDescription())
-                    .withTopicTimeStart(topic.getTopicTimeStart())
-                    .withTopicTimeEnd(topic.getTopicTimeEnd())
+                    .withFinishedCount(normalWorkRepository.countAllByTopic_CourseId(courseId))
+                    .withTotalCount(topicRepository.countAllByCourseId(courseId))
+                    .withStartTime(topic.getTopicTimeStart())
+                    .withFinishTime(topic.getTopicTimeEnd())
                     .build());
         }
-        return responses;
+        return topicInfoBOS;
     }
 }
