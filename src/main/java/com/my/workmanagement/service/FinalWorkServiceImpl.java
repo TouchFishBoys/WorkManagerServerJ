@@ -9,9 +9,11 @@ import com.my.workmanagement.repository.FinalWorkRepository;
 import com.my.workmanagement.repository.TeamRepository;
 import com.my.workmanagement.service.interfaces.FinalWorkService;
 import com.my.workmanagement.service.interfaces.TeamService;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.FileNotFoundException;
 
 @Service
 public class FinalWorkServiceImpl implements FinalWorkService {
@@ -57,5 +59,23 @@ public class FinalWorkServiceImpl implements FinalWorkService {
             throw new IdNotFoundException("finalWorkId");
         }
         return finalWorkRepository.setScoreByFinalWorkId(finalWork, score);
+    }
+
+    @Override
+    public boolean setDocumentScore(Integer finalWork, Integer score) throws IdNotFoundException {
+        if (!finalWorkRepository.existsById(finalWork)) {
+            throw new IdNotFoundException("finalWorkId");
+        }
+        return finalWorkRepository.setDocumentScoreByFinalWorkId(finalWork, score);
+    }
+
+    @Override
+    public Resource loadDocumentByFworkId(Integer finalWorkId) throws FileNotFoundException {
+        return null;
+    }
+
+    @Override
+    public Resource loadFworkFileByFworkId(Integer finalWorkId) throws FileNotFoundException {
+        return null;
     }
 }
