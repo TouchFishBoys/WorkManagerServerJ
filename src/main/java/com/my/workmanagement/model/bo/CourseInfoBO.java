@@ -115,4 +115,14 @@ public class CourseInfoBO {
 
     }
 
+    @Override
+    public String toString() {
+        return "CourseInfoBO{" +
+                "courseId=" + courseId +
+                ", courseName='" + courseName + '\'' +
+                ", courseTeacherName='" + courseTeacherName + '\'' +
+                ", finishCount=" + finishCount +
+                ", totalCount=" + totalCount +
+                '}';
+    }
 }

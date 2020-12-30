@@ -119,4 +119,16 @@ public class FinalWorkBO {
             return finalWorkBO;
         }
     }
+
+    @Override
+    public String toString() {
+        return "FinalWorkBO{" +
+                "finalWorkId=" + finalWorkId +
+                ", finalWorkName='" + finalWorkName + '\'' +
+                ", authors=" + authors +
+                ", teamName='" + teamName + '\'' +
+                ", description='" + description + '\'' +
+                ", submitTime=" + submitTime +
+                '}';
+    }
 }

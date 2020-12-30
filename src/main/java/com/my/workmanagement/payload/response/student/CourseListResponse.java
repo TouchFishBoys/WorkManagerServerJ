@@ -4,5 +4,4 @@ import java.io.Serializable;
 
 public class CourseListResponse implements Serializable {
 
-
 }
