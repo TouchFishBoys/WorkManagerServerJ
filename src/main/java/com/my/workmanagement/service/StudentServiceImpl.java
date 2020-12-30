@@ -67,7 +67,7 @@ public class StudentServiceImpl implements StudentService {
         StudentDO tmpStudent = studentRepository.findByStudentId(studentId);
         List<CourseDO> courses = courseSelectionRepository.findAllByStudent(tmpStudent);
         for (CourseDO course : courses) {
-            list.add(CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBOBuilder()
+            list.add(CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBO()
                     .withCourseName(course.getCourseName())
                     .withCourseId(course.getCourseId())
                     .withCourseTeacherName(course.getTeacher().getTeacherName())

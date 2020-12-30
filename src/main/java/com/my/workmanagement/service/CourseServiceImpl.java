@@ -4,13 +4,11 @@ import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.entity.TeacherDO;
 import com.my.workmanagement.entity.TopicDO;
 import com.my.workmanagement.exception.IdNotFoundException;
+import com.my.workmanagement.model.bo.CourseInfoBO;
 import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.response.CourseInfoResponse;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
-import com.my.workmanagement.repository.CourseRepository;
-import com.my.workmanagement.repository.NormalWorkRepository;
-import com.my.workmanagement.repository.TeacherRepository;
-import com.my.workmanagement.repository.TopicRepository;
+import com.my.workmanagement.repository.*;
 import com.my.workmanagement.service.interfaces.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,16 +19,16 @@ import java.util.List;
 @Service
 public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
-    private final TeacherRepository teacherRepository;
+    private final CourseSelectionRepository courseSelectionRepository;
     private final TopicRepository topicRepository;
     private final NormalWorkRepository normalWorkRepository;
 
     @Autowired
-    public CourseServiceImpl(CourseRepository courseRepository, TeacherRepository teacherRepository, TopicRepository topicRepository,NormalWorkRepository normalWorkRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository, TeacherRepository teacherRepository, TopicRepository topicRepository, NormalWorkRepository normalWorkRepository,CourseSelectionRepository courseSelectionRepository) {
         this.courseRepository = courseRepository;
-        this.teacherRepository = teacherRepository;
+        this.courseSelectionRepository=courseSelectionRepository;
         this.topicRepository = topicRepository;
-        this.normalWorkRepository=normalWorkRepository;
+        this.normalWorkRepository = normalWorkRepository;
     }
 
     @Override
@@ -48,22 +46,36 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CourseInfoResponse getCourseInfo(Integer courseId) throws IdNotFoundException {
+    public CourseInfoBO getCourseInfo_Teacher(Integer courseId) throws IdNotFoundException {
         CourseDO courseDO = courseRepository.findByCourseId(courseId);
         if (courseDO == null) {
             throw new IdNotFoundException("course");
         }
-        TeacherDO teacherDO = teacherRepository.findByTeacherId(courseDO.getTeacher().getTeacherId());
-        if (teacherDO == null) {
-            throw new IdNotFoundException("teacher");
-        }
-        return CourseInfoResponse.CourseInfoResponseBuilder.aCourseInfoResponse()
+        return CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBO()
+                .withCourseId(courseDO.getCourseId())
+                .withCourseName(courseDO.getCourseName())
                 .withCourseDescription(courseDO.getCourseDescription())
                 .withCourseYear(courseDO.getCourseYear())
-                .withCourseId(courseId)
+                .withCourseTeacherName(courseDO.getTeacher().getTeacherName())
+                .withTotalCount(courseSelectionRepository.countAllByCourse_CourseId(courseId))
+                .withFinishCount(normalWorkRepository.countAllByTopic_CourseId(courseId))
+                .build();
+    }
+
+    @Override
+    public CourseInfoBO getCourseInfo_Student(Integer courseId, Integer studentId) throws IdNotFoundException {
+        CourseDO courseDO = courseRepository.findByCourseId(courseId);
+        if (courseDO == null) {
+            throw new IdNotFoundException("course");
+        }
+        return CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBO()
+                .withCourseId(courseDO.getCourseId())
                 .withCourseName(courseDO.getCourseName())
-                .withTeacher(teacherDO.getTeacherName())
-                .withStudentCount(topicRepository.countAllByCourseId(courseId))
+                .withCourseDescription(courseDO.getCourseDescription())
+                .withCourseYear(courseDO.getCourseYear())
+                .withCourseTeacherName(courseDO.getTeacher().getTeacherName())
+                .withTotalCount(normalWorkRepository.countAllByTopic_CourseIdAndStudent_StudentId(courseId,studentId))
+                .withFinishCount(normalWorkRepository.countAllByTopic_CourseId(courseId))
                 .build();
     }
 

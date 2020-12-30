@@ -8,6 +8,8 @@ public class CourseInfoBO {
     private String courseTeacherName;
     private Integer finishCount;
     private Integer totalCount;
+    private Integer courseYear;
+    private String courseDescription;
 
     private CourseInfoBO() {
     }
@@ -62,19 +64,36 @@ public class CourseInfoBO {
         this.totalCount = totalCount;
     }
 
+    public Integer getCourseYear() {
+        return courseYear;
+    }
+
+    public void setCourseYear(Integer courseYear) {
+        this.courseYear = courseYear;
+    }
+
+    public String getCourseDescription() {
+        return courseDescription;
+    }
+
+    public void setCourseDescription(String courseDescription) {
+        this.courseDescription = courseDescription;
+    }
+
+
     public static final class CourseInfoBOBuilder {
         private Integer courseId;
         private String courseName;
         private String courseTeacherName;
         private Integer finishCount;
         private Integer totalCount;
+        private Integer courseYear;
+        private String courseDescription;
 
         private CourseInfoBOBuilder() {
         }
 
-        ;
-
-        public static CourseInfoBOBuilder aCourseInfoBOBuilder() {
+        public static CourseInfoBOBuilder aCourseInfoBO() {
             return new CourseInfoBOBuilder();
         }
 
@@ -103,13 +122,25 @@ public class CourseInfoBO {
             return this;
         }
 
+        public CourseInfoBOBuilder withCourseYear(Integer courseYear) {
+            this.courseYear = courseYear;
+            return this;
+        }
+
+        public CourseInfoBOBuilder withCourseDescription(String courseDescription) {
+            this.courseDescription = courseDescription;
+            return this;
+        }
+
         public CourseInfoBO build() {
             CourseInfoBO courseInfoBO = new CourseInfoBO();
-            courseInfoBO.setCourseName(this.courseName);
-            courseInfoBO.setCourseId(this.courseId);
-            courseInfoBO.setCourseTeacherName(this.courseTeacherName);
-            courseInfoBO.setFinishCount(this.finishCount);
-            courseInfoBO.setTotalCount(this.totalCount);
+            courseInfoBO.setCourseId(courseId);
+            courseInfoBO.setCourseName(courseName);
+            courseInfoBO.setCourseTeacherName(courseTeacherName);
+            courseInfoBO.setFinishCount(finishCount);
+            courseInfoBO.setTotalCount(totalCount);
+            courseInfoBO.setCourseYear(courseYear);
+            courseInfoBO.setCourseDescription(courseDescription);
             return courseInfoBO;
         }
 
@@ -123,6 +154,8 @@ public class CourseInfoBO {
                 ", courseTeacherName='" + courseTeacherName + '\'' +
                 ", finishCount=" + finishCount +
                 ", totalCount=" + totalCount +
+                ", courseYear=" + courseYear +
+                ", courseDescription='" + courseDescription + '\'' +
                 '}';
     }
 }

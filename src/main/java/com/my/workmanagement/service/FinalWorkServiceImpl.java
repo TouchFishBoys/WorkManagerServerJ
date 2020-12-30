@@ -38,7 +38,7 @@ public class FinalWorkServiceImpl implements FinalWorkService {
             // 没找到队伍
             throw new IdNotFoundException("team");
         }
-        FinalWorkDO finalWork = finalWorkRepository.findFinalWorkDOByTeamId(team);
+        FinalWorkDO finalWork = team.getFinalWork();
         if (finalWork == null) {
             throw new IdNotFoundException("finalWork");
         }

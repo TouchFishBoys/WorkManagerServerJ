@@ -57,8 +57,8 @@ public class StudentController {
         WMUserDetails userDetails = AuthUtil.getUserDetail();
         Integer studentId = userDetails.getUserId();
         List<CourseInfoBO> courseInfoBOS = studentService.getSelectedCourseInfo(studentId);
-
         CourseListResponse response = new CourseListResponse();
+        response.setCourseInfoList(courseInfoBOS);
         return ResponseEntity.ok(response);
     }
 

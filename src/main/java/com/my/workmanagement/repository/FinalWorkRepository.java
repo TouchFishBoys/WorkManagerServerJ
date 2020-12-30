@@ -7,8 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 public interface FinalWorkRepository extends CrudRepository<FinalWorkDO, Integer> {
-    FinalWorkDO findFinalWorkDOByTeamId(TeamDO teamDO);
-
     boolean existsByFworkId(Integer fworkId);
 
     @Modifying

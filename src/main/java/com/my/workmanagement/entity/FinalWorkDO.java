@@ -16,10 +16,6 @@ public class FinalWorkDO {
     private String fworkName;
     private String fworkDescription;
 
-    @JoinColumn(unique = true)
-    @OneToOne
-    private TeamDO teamId;
-
     private Integer documentScore;
     private Integer fworkScore;
 
@@ -66,13 +62,6 @@ public class FinalWorkDO {
         this.fworkDescription = fworkDescription;
     }
 
-    public TeamDO getTeamId() {
-        return teamId;
-    }
-
-    public void setTeamId(TeamDO teamId) {
-        this.teamId = teamId;
-    }
 
     public Integer getFworkScore() {
         return fworkScore;
@@ -112,7 +101,6 @@ public class FinalWorkDO {
                 "fworkId=" + fworkId +
                 ", fworkName='" + fworkName + '\'' +
                 ", fworkDescription='" + fworkDescription + '\'' +
-                ", teamId=" + teamId +
                 ", documentScore=" + documentScore +
                 ", fworkScore=" + fworkScore +
                 ", timeUpload=" + timeUpload +

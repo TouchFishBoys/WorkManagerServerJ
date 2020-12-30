@@ -9,4 +9,5 @@ public interface NormalWorkRepository extends CrudRepository<NormalWorkDO,Intege
 
     Integer countAllByStudent(StudentDO studentDO);
     Integer countAllByTopic_CourseId(Integer courseId);
+    Integer countAllByTopic_CourseIdAndStudent_StudentId(Integer courseId,Integer studentId);
 }
