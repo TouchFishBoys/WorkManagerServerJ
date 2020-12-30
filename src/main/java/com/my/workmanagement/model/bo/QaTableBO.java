@@ -8,6 +8,7 @@ public class QaTableBO {
     private String productName; // 项目名称
     private String author; // 参与者
     private Date qaTime; // 答辩时间
+    private Integer score;
 
     private List<QaTableItemBO> tables;
 
@@ -56,14 +57,6 @@ public class QaTableBO {
         this.productName = productName;
     }
 
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
     public Date getQaTime() {
         return qaTime;
     }
@@ -78,6 +71,22 @@ public class QaTableBO {
 
     public void setTables(List<QaTableItemBO> tables) {
         this.tables = tables;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
     }
 
     @Override
