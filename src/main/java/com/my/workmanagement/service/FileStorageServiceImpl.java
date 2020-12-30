@@ -2,6 +2,8 @@ package com.my.workmanagement.service;
 
 import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.service.interfaces.FileStorageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
@@ -15,6 +17,7 @@ import java.io.FileNotFoundException;
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
+    private static final Logger logger = LoggerFactory.getLogger(FileStorageServiceImpl.class);
     @Value("${workmanager.storage.root-directory:/storage}")
     private String storageRoot;
 
@@ -38,6 +41,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         try {
             return new InputStreamResource(new FileInputStream(file));
         } catch (FileNotFoundException ex) {
+            logger.error("File: '{}' not found", file.getAbsoluteFile());
             throw new StorageFileNotFoundException();
         }
     }
