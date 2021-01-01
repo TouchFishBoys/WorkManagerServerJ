@@ -1,6 +1,7 @@
 package com.my.workmanagement.service;
 
 import com.my.workmanagement.entity.CourseDO;
+import com.my.workmanagement.entity.CourseSelectionDO;
 import com.my.workmanagement.entity.StudentDO;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.model.bo.CourseInfoBO;
@@ -20,21 +21,24 @@ import java.util.List;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    private StudentRepository studentRepository;
-    private CourseSelectionRepository courseSelectionRepository;
-    private NormalWorkRepository normalWorkRepository;
-    private TopicRepository topicRepository;
+    private final StudentRepository studentRepository;
+    private final CourseSelectionRepository courseSelectionRepository;
+    private final NormalWorkRepository normalWorkRepository;
+    private final TopicRepository topicRepository;
+    private final TeamRepository teamRepository;
 
     StudentServiceImpl(
-            StudentRepository studentRepository
-            , CourseSelectionRepository courseSelectionRepository
-            , NormalWorkRepository normalWorkRepository
-            , TopicRepository topicRepository
+            StudentRepository studentRepository,
+            CourseSelectionRepository courseSelectionRepository,
+            NormalWorkRepository normalWorkRepository,
+            TopicRepository topicRepository,
+            TeamRepository teamRepository
     ) {
         this.studentRepository = studentRepository;
         this.courseSelectionRepository = courseSelectionRepository;
         this.normalWorkRepository = normalWorkRepository;
         this.topicRepository = topicRepository;
+        this.teamRepository = teamRepository;
     }
 
     @Override
@@ -78,5 +82,25 @@ public class StudentServiceImpl implements StudentService {
         }
         return list;
     }
+
+    @Override
+    public List<StudentInfoBO> getStudentsByTeamId(Integer teamId) throws IdNotFoundException {
+        List<CourseSelectionDO> courseSelectionDOS = courseSelectionRepository.getAllByTeam_TeamId(teamId);
+
+        List<StudentInfoBO> result = new LinkedList<>();
+        for (CourseSelectionDO courseSelection : courseSelectionDOS) {
+            StudentInfoBO info = new StudentInfoBO();
+            StudentDO student = studentRepository.findByStudentId(courseSelection.getStudent().getStudentId());
+
+            info.setStudentId(student.getStudentId());
+            info.setStudentName(student.getStudentName());
+            info.setStudentNum(student.getStudentNum());
+            info.setStudentClass(student.getStudentClass());
+
+            result.add(info);
+        }
+        return result;
+    }
+
 
 }

@@ -92,6 +92,14 @@ public class FinalWorkController {
                 .body(resource);
     }
 
+    /**
+     * 设置大作业文档分数
+     *
+     * @param finalId 大作业Id
+     * @param request 分数
+     * @return null
+     * @throws IdNotFoundException 大作业不存在
+     */
     @PostMapping(value = "/{finalId}/document/score", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PackedResponse<Void>> setFworkDocumentScore(
             @PathVariable Integer finalId,

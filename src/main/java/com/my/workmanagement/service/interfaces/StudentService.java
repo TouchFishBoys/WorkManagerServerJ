@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
 @Service
 public interface StudentService {
     Resource getStudentExcel(String courseId);
@@ -18,4 +19,6 @@ public interface StudentService {
     StudentInfoBO getStudentInfo(Integer studentId) throws IdNotFoundException;
 
     List<CourseInfoBO> getSelectedCourseInfo(Integer studentId) throws IdNotFoundException;
+
+    List<StudentInfoBO> getStudentsByTeamId(Integer teamId) throws IdNotFoundException;
 }
