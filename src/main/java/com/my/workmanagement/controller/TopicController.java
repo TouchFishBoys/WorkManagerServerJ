@@ -2,6 +2,7 @@ package com.my.workmanagement.controller;
 
 import javax.websocket.server.PathParam;
 
+import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
@@ -72,7 +73,7 @@ public class TopicController {
     @GetMapping(value = "/{topicId}")
     public ResponseEntity<PackedResponse<TopicInfoResponse>> getTopicInfo(
             @PathVariable("topicId") Integer topicId
-    ) {
+    ) throws IdNotFoundException {
         TopicInfoResponse response = normalWorkService.getTopicInfo(topicId);
         return PackedResponse.success(response, "");
     }

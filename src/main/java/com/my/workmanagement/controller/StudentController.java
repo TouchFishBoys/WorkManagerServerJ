@@ -39,11 +39,16 @@ public class StudentController {
      */
     @GetMapping(value = "/{stuId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StudentInfoResponse> getStudentInfo(
-            @PathVariable Integer stuId,
-            @RequestParam List<String> selectedColumn
+            @PathVariable Integer stuId
     ) throws IdNotFoundException {
         StudentInfoBO studentInfoBO = studentService.getStudentInfo(stuId);
-        return null;
+
+         StudentInfoResponse response=StudentInfoResponse.StudentInfoResponseBuilder.aStudentInfoResponse()
+                .withStudentClass(studentInfoBO.getStudentClass())
+                .withStudentName(studentInfoBO.getStudentName())
+                .withStudentNum(studentInfoBO.getStudentNum())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     /**

@@ -48,8 +48,12 @@ public class NormalWorkServiceImpl implements NormalWorkService {
     }
 
     @Override
-    public TopicInfoResponse getTopicInfo(Integer topicId) {
+    public TopicInfoResponse getTopicInfo(Integer topicId) throws IdNotFoundException  {
         TopicDO topicDemo = topicRepository.findByTopicId(topicId);
+        if(topicDemo==null)
+        {
+            throw new IdNotFoundException("topicid");
+        }
         return TopicInfoResponse.TopicInfoResponseBuilder.aTopicInfoResponse()
                 .withCourseName(courseRepository.findByCourseId(topicId).getCourseName())
                 .withTopicName(topicDemo.getTopicName())
