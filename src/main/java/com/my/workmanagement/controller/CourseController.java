@@ -5,6 +5,7 @@ import com.my.workmanagement.exception.UndefinedUserRoleException;
 import com.my.workmanagement.model.ERole;
 import com.my.workmanagement.model.WMUserDetails;
 import com.my.workmanagement.model.bo.CourseInfoBO;
+import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.topic.ReleaseTopicRequest;
@@ -102,9 +103,18 @@ public class CourseController {
     @GetMapping("/{courseId}/student")
     public ResponseEntity<PackedResponse<List<StudentInfoResponse>>> getStudentInfoList(
             @PathVariable Integer courseId
-    ) {
+    ) throws IdNotFoundException {
         logger.info("Get student info list");
         List<StudentInfoResponse> response = new LinkedList<>();
+        List<StudentInfoBO> studentInfoBOS=courseService.getStudentInfo(courseId);
+        for(StudentInfoBO student:studentInfoBOS){
+            response.add(StudentInfoResponse.StudentInfoResponseBuilder.aStudentInfoResponse()
+            .withStudentClass(student.getStudentClass())
+            .withStudentNum(student.getStudentNum())
+            .withStudentName(student.getStudentName())
+            .build());
+        }
+
         return PackedResponse.success(response, "");
     }
 

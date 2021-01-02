@@ -21,7 +21,7 @@
 ----
 ###教师操作
 - 教师个人信息
-  - [ ] 获取教师信息             GET /teacher/:teacherId
+  - [x] 获取教师信息             GET /teacher/:teacherId
 - 学生管理
   - [ ] 导入学生信息             POST  /course/:courseId/student?courseName=
   - [ ] 获取学生信息             GET   /course/:courseId/student
@@ -48,7 +48,7 @@
       - [x] 下载答辩记录表       GET  /qa-table/:courseId/:studentId/file //Word
       - [ ] 提交答辩记录表       POST /qa-table/:courseId/:studentId
 - 课程管理
-  - [ ] 获取某课程信息           GET /course/:courseId
+  - [x] 获取某课程信息           GET /course/:courseId
 ----
 ###存储目录结构
 /storage

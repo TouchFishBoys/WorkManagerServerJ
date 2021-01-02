@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface CourseSelectionRepository extends CrudRepository<CourseSelectionDO, Integer> {
-    List<CourseDO> findAllByStudent(StudentDO student);
+    List<CourseSelectionDO> findAllByStudent(StudentDO student);
 
     List<CourseSelectionDO> findAllByStudent_StudentId(Integer studentId);
 
@@ -26,4 +26,5 @@ public interface CourseSelectionRepository extends CrudRepository<CourseSelectio
     @Query("SELECT TeamDO.teamId FROM CourseSelectionDO cs WHERE cs.student.studentId = :studentId AND cs.course.courseId = :courseId")
     Integer getTeamIdByStudentIdAndCourseId(Integer studentId, Integer courseId);
 */
+    List<CourseSelectionDO> findAllByCourse_CourseId(Integer courseId);
 }

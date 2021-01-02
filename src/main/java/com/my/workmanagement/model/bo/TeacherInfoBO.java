@@ -3,12 +3,14 @@ package com.my.workmanagement.model.bo;
 import java.io.Serializable;
 
 public class TeacherInfoBO implements Serializable {
-    // Id
+    //id
     private Integer teacherId;
     // 姓名
     private String teacherName;
     // 工号
     private String teacherNum;
+    //教师电话
+    private String teacherTell;
 
     public Integer getTeacherId() {
         return teacherId;
@@ -34,22 +36,24 @@ public class TeacherInfoBO implements Serializable {
         this.teacherNum = teacherNum;
     }
 
-    @Override
-    public String toString() {
-        return "TeacherInfoBO{" +
-                "teacherId=" + teacherId +
-                ", teacherName='" + teacherName + '\'' +
-                ", teacherNum='" + teacherNum + '\'' +
-                '}';
+    public String getTeacherTell() {
+        return teacherTell;
     }
 
+    public void setTeacherTell(String teacherTell) {
+        this.teacherTell = teacherTell;
+    }
+
+
     public static final class TeacherInfoBOBuilder {
-        // Id
+        //id
         private Integer teacherId;
         // 姓名
         private String teacherName;
         // 工号
         private String teacherNum;
+        //教师电话
+        private String teacherTell;
 
         private TeacherInfoBOBuilder() {
         }
@@ -73,12 +77,28 @@ public class TeacherInfoBO implements Serializable {
             return this;
         }
 
+        public TeacherInfoBOBuilder withTeacherTell(String teacherTell) {
+            this.teacherTell = teacherTell;
+            return this;
+        }
+
         public TeacherInfoBO build() {
             TeacherInfoBO teacherInfoBO = new TeacherInfoBO();
             teacherInfoBO.setTeacherId(teacherId);
             teacherInfoBO.setTeacherName(teacherName);
             teacherInfoBO.setTeacherNum(teacherNum);
+            teacherInfoBO.setTeacherTell(teacherTell);
             return teacherInfoBO;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "TeacherInfoBO{" +
+                "teacherId=" + teacherId +
+                ", teacherName='" + teacherName + '\'' +
+                ", teacherNum='" + teacherNum + '\'' +
+                ", teacherTell='" + teacherTell + '\'' +
+                '}';
     }
 }
