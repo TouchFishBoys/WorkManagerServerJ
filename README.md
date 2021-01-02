@@ -35,7 +35,7 @@
     - [ ] 平时作业评分           POST /topic/:topicId/:stidentId/score
   - 大作业
     - [ ] 获取大作业列表         GET  /course/:courseId/final-work
-    - [ ] 获取大作业信息         GET  /final-work/:finalId
+    - [ ] 获取大作业信息         GET  /final-work/:finalId  
     - [x] 设置大作业分数         POST /final-work/:finalId/score
     - 文件相关
       - [ ] 下载大作业文件       GET /final-work/:finalId/file

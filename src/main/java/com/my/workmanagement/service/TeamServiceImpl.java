@@ -16,7 +16,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public TeamInfoBO getTeamInfo(Integer teamId) {
+    public TeamInfoBO getTeamInfo(Integer teamId) throws IdNotFoundException {
         // TODO: 2020/12/29
         return null;
     }

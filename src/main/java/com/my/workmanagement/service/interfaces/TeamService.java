@@ -16,7 +16,7 @@ public interface TeamService {
      */
     Integer getTeamId(Integer studentId, Integer courseId) throws IdNotFoundException;
 
-    TeamInfoBO getTeamInfo(Integer teamId);
+    TeamInfoBO getTeamInfo(Integer teamId) throws IdNotFoundException;
 
     /**
      * 获取课程下所有的小组
