@@ -105,6 +105,8 @@ public class CourseController {
     ) {
         logger.info("Get student info list");
         List<StudentInfoResponse> response = new LinkedList<>();
+
+
         return PackedResponse.success(response, "");
     }
 

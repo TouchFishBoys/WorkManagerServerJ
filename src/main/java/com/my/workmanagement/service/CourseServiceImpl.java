@@ -5,6 +5,7 @@ import com.my.workmanagement.entity.TeacherDO;
 import com.my.workmanagement.entity.TopicDO;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.model.bo.CourseInfoBO;
+import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.response.CourseInfoResponse;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
@@ -58,7 +59,7 @@ public class CourseServiceImpl implements CourseService {
                 .withCourseYear(courseDO.getCourseYear())
                 .withCourseTeacherName(courseDO.getTeacher().getTeacherName())
                 .withStudentCount(courseSelectionRepository.countAllByCourse_CourseId(courseId))
-                //.withTotalCount(courseSelectionRepository.countAllByCourseIdGroupByTeam(courseId))
+                //.withTotalCount(courseSelectionRepository.countAllByCourseIdGroupByTeam(courseId)) //SQL问题
                 .withFinishCount(courseSelectionRepository.countAllByCourse_CourseIdAndTeam_FinalWork_TimeUploadNot(courseId,null))
                 .build();
     }
@@ -100,5 +101,10 @@ public class CourseServiceImpl implements CourseService {
                     .build());
         }
         return topicInfoBOS;
+    }
+    @Override
+    public List<StudentInfoBO> getStudentInfo(Integer courseId) throws  IdNotFoundException{
+
+        return null;
     }
 }

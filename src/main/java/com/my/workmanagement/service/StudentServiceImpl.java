@@ -26,19 +26,22 @@ public class StudentServiceImpl implements StudentService {
     private final NormalWorkRepository normalWorkRepository;
     private final TopicRepository topicRepository;
     private final TeamRepository teamRepository;
+    private final CourseRepository courseRepository;
 
     StudentServiceImpl(
             StudentRepository studentRepository,
             CourseSelectionRepository courseSelectionRepository,
             NormalWorkRepository normalWorkRepository,
             TopicRepository topicRepository,
-            TeamRepository teamRepository
+            TeamRepository teamRepository,
+            CourseRepository courseRepository
     ) {
         this.studentRepository = studentRepository;
         this.courseSelectionRepository = courseSelectionRepository;
         this.normalWorkRepository = normalWorkRepository;
         this.topicRepository = topicRepository;
         this.teamRepository = teamRepository;
+        this.courseRepository = courseRepository;
     }
 
     @Override
@@ -54,7 +57,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentInfoBO getStudentInfo(Integer studentId) throws IdNotFoundException {
         StudentDO studentDO = studentRepository.findByStudentId(studentId);
-        if(studentDO==null) {
+        if (studentDO == null) {
             throw new IdNotFoundException("studentId");
         }
         StudentInfoBO studentInfoBO = new StudentInfoBO();
@@ -72,16 +75,17 @@ public class StudentServiceImpl implements StudentService {
         }
         //StudentDO tmpStudent = new StudentDO(studentId);
         StudentDO tmpStudent = studentRepository.findByStudentId(studentId);
-        List<CourseDO> courses = courseSelectionRepository.findAllByStudent(tmpStudent);
-        for (CourseDO course : courses) {
-            list.add(CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBO()
-                    .withCourseName(course.getCourseName())
-                    .withCourseId(course.getCourseId())
-                    .withCourseTeacherName(course.getTeacher().getTeacherName())
-                    .withFinishCount(normalWorkRepository.countAllByStudent(tmpStudent))
-                    .withTotalCount(topicRepository.countAllByCourseId(course.getCourseId()))
-                    .build()
-            );
+        List<CourseSelectionDO> courseSelections = courseSelectionRepository.findAllByStudent(tmpStudent);
+        for (CourseSelectionDO courseSelection : courseSelections) {
+            CourseDO course = courseSelection.getCourse();
+                    list.add(CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBO()
+                            .withCourseName(course.getCourseName())
+                            .withCourseId(course.getCourseId())
+                            .withCourseTeacherName(course.getTeacher().getTeacherName())
+                            .withFinishCount(normalWorkRepository.countAllByStudent(tmpStudent))
+                            .withTotalCount(topicRepository.countAllByCourseId(course.getCourseId()))
+                            .build()
+                    );
         }
         return list;
     }
