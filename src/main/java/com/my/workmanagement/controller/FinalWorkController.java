@@ -92,6 +92,23 @@ public class FinalWorkController {
                 .body(resource);
     }
 
+    @GetMapping(value = "/{finalId}/file", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<Resource> getFinalWorkFile(
+            @PathVariable Integer finalId,
+            @PathParam("filename") String fileName
+    ) throws StorageFileNotFoundException {
+        Resource resource;
+        try {
+            resource = finalWorkService.loadFworkFileByFworkId(finalId);
+        } catch (FileNotFoundException e) {
+            throw new StorageFileNotFoundException();
+        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment;filename=\"%s.docx\"", fileName))
+                .header(HttpHeaders.CACHE_CONTROL, "no-cache,no-store,must-revalidate")
+                .body(resource);
+    }
+
     /**
      * 设置大作业文档分数
      *

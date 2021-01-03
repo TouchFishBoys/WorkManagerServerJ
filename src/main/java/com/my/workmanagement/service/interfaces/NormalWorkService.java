@@ -1,6 +1,7 @@
 package com.my.workmanagement.service.interfaces;
 
 import com.my.workmanagement.exception.IdNotFoundException;
+import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import org.springframework.core.io.Resource;
@@ -9,22 +10,25 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
+
 @Service
 public interface NormalWorkService {
     boolean store(Integer stuId, Integer topicId, MultipartFile file);
 
-    Resource loadResource(Integer stuId, Integer topicId);
+    Resource loadResource(Integer stuId, Integer topicId) throws StorageFileNotFoundException;
 
     List<String> getStuSubmittedList(Integer stuId);
 
     List<String> getTopicSubmittedList(Integer topicId);
 
-    TopicInfoResponse getTopicInfo(Integer topicId)throws IdNotFoundException;
+    TopicInfoResponse getTopicInfo(Integer topicId) throws IdNotFoundException;
 
     Integer createTopic(String topicName, String topicDescription, Integer courseId, Date startTime, Date finishTime);
 
     List<TopicInfoBO> getTopicInfosAsStudent(Integer courseId, Integer studentId) throws IdNotFoundException;
 
     List<TopicInfoBO> getTopicInfosAsTeacher(Integer courseId, Integer teacherId) throws IdNotFoundException;
+
+    boolean setScore(Integer topicId, Integer studentId, Integer score) throws IdNotFoundException;
 
 }

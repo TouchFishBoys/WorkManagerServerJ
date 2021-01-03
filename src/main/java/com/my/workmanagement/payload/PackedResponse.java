@@ -28,6 +28,11 @@ public final class PackedResponse<T> {
                 .body(new PackedResponse<>(data, message, ResponseResult.FAILED));
     }
 
+    public static <T> ResponseEntity<PackedResponse<T>> conflict(T data, String message) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new PackedResponse<>(data, message, ResponseResult.FAILED));
+    }
+
     public static <T> ResponseEntity<PackedResponse<T>> success(T data, String message) {
         return ResponseEntity.ok(new PackedResponse<>(data, message, ResponseResult.SUCCESS));
     }

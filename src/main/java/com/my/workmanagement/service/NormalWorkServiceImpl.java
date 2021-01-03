@@ -1,10 +1,12 @@
 package com.my.workmanagement.service;
 
+import com.my.workmanagement.entity.NormalWorkDO;
 import com.my.workmanagement.entity.TopicDO;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import com.my.workmanagement.repository.CourseRepository;
+import com.my.workmanagement.repository.NormalWorkRepository;
 import com.my.workmanagement.repository.TopicRepository;
 import com.my.workmanagement.service.interfaces.NormalWorkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +22,17 @@ import java.util.List;
 public class NormalWorkServiceImpl implements NormalWorkService {
     private final TopicRepository topicRepository;
     private final CourseRepository courseRepository;
+    private final NormalWorkRepository normalWorkRepository;
 
     @Autowired
-    public NormalWorkServiceImpl(TopicRepository topicRepository, CourseRepository courseRepository) {
+    public NormalWorkServiceImpl(
+            TopicRepository topicRepository,
+            CourseRepository courseRepository,
+            NormalWorkRepository normalWorkRepository
+    ) {
         this.topicRepository = topicRepository;
         this.courseRepository = courseRepository;
+        this.normalWorkRepository = normalWorkRepository;
     }
 
     @Override
@@ -48,10 +56,9 @@ public class NormalWorkServiceImpl implements NormalWorkService {
     }
 
     @Override
-    public TopicInfoResponse getTopicInfo(Integer topicId) throws IdNotFoundException  {
+    public TopicInfoResponse getTopicInfo(Integer topicId) throws IdNotFoundException {
         TopicDO topicDemo = topicRepository.findByTopicId(topicId);
-        if(topicDemo==null)
-        {
+        if (topicDemo == null) {
             throw new IdNotFoundException("topicid");
         }
         return TopicInfoResponse.TopicInfoResponseBuilder.aTopicInfoResponse()
@@ -77,4 +84,16 @@ public class NormalWorkServiceImpl implements NormalWorkService {
     public List<TopicInfoBO> getTopicInfosAsTeacher(Integer courseId, Integer teacherId) throws IdNotFoundException {
         return null;
     }
+
+    @Override
+    @Transactional
+    public boolean setScore(Integer topicId, Integer studentId, Integer score) throws IdNotFoundException {
+        NormalWorkDO normalWork = normalWorkRepository.getFirstByTopic_TopicIdAndStudent_StudentId(topicId, studentId);
+        if (normalWork == null) {
+            throw new IdNotFoundException("normalwork");
+        }
+        return normalWorkRepository.setScoreById(normalWork.getNworkId(), score);
+    }
+
+
 }

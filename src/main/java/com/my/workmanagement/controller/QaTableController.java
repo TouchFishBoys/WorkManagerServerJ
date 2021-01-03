@@ -2,6 +2,7 @@ package com.my.workmanagement.controller;
 
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
+import com.my.workmanagement.exception.WordTemplateNotFoundException;
 import com.my.workmanagement.model.bo.QaTableBO;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.SubmitQaTableRequest;
@@ -39,7 +40,7 @@ public class QaTableController {
      *
      * @param courseId  课程Id
      * @param studentId 学生Id
-     * @return
+     * @return /
      */
     @GetMapping("/{courseId}/{studentId}")
     public ResponseEntity<PackedResponse<String>> getQaTableJson(
@@ -56,6 +57,8 @@ public class QaTableController {
      * @param courseId  课程Id
      * @param studentId 学生Id
      * @return 答辩记录
+     * @throws IdNotFoundException          没找到Id
+     * @throws StorageFileNotFoundException 文件没找到（还没上传）
      */
     @GetMapping(value = "/{courseId}/{studentId}/file", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<Resource> getQaTableFile(
@@ -85,13 +88,14 @@ public class QaTableController {
      * @param studentId 学生Id
      * @param request   request
      * @return /
+     * @throws WordTemplateNotFoundException 模板没找到
      */
     @PostMapping(value = "/{courseId}/{studentId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PackedResponse<Void>> submitQaTable(
             @PathVariable @Min(value = 1, message = "course id must > 0") Integer courseId,
             @PathVariable @Min(value = 1, message = "student id must > 0") Integer studentId,
             @RequestBody SubmitQaTableRequest request
-    ) {
+    ) throws WordTemplateNotFoundException {
         List<QaTableBO.QaTableItemBO> qaItems = request.getQaList();
         // TODO: 2020/12/29  生成答辩记录表
         return PackedResponse.success(null, "success");
