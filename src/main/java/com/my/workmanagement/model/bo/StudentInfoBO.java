@@ -1,7 +1,6 @@
 package com.my.workmanagement.model.bo;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class StudentInfoBO implements Serializable {
     // 学生 Id
@@ -58,6 +57,8 @@ public class StudentInfoBO implements Serializable {
     }
 
     public static final class StudentInfoBOBuilder {
+        // 学生 Id
+        private Integer studentId;
         //学生姓名
         private String studentName;
         //学生学号
@@ -70,6 +71,11 @@ public class StudentInfoBO implements Serializable {
 
         public static StudentInfoBOBuilder aStudentInfoBO() {
             return new StudentInfoBOBuilder();
+        }
+
+        public StudentInfoBOBuilder withStudentId(Integer studentId) {
+            this.studentId = studentId;
+            return this;
         }
 
         public StudentInfoBOBuilder withStudentName(String studentName) {
@@ -89,6 +95,7 @@ public class StudentInfoBO implements Serializable {
 
         public StudentInfoBO build() {
             StudentInfoBO studentInfoBO = new StudentInfoBO();
+            studentInfoBO.setStudentId(studentId);
             studentInfoBO.setStudentName(studentName);
             studentInfoBO.setStudentNum(studentNum);
             studentInfoBO.setStudentClass(studentClass);

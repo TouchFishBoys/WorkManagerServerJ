@@ -1,9 +1,7 @@
 package com.my.workmanagement.repository;
 
-import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.entity.CourseSelectionDO;
 import com.my.workmanagement.entity.StudentDO;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.sql.Timestamp;
@@ -22,9 +20,12 @@ public interface CourseSelectionRepository extends CrudRepository<CourseSelectio
     List<CourseSelectionDO> getAllByTeam_TeamId(Integer teamId);
 
     Integer countAllByCourse_CourseIdAndTeam_FinalWork_TimeUploadNot(Integer courseId, Timestamp timestamp);
-/*
-    @Query("SELECT TeamDO.teamId FROM CourseSelectionDO cs WHERE cs.student.studentId = :studentId AND cs.course.courseId = :courseId")
-    Integer getTeamIdByStudentIdAndCourseId(Integer studentId, Integer courseId);
-*/
+
+    /*
+        @Query("SELECT TeamDO.teamId FROM CourseSelectionDO cs WHERE cs.student.studentId = :studentId AND cs.course.courseId = :courseId")
+        Integer getTeamIdByStudentIdAndCourseId(Integer studentId, Integer courseId);
+    */
     List<CourseSelectionDO> findAllByCourse_CourseId(Integer courseId);
+
+    CourseSelectionDO findFirstByStudent_StudentIdAndCourse_CourseId(Integer studentId, Integer courseId);
 }

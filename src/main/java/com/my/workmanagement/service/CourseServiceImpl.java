@@ -1,12 +1,13 @@
 package com.my.workmanagement.service;
 
-import com.my.workmanagement.entity.*;
+import com.my.workmanagement.entity.CourseDO;
+import com.my.workmanagement.entity.CourseSelectionDO;
+import com.my.workmanagement.entity.StudentDO;
+import com.my.workmanagement.entity.TopicDO;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.model.bo.CourseInfoBO;
 import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.model.bo.TopicInfoBO;
-import com.my.workmanagement.payload.response.CourseInfoResponse;
-import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import com.my.workmanagement.repository.*;
 import com.my.workmanagement.service.interfaces.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,9 @@ public class CourseServiceImpl implements CourseService {
     private final NormalWorkRepository normalWorkRepository;
 
     @Autowired
-    public CourseServiceImpl(CourseRepository courseRepository, TeacherRepository teacherRepository, TopicRepository topicRepository, NormalWorkRepository normalWorkRepository,CourseSelectionRepository courseSelectionRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository, TeacherRepository teacherRepository, TopicRepository topicRepository, NormalWorkRepository normalWorkRepository, CourseSelectionRepository courseSelectionRepository) {
         this.courseRepository = courseRepository;
-        this.courseSelectionRepository=courseSelectionRepository;
+        this.courseSelectionRepository = courseSelectionRepository;
         this.topicRepository = topicRepository;
         this.normalWorkRepository = normalWorkRepository;
     }
@@ -58,7 +59,7 @@ public class CourseServiceImpl implements CourseService {
                 .withCourseTeacherName(courseDO.getTeacher().getTeacherName())
                 .withStudentCount(courseSelectionRepository.countAllByCourse_CourseId(courseId))
                 //.withTotalCount(courseSelectionRepository.countAllByCourseIdGroupByTeam(courseId)) //SQL问题
-                .withFinishCount(courseSelectionRepository.countAllByCourse_CourseIdAndTeam_FinalWork_TimeUploadNot(courseId,null))
+                .withFinishCount(courseSelectionRepository.countAllByCourse_CourseIdAndTeam_FinalWork_TimeUploadNot(courseId, null))
                 .build();
     }
 
@@ -75,7 +76,7 @@ public class CourseServiceImpl implements CourseService {
                 .withCourseYear(courseDO.getCourseYear())
                 .withStudentCount(1)
                 .withCourseTeacherName(courseDO.getTeacher().getTeacherName())
-                .withTotalCount(normalWorkRepository.countAllByTopic_CourseIdAndStudent_StudentId(courseId,studentId))
+                .withTotalCount(normalWorkRepository.countAllByTopic_CourseIdAndStudent_StudentId(courseId, studentId))
                 .withFinishCount(normalWorkRepository.countAllByTopic_CourseId(courseId))
                 .build();
     }
@@ -100,20 +101,21 @@ public class CourseServiceImpl implements CourseService {
         }
         return topicInfoBOS;
     }
+
     @Override
-    public List<StudentInfoBO> getStudentInfo(Integer courseId) throws  IdNotFoundException{
-        List<CourseSelectionDO> courseSelectionDOS =courseSelectionRepository.findAllByCourse_CourseId(courseId);
-        if(courseSelectionDOS==null) {
-            throw new IdNotFoundException("courseId:"+courseId.toString());
+    public List<StudentInfoBO> getStudentInfo(Integer courseId) throws IdNotFoundException {
+        List<CourseSelectionDO> courseSelectionDOS = courseSelectionRepository.findAllByCourse_CourseId(courseId);
+        if (courseSelectionDOS == null) {
+            throw new IdNotFoundException("courseId:" + courseId.toString());
         }
-        List<StudentInfoBO> studentInfoBOS=new LinkedList<>();
-        for(CourseSelectionDO courseSelection:courseSelectionDOS){
-            StudentDO student=courseSelection.getStudent();
+        List<StudentInfoBO> studentInfoBOS = new LinkedList<>();
+        for (CourseSelectionDO courseSelection : courseSelectionDOS) {
+            StudentDO student = courseSelection.getStudent();
             studentInfoBOS.add(StudentInfoBO.StudentInfoBOBuilder.aStudentInfoBO()
-            .withStudentClass(student.getStudentClass())
-            .withStudentName(student.getStudentName())
-            .withStudentNum(student.getStudentNum())
-            .build());
+                    .withStudentClass(student.getStudentClass())
+                    .withStudentName(student.getStudentName())
+                    .withStudentNum(student.getStudentNum())
+                    .build());
         }
         return studentInfoBOS;
     }

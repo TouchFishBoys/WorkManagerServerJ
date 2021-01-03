@@ -4,7 +4,6 @@ import com.my.workmanagement.entity.FinalWorkDO;
 import com.my.workmanagement.entity.TeamDO;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.model.bo.FinalWorkBO;
-import com.my.workmanagement.payload.response.finalwork.FinalWorkInfoResponse;
 import com.my.workmanagement.repository.FinalWorkRepository;
 import com.my.workmanagement.repository.TeamRepository;
 import com.my.workmanagement.service.interfaces.FinalWorkService;
@@ -17,9 +16,9 @@ import java.io.FileNotFoundException;
 
 @Service
 public class FinalWorkServiceImpl implements FinalWorkService {
+    private final TeamService teamService;
     private FinalWorkRepository finalWorkRepository;
     private TeamRepository teamRepository;
-    private final TeamService teamService;
 
     FinalWorkServiceImpl(
             FinalWorkRepository finalWorkRepository,
@@ -48,7 +47,7 @@ public class FinalWorkServiceImpl implements FinalWorkService {
                 .withTeamName(team.getTeamName())
                 .withSubmitTime(finalWork.getTimeUpload())
                 .withDescription(finalWork.getFworkDescription())
-                .withAuthors(teamService.getTeamMembers(teamId))
+                .withAuthors(teamService.getTeamMembersName(teamId))
                 .build();
     }
 

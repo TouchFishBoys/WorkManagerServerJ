@@ -1,6 +1,7 @@
 package com.my.workmanagement.service.interfaces;
 
 import com.my.workmanagement.exception.IdNotFoundException;
+import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.model.bo.TeamInfoBO;
 
 import java.util.List;
@@ -24,8 +25,17 @@ public interface TeamService {
      * @param courseId 课程Id
      * @return 队伍信息列表
      */
-    List<TeamInfoBO> getTeamInfoList(Integer courseId);
+    List<TeamInfoBO> getTeamInfoList(Integer courseId) throws IdNotFoundException;
 
-    List<String> getTeamMembers(Integer teamId);
+    /**
+     * 获取小组成员信息列表
+     *
+     * @param teamId 队伍Id
+     * @return /
+     * @throws IdNotFoundException 没找到小组
+     */
+    List<StudentInfoBO> getTeamMembers(Integer teamId) throws IdNotFoundException;
+
+    List<String> getTeamMembersName(Integer teamId) throws IdNotFoundException;
 
 }
