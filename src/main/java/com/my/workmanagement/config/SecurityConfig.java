@@ -13,6 +13,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -27,11 +28,17 @@ import javax.annotation.Resource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
     private final UserDetailsService teacherDetailsService;
     private final UserDetailsService studentDetailsService;
     @Resource
     private JwtTokenFilter jwtTokenFilter;
+
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/auth/login",
+            "/v3/api-docs"
+    };
 
     @Autowired
     SecurityConfig(
@@ -67,12 +74,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // OPTIONS 请求全部放行
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 登录接口放行
-                .antMatchers("/auth/login").permitAll()
+                .antMatchers(AUTH_WHITELIST).permitAll()
                 // 其它接口进行验证
                 .anyRequest().authenticated();
         // 添加 Filter
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         http.headers().cacheControl();
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+                .antMatchers(AUTH_WHITELIST);
     }
 
     @Bean

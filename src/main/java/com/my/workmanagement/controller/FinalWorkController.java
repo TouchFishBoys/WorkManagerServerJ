@@ -4,10 +4,14 @@ import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.model.bo.FinalWorkBO;
 import com.my.workmanagement.payload.PackedResponse;
+import com.my.workmanagement.payload.request.SingleValueRequest;
 import com.my.workmanagement.payload.request.finalwork.SetDocumentScoreRequest;
 import com.my.workmanagement.payload.request.finalwork.SetFinalScoreRequest;
 import com.my.workmanagement.service.interfaces.FinalWorkService;
 import com.my.workmanagement.util.FilePathUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,7 @@ import java.io.FileNotFoundException;
 
 @RestController
 @RequestMapping("/final")
+@Api(description = "大作业")
 public class FinalWorkController {
     private static final Logger logger = LoggerFactory.getLogger(TopicController.class);
     private final FinalWorkService finalWorkService;
@@ -41,6 +46,9 @@ public class FinalWorkController {
      * @throws IdNotFoundException 队伍不存在
      */
     @GetMapping(value = "/{teamId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ApiOperation(
+            value = "获取大作业信息"
+    )
     public ResponseEntity<PackedResponse<FinalWorkBO>> getFinalWorkInfo(@PathVariable Integer teamId) throws IdNotFoundException {
         FinalWorkBO response = finalWorkService.getFinalWorkInfo(teamId);
         // TODO: 2020/12/29 remake
@@ -55,13 +63,19 @@ public class FinalWorkController {
      * @return httpok or conflict(成绩已经设置)
      * @throws IdNotFoundException 大作业Id不存在
      */
-    @PostMapping(value = "/{finalId}/score", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/{finalId}/score",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_TEACHER)")
     public ResponseEntity<PackedResponse<Void>> setFinalWorkScore(
             @PathVariable Integer finalId,
-            @RequestBody SetFinalScoreRequest request
+            @ApiParam("成绩") @RequestBody SingleValueRequest<Integer> request
     ) throws IdNotFoundException {
-        if (finalWorkService.setFinalWorkScore(finalId, request.getScore())) {
+        Integer score = request.getValue();
+        if (score < 0 || score > 100) {
+            return PackedResponse.badRequest(null, "Score must in [0,100]");
+        }
+        if (finalWorkService.setFinalWorkScore(finalId, request.getValue())) {
             return PackedResponse.success(null, "Success");
         } else {
             return PackedResponse.failure(null, "Score has been set", HttpStatus.CONFLICT);

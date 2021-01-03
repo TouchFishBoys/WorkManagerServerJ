@@ -49,7 +49,7 @@ public class AuthController {
         return PackedResponse.success(response, "");
     }
 
-    @RequestMapping("/who-am-i")
+    @GetMapping("/who-am-i")
     public ResponseEntity<PackedResponse<WhoAmIResponse>> hello() {
         WMUserDetails user = AuthUtil.getUserDetail();
 
@@ -57,13 +57,13 @@ public class AuthController {
         return PackedResponse.success(response, "hello");
     }
 
-    @RequestMapping("/am-i-a-teacher")
+    @GetMapping("/am-i-a-teacher")
     @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_TEACHER)")
     public ResponseEntity<PackedResponse<String>> helloTeacher() {
         return PackedResponse.success("hello", "hello");
     }
 
-    @RequestMapping("/am-i-a-student")
+    @GetMapping("/am-i-a-student")
     @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_STUDENT)")
     public ResponseEntity<PackedResponse<String>> helloStudent() {
         return PackedResponse.success("hello", "hello");
