@@ -30,7 +30,7 @@ public class TeacherController {
      * @return 教师信息
      */
     @GetMapping(value = "/{teacherId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TeacherInfoResponse> getStudentInfo(
+    public ResponseEntity<TeacherInfoResponse> getTeacherInfo(
             @PathVariable Integer teacherId
     ) throws IdNotFoundException {
         TeacherInfoBO teacherInfoBO=teacherService.getTeacherInfo(teacherId);
