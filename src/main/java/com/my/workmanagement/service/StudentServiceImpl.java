@@ -104,7 +104,7 @@ public class StudentServiceImpl implements StudentService {
                     .withCourseId(course.getCourseId())
                     .withCourseTeacherName(course.getTeacher().getTeacherName())
                     .withFinishCount(normalWorkRepository.countAllByStudent(tmpStudent))
-                    .withTotalCount(topicRepository.countAllByCourseId(course.getCourseId()))
+                    .withTotalCount(topicRepository.countAllByCourse_CourseId(course.getCourseId()))
                     .build()
             );
         }

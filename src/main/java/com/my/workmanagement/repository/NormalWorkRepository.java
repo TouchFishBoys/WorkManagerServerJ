@@ -10,9 +10,9 @@ public interface NormalWorkRepository extends CrudRepository<NormalWorkDO, Integ
 
     Integer countAllByStudent(StudentDO studentDO);
 
-    Integer countAllByTopic_CourseId(Integer courseId);
+    Integer countAllByTopic_Course_CourseId(Integer courseId);
 
-    Integer countAllByTopic_CourseIdAndStudent_StudentId(Integer courseId, Integer studentId);
+    Integer countAllByTopic_Course_CourseIdAndStudent_StudentId(Integer courseId, Integer studentId);
 
     boolean existsByTopic_TopicIdAndStudent_StudentId(Integer topicId, Integer studentId);
 
@@ -21,4 +21,6 @@ public interface NormalWorkRepository extends CrudRepository<NormalWorkDO, Integ
     @Modifying
     @Query("UPDATE NormalWorkDO nwork SET nwork.nworkScore = :score WHERE nwork.nworkId = :id")
     int setScoreById(Integer id, Integer score);
+
+    int countAllByTopic_TopicId(Integer topicId);
 }

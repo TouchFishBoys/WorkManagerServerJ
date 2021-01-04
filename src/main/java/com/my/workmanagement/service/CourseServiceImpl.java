@@ -109,14 +109,14 @@ public class CourseServiceImpl implements CourseService {
                 .withCourseYear(courseDO.getCourseYear())
                 .withStudentCount(1)
                 .withCourseTeacherName(courseDO.getTeacher().getTeacherName())
-                .withTotalCount(normalWorkRepository.countAllByTopic_CourseIdAndStudent_StudentId(courseId, studentId))
-                .withFinishCount(normalWorkRepository.countAllByTopic_CourseId(courseId))
+                .withTotalCount(normalWorkRepository.countAllByTopic_Course_CourseIdAndStudent_StudentId(courseId, studentId))
+                .withFinishCount(normalWorkRepository.countAllByTopic_Course_CourseId(courseId))
                 .build();
     }
 
     @Override
     public List<TopicInfoBO> getTopicInfoByCourseId(Integer courseId) throws IdNotFoundException {
-        List<TopicDO> topics = topicRepository.findAllByCourseId(courseId);
+        List<TopicDO> topics = topicRepository.findAllByCourse_CourseId(courseId);
         List<TopicInfoBO> topicInfoBOS = new LinkedList<>();
         if (topics == null) {
             throw new IdNotFoundException("topic");
@@ -126,8 +126,8 @@ public class CourseServiceImpl implements CourseService {
                     .withTopicId(topic.getTopicId())
                     .withTopicName(topic.getTopicName())
                     .withTopicDescription(topic.getTopicDescription())
-                    .withFinishedCount(normalWorkRepository.countAllByTopic_CourseId(courseId))
-                    .withTotalCount(topicRepository.countAllByCourseId(courseId))
+                    .withFinishedCount(normalWorkRepository.countAllByTopic_Course_CourseId(courseId))
+                    .withTotalCount(topicRepository.countAllByCourse_CourseId(courseId))
                     .withStartTime(topic.getTopicTimeStart())
                     .withFinishTime(topic.getTopicTimeEnd())
                     .build());

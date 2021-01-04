@@ -67,6 +67,20 @@ public class TopicInfoBO {
         this.finishTime = finishTime;
     }
 
+
+    @Override
+    public String toString() {
+        return "TopicInfoBO{" +
+                "topicId=" + topicId +
+                ", topicName='" + topicName + '\'' +
+                ", topicDescription='" + topicDescription + '\'' +
+                ", totalCount=" + totalCount +
+                ", finishedCount=" + finishedCount +
+                ", startTime=" + startTime +
+                ", finishTime=" + finishTime +
+                '}';
+    }
+
     public static final class TopicInfoBOBuilder {
         private Integer topicId; //题目Id
         private String topicName; //题目名
@@ -129,18 +143,5 @@ public class TopicInfoBO {
             topicInfoBO.setFinishTime(finishTime);
             return topicInfoBO;
         }
-    }
-
-    @Override
-    public String toString() {
-        return "TopicInfoBO{" +
-                "topicId=" + topicId +
-                ", topicName='" + topicName + '\'' +
-                ", topicDescription='" + topicDescription + '\'' +
-                ", totalCount=" + totalCount +
-                ", finishedCount=" + finishedCount +
-                ", startTime=" + startTime +
-                ", finishTime=" + finishTime +
-                '}';
     }
 }

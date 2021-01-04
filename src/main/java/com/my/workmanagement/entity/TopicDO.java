@@ -9,12 +9,12 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "topic")
 public class TopicDO {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer topicId;
-    @Column(nullable = false)
-    private Integer courseId;
+    @JoinColumn(name = "course_id", nullable = false)
+    @OneToOne()
+    private CourseDO course;
 
     @Column(nullable = false)
     private String topicName;
@@ -39,12 +39,12 @@ public class TopicDO {
         this.topicId = topicId;
     }
 
-    public Integer getCourseId() {
-        return courseId;
+    public CourseDO getCourse() {
+        return course;
     }
 
-    public void setCourseId(Integer courseId) {
-        this.courseId = courseId;
+    public void setCourse(CourseDO course) {
+        this.course = course;
     }
 
     public String getTopicName() {
@@ -99,7 +99,7 @@ public class TopicDO {
     public String toString() {
         return "TopicDO{" +
                 "topicId=" + topicId +
-                ", courseId=" + courseId +
+                ", course=" + course +
                 ", topicName='" + topicName + '\'' +
                 ", topicDescription='" + topicDescription + '\'' +
                 ", topicTimeStart=" + topicTimeStart +

@@ -1,11 +1,13 @@
 package com.my.workmanagement.service;
 
+import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.entity.NormalWorkDO;
 import com.my.workmanagement.entity.TopicDO;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import com.my.workmanagement.repository.CourseRepository;
+import com.my.workmanagement.repository.CourseSelectionRepository;
 import com.my.workmanagement.repository.NormalWorkRepository;
 import com.my.workmanagement.repository.TopicRepository;
 import com.my.workmanagement.service.interfaces.NormalWorkService;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,16 +27,20 @@ public class NormalWorkServiceImpl implements NormalWorkService {
     private final TopicRepository topicRepository;
     private final CourseRepository courseRepository;
     private final NormalWorkRepository normalWorkRepository;
+    private final CourseSelectionRepository courseSelectionRepository;
 
     @Autowired
     public NormalWorkServiceImpl(
             TopicRepository topicRepository,
             CourseRepository courseRepository,
-            NormalWorkRepository normalWorkRepository
+            NormalWorkRepository normalWorkRepository,
+            CourseSelectionRepository courseSelectionRepository
     ) {
         this.topicRepository = topicRepository;
         this.courseRepository = courseRepository;
         this.normalWorkRepository = normalWorkRepository;
+        this.courseSelectionRepository = courseSelectionRepository;
+
     }
 
     @Override
@@ -71,21 +79,31 @@ public class NormalWorkServiceImpl implements NormalWorkService {
 
     @Override
     @Transactional
-    public Integer createTopic(String topicName, String topicDescription, Integer courseId, Date startTime, Date finishTime) {
-        // TODO: 2021/1/4 创建题目
-        return null;
+    public Integer createTopic(String topicName, String topicDescription, Integer courseId, Date startTime, Date finishTime) throws IdNotFoundException {
+        TopicDO topic = new TopicDO();
+        CourseDO course = courseRepository.findByCourseId(courseId);
+        if (course == null) {
+            throw new IdNotFoundException("course id");
+        }
+        topic.setCourse(course);
+        topic.setTopicName(topicName);
+        topic.setTopicDescription(topicDescription);
+        topic.setTopicTimeStart(new Timestamp(startTime.getTime()));
+        topic.setTopicTimeEnd(new Timestamp(finishTime.getTime()));
+        return topicRepository.save(topic).getTopicId();
     }
 
     @Override
-    public List<TopicInfoBO> getTopicInfosAsStudent(Integer courseId, Integer studentId) throws IdNotFoundException {
-        // TODO: 2021/1/4  获取题目列表
-        return null;
-    }
-
-    @Override
-    public List<TopicInfoBO> getTopicInfosAsTeacher(Integer courseId, Integer teacherId) throws IdNotFoundException {
-        // TODO: 2021/1/4  获取题目列表
-        return null;
+    public List<TopicInfoBO> getTopicInfos(Integer courseId) throws IdNotFoundException {
+        if (!courseRepository.existsById(courseId)) {
+            throw new IdNotFoundException("course id");
+        }
+        List<TopicDO> topics = topicRepository.findAllByCourse_CourseId(courseId);
+        List<TopicInfoBO> topicInfos = new ArrayList<>();
+        topics.forEach(item -> {
+            topicInfos.add(getTopicBoFromDo(item));
+        });
+        return topicInfos;
     }
 
     @Override
@@ -98,5 +116,18 @@ public class NormalWorkServiceImpl implements NormalWorkService {
         return normalWorkRepository.setScoreById(normalWork.getNworkId(), score) > 0;
     }
 
+    private TopicInfoBO getTopicBoFromDo(TopicDO topic) {
+        Integer totalCount = courseSelectionRepository.countAllByCourse_CourseId(topic.getCourse().getCourseId());
+        Integer finishedCount = normalWorkRepository.countAllByTopic_TopicId(topic.getTopicId());
 
+        return TopicInfoBO.TopicInfoBOBuilder.aTopicInfoBO()
+                .withTopicId(topic.getTopicId())
+                .withTopicName(topic.getTopicName())
+                .withTopicDescription(topic.getTopicDescription())
+                .withTotalCount(totalCount)
+                .withFinishedCount(finishedCount)
+                .withStartTime(topic.getTopicTimeStart())
+                .withFinishTime(topic.getTopicTimeEnd())
+                .build();
+    }
 }

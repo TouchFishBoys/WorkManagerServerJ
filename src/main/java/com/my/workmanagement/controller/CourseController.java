@@ -172,7 +172,7 @@ public class CourseController {
     public ResponseEntity<PackedResponse<Integer>> releaseTopic(
             @RequestBody ReleaseTopicRequest request,
             @PathVariable Integer courseId
-    ) {
+    ) throws IdNotFoundException {
         Integer result = normalWorkService.createTopic(
                 request.getTopicName(),
                 request.getTopicDescription(),
@@ -195,23 +195,14 @@ public class CourseController {
      *
      * @param courseId 课程 Id
      * @return 题目信息列表
-     * @throws UndefinedUserRoleException 用户角色不存在
-     * @throws IdNotFoundException        没有找到对应的记录
+     * @throws IdNotFoundException 没有找到对应的记录
      */
     @GetMapping("/{courseId}/topic")
     public ResponseEntity<PackedResponse<TopicInfoListResponse>> getTopicInfoList(
             @PathVariable Integer courseId
-    ) throws UndefinedUserRoleException, IdNotFoundException {
+    ) throws IdNotFoundException {
         TopicInfoListResponse response = new TopicInfoListResponse();
-        WMUserDetails userDetails = AuthUtil.getUserDetail();
-
-        if (userDetails.getRole() == ERole.ROLE_STUDENT) {
-            response.setTopics(normalWorkService.getTopicInfosAsStudent(courseId, userDetails.getUserId()));
-        } else if (userDetails.getRole() == ERole.ROLE_TEACHER) {
-            response.setTopics(normalWorkService.getTopicInfosAsTeacher(courseId, userDetails.getUserId()));
-        } else {
-            throw new UndefinedUserRoleException(userDetails.getRole().name());
-        }
+        response.setTopics(normalWorkService.getTopicInfos(courseId));
 
         return PackedResponse.success(response, "");
     }

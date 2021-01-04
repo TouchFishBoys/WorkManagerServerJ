@@ -23,11 +23,9 @@ public interface NormalWorkService {
 
     TopicInfoResponse getTopicInfo(Integer topicId) throws IdNotFoundException;
 
-    Integer createTopic(String topicName, String topicDescription, Integer courseId, Date startTime, Date finishTime);
+    Integer createTopic(String topicName, String topicDescription, Integer courseId, Date startTime, Date finishTime) throws IdNotFoundException;
 
-    List<TopicInfoBO> getTopicInfosAsStudent(Integer courseId, Integer studentId) throws IdNotFoundException;
-
-    List<TopicInfoBO> getTopicInfosAsTeacher(Integer courseId, Integer teacherId) throws IdNotFoundException;
+    List<TopicInfoBO> getTopicInfos(Integer courseId) throws IdNotFoundException;
 
     boolean setScore(Integer topicId, Integer studentId, Integer score) throws IdNotFoundException;
 
