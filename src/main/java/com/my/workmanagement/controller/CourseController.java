@@ -17,6 +17,7 @@ import com.my.workmanagement.payload.response.student.StudentInfoResponse;
 import com.my.workmanagement.service.interfaces.CourseService;
 import com.my.workmanagement.service.interfaces.NormalWorkService;
 import com.my.workmanagement.service.interfaces.StudentService;
+import com.my.workmanagement.service.interfaces.TeacherService;
 import com.my.workmanagement.util.AuthUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,16 +41,19 @@ public class CourseController {
     private final StudentService studentService;
     private final CourseService courseService;
     private final NormalWorkService normalWorkService;
+    private final TeacherService teacherService;
 
     @Autowired
     public CourseController(
             StudentService studentService,
+            TeacherService teacherService,
             CourseService courseService,
             NormalWorkService normalWorkService
     ) {
         this.studentService = studentService;
         this.courseService = courseService;
         this.normalWorkService = normalWorkService;
+        this.teacherService = teacherService;
     }
 
     @GetMapping
@@ -58,12 +62,12 @@ public class CourseController {
         WMUserDetails userDetails = AuthUtil.getUserDetail();
         logger.info("Userid:{}", userDetails.getUserId());
 
-        switch (AuthUtil.getUserDetail().getRole()) {
+        switch (userDetails.getRole()) {
             case ROLE_TEACHER:
-                // TODO: 2021/1/4
+                response.setCourses(teacherService.getHostedCourseInfoList(userDetails.getUserId()));
                 break;
             case ROLE_STUDENT:
-                response.setCourseInfoList(studentService.getSelectedCourseInfo(userDetails.getUserId()));
+                response.setCourses(studentService.getSelectedCourseInfo(userDetails.getUserId()));
                 break;
             default:
                 throw new UndefinedUserRoleException(AuthUtil.getUserDetail().getRole().name());
@@ -152,7 +156,7 @@ public class CourseController {
     public ResponseEntity<?> importStudents(
             @RequestParam(value = "file", required = true) MultipartFile excelFile,
             @PathVariable Integer courseId
-    ) throws UnsupportedFileTypeException, IOException {
+    ) throws UnsupportedFileTypeException, IOException, IdNotFoundException {
         boolean result = studentService.importStudents(courseId, excelFile);
         return ResponseEntity.ok(result);
     }

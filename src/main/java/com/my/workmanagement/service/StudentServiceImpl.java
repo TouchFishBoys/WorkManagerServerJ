@@ -16,8 +16,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -54,10 +54,23 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public boolean importStudents(Integer courseId, MultipartFile file) throws UnsupportedFileTypeException, IOException {
-        List<HashMap<String, Object>> data = ExcelUtils.readFromExcel(file);
-
-        return false;
+    @Transactional
+    public boolean importStudents(Integer courseId, MultipartFile file)
+            throws UnsupportedFileTypeException, IOException, IdNotFoundException {
+        List<StudentDO> students = ExcelUtils.readFromExcel(file);
+        CourseDO course = courseRepository.findByCourseId(courseId);
+        List<CourseSelectionDO> courseSelectionList = new LinkedList<>();
+        if (course == null) {
+            throw new IdNotFoundException("course id");
+        }
+        students.forEach(item -> {
+            CourseSelectionDO courseSelection = new CourseSelectionDO();
+            courseSelection.setStudent(item);
+            courseSelection.setCourse(course);
+        });
+        studentRepository.saveAll(students);
+        courseSelectionRepository.saveAll(courseSelectionList);
+        return true;
     }
 
     @Override

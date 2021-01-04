@@ -7,6 +7,7 @@ import com.my.workmanagement.model.bo.CourseInfoBO;
 import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.payload.response.student.CourseListResponse;
 import com.my.workmanagement.payload.response.student.StudentInfoResponse;
+import com.my.workmanagement.service.interfaces.CourseService;
 import com.my.workmanagement.service.interfaces.StudentService;
 import com.my.workmanagement.util.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,13 @@ import java.util.List;
 @RequestMapping("/student")
 public class StudentController {
     private final StudentService studentService;
+    private final CourseService courseService;
 
     @Autowired
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService,
+                             CourseService courseService) {
         this.studentService = studentService;
+        this.courseService = courseService;
     }
 
     /**
@@ -42,7 +46,7 @@ public class StudentController {
     ) throws IdNotFoundException {
         StudentInfoBO studentInfoBO = studentService.getStudentInfo(stuId);
 
-         StudentInfoResponse response=StudentInfoResponse.StudentInfoResponseBuilder.aStudentInfoResponse()
+        StudentInfoResponse response = StudentInfoResponse.StudentInfoResponseBuilder.aStudentInfoResponse()
                 .withStudentClass(studentInfoBO.getStudentClass())
                 .withStudentName(studentInfoBO.getStudentName())
                 .withStudentNum(studentInfoBO.getStudentNum())
@@ -62,7 +66,7 @@ public class StudentController {
         Integer studentId = userDetails.getUserId();
         List<CourseInfoBO> courseInfoBOS = studentService.getSelectedCourseInfo(studentId);
         CourseListResponse response = new CourseListResponse();
-        response.setCourseInfoList(courseInfoBOS);
+        response.setCourses(courseInfoBOS);
         return ResponseEntity.ok(response);
     }
 
@@ -72,14 +76,18 @@ public class StudentController {
      * @param excelFile 文件
      * @return 无
      */
-    @PostMapping(value = "/{courseId}", consumes = {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "application/vnd.ms-excel"})
+    @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_TEACHER)")
     public ResponseEntity<?> importStudents(
             @RequestParam(value = "excel", required = true) MultipartFile excelFile,
-            @PathVariable Integer courseId
-    ) throws UnsupportedFileTypeException, IOException {
+            @RequestParam(value = "course_name") String courseName,
+            @RequestParam(value = "course_description") String courseDescription
+    ) throws UnsupportedFileTypeException, IOException, IdNotFoundException {
+        WMUserDetails userDetails = AuthUtil.getUserDetail();
+        Integer teacherId = userDetails.getUserId();
+        Integer courseId = courseService.createCourse(teacherId, courseName, courseDescription);
         boolean result = studentService.importStudents(courseId, excelFile);
+
         return ResponseEntity.ok(result);
     }
 

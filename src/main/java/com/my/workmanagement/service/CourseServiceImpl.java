@@ -1,40 +1,48 @@
 package com.my.workmanagement.service;
 
-import com.my.workmanagement.entity.CourseDO;
-import com.my.workmanagement.entity.CourseSelectionDO;
-import com.my.workmanagement.entity.StudentDO;
-import com.my.workmanagement.entity.TopicDO;
+import com.my.workmanagement.entity.*;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.model.bo.CourseInfoBO;
 import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.repository.*;
 import com.my.workmanagement.service.interfaces.CourseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
+    private static final Logger logger = LoggerFactory.getLogger(CourseServiceImpl.class);
+
     private final CourseRepository courseRepository;
     private final CourseSelectionRepository courseSelectionRepository;
     private final TopicRepository topicRepository;
     private final NormalWorkRepository normalWorkRepository;
+    private final TeacherRepository teacherRepository;
+    private final TeamRepository teamRepository;
 
     @Autowired
-    public CourseServiceImpl(CourseRepository courseRepository, TeacherRepository teacherRepository, TopicRepository topicRepository, NormalWorkRepository normalWorkRepository, CourseSelectionRepository courseSelectionRepository) {
+    public CourseServiceImpl(
+            CourseRepository courseRepository,
+            TeacherRepository teacherRepository,
+            TopicRepository topicRepository,
+            NormalWorkRepository normalWorkRepository,
+            CourseSelectionRepository courseSelectionRepository,
+            TeamRepository teamRepository
+    ) {
         this.courseRepository = courseRepository;
         this.courseSelectionRepository = courseSelectionRepository;
         this.topicRepository = topicRepository;
         this.normalWorkRepository = normalWorkRepository;
+        this.teacherRepository = teacherRepository;
+        this.teamRepository = teamRepository;
     }
 
-    @Override
-    public boolean createCourse(String courseName, String teacherNum, Integer[] studentNums) {
-        return false;
-    }
 
     @Override
     public String getCourseName(Integer courseId) throws IdNotFoundException {
@@ -51,16 +59,41 @@ public class CourseServiceImpl implements CourseService {
         if (courseDO == null) {
             throw new IdNotFoundException("course");
         }
+        // 取出课程下全部的小组
+        List<TeamDO> teams = courseSelectionRepository.findAllByCourseAndTeamIsNotNull(courseDO)
+                .stream().map(CourseSelectionDO::getTeam).collect(Collectors.toList());
+        // 去除重复项
+        List<TeamDO> uniqueTeams = teams.stream().collect(
+                Collectors.collectingAndThen(
+                        Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(TeamDO::getTeamId))), ArrayList::new
+                )
+        );
+        int finishedCount = teamRepository.getFinishedTeams(uniqueTeams);
+        logger.debug("Found {} teams under course {}, finished {} teams", uniqueTeams.size(), courseId, finishedCount);
+
         return CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBO()
                 .withCourseId(courseDO.getCourseId())
                 .withCourseName(courseDO.getCourseName())
                 .withCourseDescription(courseDO.getCourseDescription())
                 .withCourseYear(courseDO.getCourseYear())
                 .withCourseTeacherName(courseDO.getTeacher().getTeacherName())
-                .withStudentCount(courseSelectionRepository.countAllByCourse_CourseId(courseId))
-                //.withTotalCount(courseSelectionRepository.countAllByCourseIdGroupByTeam(courseId)) //SQL问题
-                .withFinishCount(courseSelectionRepository.countAllByCourse_CourseIdAndTeam_FinalWork_TimeUploadNot(courseId, null))
+                .withStudentCount(courseSelectionRepository.countAllByCourse_CourseId(courseId)) //学生人数
+                .withFinishCount(finishedCount) //完成的小组数
+                .withTotalCount(uniqueTeams.size()) // 总共的小组数
                 .build();
+    }
+
+    @Override
+    public Integer createCourse(Integer teacherId, String courseName, String courseDescription) throws IdNotFoundException {
+        TeacherDO teacher = teacherRepository.findByTeacherId(teacherId);
+        if (teacher == null) {
+            throw new IdNotFoundException("teacher id");
+        }
+        CourseDO course = new CourseDO();
+        course.setCourseName(courseName);
+        course.setCourseDescription(courseDescription);
+        course.setTeacher(teacher);
+        return courseRepository.save(course).getCourseId();
     }
 
     @Override

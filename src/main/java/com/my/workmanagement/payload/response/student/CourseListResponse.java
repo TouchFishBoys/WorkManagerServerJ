@@ -6,20 +6,13 @@ import java.io.Serializable;
 import java.util.List;
 
 public class CourseListResponse implements Serializable {
-    private List<CourseInfoBO> courseInfoList;
+    private List<CourseInfoBO> courses;
 
-    public CourseListResponse() {
+    public List<CourseInfoBO> getCourses() {
+        return courses;
     }
 
-    public CourseListResponse(List<CourseInfoBO> courseInfoList) {
-        this.courseInfoList = courseInfoList;
-    }
-
-    public List<CourseInfoBO> getCourseInfoList() {
-        return courseInfoList;
-    }
-
-    public void setCourseInfoList(List<CourseInfoBO> courseInfoList) {
-        this.courseInfoList = courseInfoList;
+    public void setCourses(List<CourseInfoBO> courses) {
+        this.courses = courses;
     }
 }

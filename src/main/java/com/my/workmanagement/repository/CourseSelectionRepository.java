@@ -1,11 +1,12 @@
 package com.my.workmanagement.repository;
 
+import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.entity.CourseSelectionDO;
 import com.my.workmanagement.entity.StudentDO;
 import com.my.workmanagement.entity.upk.CourseSelectionUPK;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public interface CourseSelectionRepository extends CrudRepository<CourseSelectionDO, CourseSelectionUPK> {
@@ -17,7 +18,11 @@ public interface CourseSelectionRepository extends CrudRepository<CourseSelectio
 
     List<CourseSelectionDO> getAllByTeam_TeamId(Integer teamId);
 
-    Integer countAllByCourse_CourseIdAndTeam_FinalWork_TimeUploadNot(Integer courseId, Timestamp timestamp);
+    // 大作业完成人数
+    @Query("SELECT COUNT(tdo) FROM CourseSelectionDO AS cs, TeamDO AS tdo, FinalWorkDO AS fwork WHERE fwork.timeUpload IS NOT NULL AND cs.course.courseId = :courseId")
+    Integer countAllByCourse_CourseIdAndTeam_FinalWork_TimeUploadNotNull(Integer courseId);
+
+    List<CourseSelectionDO> findAllByCourseAndTeamIsNotNull(CourseDO course);
 
     List<CourseSelectionDO> findAllByCourse_CourseId(Integer courseId);
 
