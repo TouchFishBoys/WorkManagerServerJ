@@ -7,16 +7,19 @@ import com.my.workmanagement.model.bo.QaTableBO;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.SubmitQaTableRequest;
 import com.my.workmanagement.service.interfaces.FileStorageService;
+import com.my.workmanagement.service.interfaces.FinalWorkService;
 import com.my.workmanagement.service.interfaces.TeamService;
 import com.my.workmanagement.util.FilePathUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -24,16 +27,18 @@ import java.util.List;
 public class QaTableController {
     private final FileStorageService fileStorageService;
     private final TeamService teamService;
+    private final FinalWorkService finalWorkService;
 
     @Autowired
     public QaTableController(
             FileStorageService fileStorageService,
-            TeamService teamService
+            TeamService teamService,
+            FinalWorkService finalWorkService
     ) {
         this.fileStorageService = fileStorageService;
         this.teamService = teamService;
+        this.finalWorkService = finalWorkService;
     }
-
 
     /**
      * 获取答辩记录表（JSON）
@@ -90,14 +95,21 @@ public class QaTableController {
      * @return /
      * @throws WordTemplateNotFoundException 模板没找到
      */
-    @PostMapping(value = "/{courseId}/{studentId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{courseId}/{studentId}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<PackedResponse<Void>> submitQaTable(
             @PathVariable @Min(value = 1, message = "course id must > 0") Integer courseId,
             @PathVariable @Min(value = 1, message = "student id must > 0") Integer studentId,
             @RequestBody SubmitQaTableRequest request
-    ) throws WordTemplateNotFoundException {
+    ) throws WordTemplateNotFoundException, IOException, IdNotFoundException {
         List<QaTableBO.QaTableItemBO> qaItems = request.getQaList();
         // TODO: 2020/12/29  生成答辩记录表
-        return PackedResponse.success(null, "success");
+        if (finalWorkService.generateQaTable(qaItems, courseId, studentId, request.getQaLocation(), request.getScore())) {
+            return PackedResponse.success(null, "success");
+        } else {
+            return PackedResponse.failure(null, "failed", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

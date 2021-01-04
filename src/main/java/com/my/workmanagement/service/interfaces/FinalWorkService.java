@@ -1,11 +1,15 @@
 package com.my.workmanagement.service.interfaces;
 
 import com.my.workmanagement.exception.IdNotFoundException;
+import com.my.workmanagement.exception.WordTemplateNotFoundException;
 import com.my.workmanagement.model.bo.FinalWorkBO;
+import com.my.workmanagement.model.bo.QaTableBO;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
 
 @Service
 public interface FinalWorkService {
@@ -26,4 +30,6 @@ public interface FinalWorkService {
     Resource loadDocumentByFworkId(Integer finalWorkId) throws FileNotFoundException;
 
     Resource loadFworkFileByFworkId(Integer finalWorkId) throws FileNotFoundException;
+
+    boolean generateQaTable(List<QaTableBO.QaTableItemBO> items, Integer courseId, Integer studentId, String location, Integer score) throws WordTemplateNotFoundException, IOException, IdNotFoundException;
 }
