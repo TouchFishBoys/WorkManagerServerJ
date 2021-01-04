@@ -4,17 +4,18 @@ import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.entity.CourseSelectionDO;
 import com.my.workmanagement.entity.StudentDO;
 import com.my.workmanagement.exception.IdNotFoundException;
+import com.my.workmanagement.exception.UnsupportedFileTypeException;
 import com.my.workmanagement.model.bo.CourseInfoBO;
 import com.my.workmanagement.model.bo.StudentInfoBO;
-import com.my.workmanagement.payload.response.student.StudentInfoResponse;
 import com.my.workmanagement.repository.*;
-import com.my.workmanagement.service.interfaces.AuthService;
 import com.my.workmanagement.service.interfaces.StudentService;
-import org.hibernate.hql.internal.ast.util.TokenPrinters;
+import com.my.workmanagement.util.ExcelUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,7 +51,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public boolean importStudents(Integer courseId, MultipartFile file) {
+    public boolean importStudents(Integer courseId, MultipartFile file) throws UnsupportedFileTypeException, IOException {
+        List<HashMap<String, Object>> data = ExcelUtils.readFromExcel(file);
+
         return false;
     }
 
@@ -78,14 +81,14 @@ public class StudentServiceImpl implements StudentService {
         List<CourseSelectionDO> courseSelections = courseSelectionRepository.findAllByStudent(tmpStudent);
         for (CourseSelectionDO courseSelection : courseSelections) {
             CourseDO course = courseSelection.getCourse();
-                    list.add(CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBO()
-                            .withCourseName(course.getCourseName())
-                            .withCourseId(course.getCourseId())
-                            .withCourseTeacherName(course.getTeacher().getTeacherName())
-                            .withFinishCount(normalWorkRepository.countAllByStudent(tmpStudent))
-                            .withTotalCount(topicRepository.countAllByCourseId(course.getCourseId()))
-                            .build()
-                    );
+            list.add(CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBO()
+                    .withCourseName(course.getCourseName())
+                    .withCourseId(course.getCourseId())
+                    .withCourseTeacherName(course.getTeacher().getTeacherName())
+                    .withFinishCount(normalWorkRepository.countAllByStudent(tmpStudent))
+                    .withTotalCount(topicRepository.countAllByCourseId(course.getCourseId()))
+                    .build()
+            );
         }
         return list;
     }

@@ -11,6 +11,8 @@ public class GetTeamInfoResponse implements Serializable {
     // 人数
     private Integer memberCount;
     private List<StudentInfoBO> students;
+    private Integer documentScore;
+    private Integer score;
 
     public Integer getTeamId() {
         return teamId;
@@ -44,6 +46,22 @@ public class GetTeamInfoResponse implements Serializable {
         this.students = students;
     }
 
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public Integer getDocumentScore() {
+        return documentScore;
+    }
+
+    public void setDocumentScore(Integer documentScore) {
+        this.documentScore = documentScore;
+    }
+
     @Override
     public String toString() {
         return "GetTeamInfoResponse{" +
@@ -51,6 +69,8 @@ public class GetTeamInfoResponse implements Serializable {
                 ", teamName='" + teamName + '\'' +
                 ", memberCount=" + memberCount +
                 ", students=" + students +
+                ", documentScore=" + documentScore +
+                ", score=" + score +
                 '}';
     }
 }

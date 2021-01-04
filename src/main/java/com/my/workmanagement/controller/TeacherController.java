@@ -29,7 +29,7 @@ public class TeacherController {
      * @param teacherId 教师 Id
      * @return 教师信息
      */
-    @GetMapping(value = "/{teacherId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{teacherId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation("获取教师信息")
     public ResponseEntity<TeacherInfoResponse> getTeacherInfo(
             @PathVariable Integer teacherId

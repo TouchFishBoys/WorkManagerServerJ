@@ -6,9 +6,7 @@ import com.my.workmanagement.model.bo.FinalWorkBO;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.SingleValueRequest;
 import com.my.workmanagement.payload.request.finalwork.SetDocumentScoreRequest;
-import com.my.workmanagement.payload.request.finalwork.SetFinalScoreRequest;
 import com.my.workmanagement.service.interfaces.FinalWorkService;
-import com.my.workmanagement.util.FilePathUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -51,7 +49,7 @@ public class FinalWorkController {
     )
     public ResponseEntity<PackedResponse<FinalWorkBO>> getFinalWorkInfo(@PathVariable Integer teamId) throws IdNotFoundException {
         FinalWorkBO response = finalWorkService.getFinalWorkInfo(teamId);
-        // TODO: 2020/12/29 remake
+        // TODO: 2020/12/29 增加总人数和完成人数
         return PackedResponse.success(response, "");
     }
 

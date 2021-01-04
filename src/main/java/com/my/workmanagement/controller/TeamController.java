@@ -51,6 +51,8 @@ public class TeamController {
         response.setTeamId(teamInfo.getTeamId());
         response.setMemberCount(teamInfo.getMemberCount());
         response.setTeamName(teamInfo.getTeamName());
+        response.setScore(teamInfo.getScore());
+        response.setDocumentScore(teamInfo.getDocumentScore());
 
         return PackedResponse.success(response, "Success");
     }

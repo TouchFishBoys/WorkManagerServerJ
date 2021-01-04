@@ -48,6 +48,8 @@ public class FinalWorkServiceImpl implements FinalWorkService {
                 .withSubmitTime(finalWork.getTimeUpload())
                 .withDescription(finalWork.getFworkDescription())
                 .withAuthors(teamService.getTeamMembersName(teamId))
+                .withScore(finalWork.getFworkScore())
+                .withDocumentScore(finalWork.getDocumentScore())
                 .build();
     }
 

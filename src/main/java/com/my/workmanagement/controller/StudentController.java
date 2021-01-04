@@ -1,8 +1,7 @@
 package com.my.workmanagement.controller;
 
 import com.my.workmanagement.exception.IdNotFoundException;
-import com.my.workmanagement.exception.UndefinedUserRoleException;
-import com.my.workmanagement.model.ERole;
+import com.my.workmanagement.exception.UnsupportedFileTypeException;
 import com.my.workmanagement.model.WMUserDetails;
 import com.my.workmanagement.model.bo.CourseInfoBO;
 import com.my.workmanagement.model.bo.StudentInfoBO;
@@ -15,10 +14,10 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -37,7 +36,7 @@ public class StudentController {
      * @param stuId 学生 Id
      * @return 学生信息
      */
-    @GetMapping(value = "/{stuId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{stuId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StudentInfoResponse> getStudentInfo(
             @PathVariable Integer stuId
     ) throws IdNotFoundException {
@@ -79,7 +78,7 @@ public class StudentController {
     public ResponseEntity<?> importStudents(
             @RequestParam(value = "excel", required = true) MultipartFile excelFile,
             @PathVariable Integer courseId
-    ) {
+    ) throws UnsupportedFileTypeException, IOException {
         boolean result = studentService.importStudents(courseId, excelFile);
         return ResponseEntity.ok(result);
     }

@@ -1,6 +1,7 @@
 package com.my.workmanagement.service;
 
 import com.my.workmanagement.entity.CourseSelectionDO;
+import com.my.workmanagement.entity.FinalWorkDO;
 import com.my.workmanagement.entity.StudentDO;
 import com.my.workmanagement.entity.TeamDO;
 import com.my.workmanagement.exception.IdNotFoundException;
@@ -84,10 +85,13 @@ public class TeamServiceImpl implements TeamService {
     }
 
     public TeamInfoBO getBoFromDo(TeamDO team) throws IdNotFoundException {
+        FinalWorkDO finalWork = team.getFinalWork();
         TeamInfoBO bo = new TeamInfoBO();
         bo.setTeamName(team.getTeamName());
         bo.setTeamId(team.getTeamId());
         bo.setMemberCount(getTeamMembers(team.getTeamId()).size());
+        bo.setScore(finalWork.getFworkScore());
+        bo.setDocumentScore(finalWork.getDocumentScore());
         return bo;
     }
 }
