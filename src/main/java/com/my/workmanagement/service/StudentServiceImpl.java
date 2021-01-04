@@ -10,6 +10,8 @@ import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.repository.*;
 import com.my.workmanagement.service.interfaces.StudentService;
 import com.my.workmanagement.util.ExcelUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +23,7 @@ import java.util.List;
 
 @Service
 public class StudentServiceImpl implements StudentService {
+    private static final Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
 
     private final StudentRepository studentRepository;
     private final CourseSelectionRepository courseSelectionRepository;
@@ -73,14 +76,16 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<CourseInfoBO> getSelectedCourseInfo(Integer studentId) throws IdNotFoundException {
         List<CourseInfoBO> list = new LinkedList<>();
-        if (studentRepository.existsByStudentId(studentId)) {
+        if (!studentRepository.existsByStudentId(studentId)) {
             throw new IdNotFoundException("studentId");
         }
-        //StudentDO tmpStudent = new StudentDO(studentId);
         StudentDO tmpStudent = studentRepository.findByStudentId(studentId);
+
         List<CourseSelectionDO> courseSelections = courseSelectionRepository.findAllByStudent(tmpStudent);
+        logger.info("Found {} course selected by {}", courseSelections.size(), studentId);
         for (CourseSelectionDO courseSelection : courseSelections) {
             CourseDO course = courseSelection.getCourse();
+            // TODO: 2021/1/4 加上缺少的值
             list.add(CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBO()
                     .withCourseName(course.getCourseName())
                     .withCourseId(course.getCourseId())

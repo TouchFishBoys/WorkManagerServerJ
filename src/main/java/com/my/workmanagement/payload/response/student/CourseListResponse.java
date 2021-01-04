@@ -7,10 +7,12 @@ import java.util.List;
 
 public class CourseListResponse implements Serializable {
     private List<CourseInfoBO> courseInfoList;
-    public CourseListResponse(){
-    };
-    public CourseListResponse(List<CourseInfoBO>courseInfoList){
-        this.courseInfoList=courseInfoList;
+
+    public CourseListResponse() {
+    }
+
+    public CourseListResponse(List<CourseInfoBO> courseInfoList) {
+        this.courseInfoList = courseInfoList;
     }
 
     public List<CourseInfoBO> getCourseInfoList() {

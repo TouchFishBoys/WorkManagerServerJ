@@ -47,12 +47,14 @@ public class TeamController {
     ) throws IdNotFoundException {
         GetTeamInfoResponse response = new GetTeamInfoResponse();
         TeamInfoBO teamInfo = teamService.getTeamInfo(teamId);
+        Integer finalWorkId = teamService.getFinalWorkId(teamId);
 
         response.setTeamId(teamInfo.getTeamId());
         response.setMemberCount(teamInfo.getMemberCount());
         response.setTeamName(teamInfo.getTeamName());
         response.setScore(teamInfo.getScore());
         response.setDocumentScore(teamInfo.getDocumentScore());
+        response.setFinalWorkId(finalWorkId);
 
         return PackedResponse.success(response, "Success");
     }

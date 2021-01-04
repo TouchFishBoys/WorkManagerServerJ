@@ -38,4 +38,6 @@ public interface TeamService {
 
     List<String> getTeamMembersName(Integer teamId) throws IdNotFoundException;
 
+    Integer getFinalWorkId(Integer teamId) throws IdNotFoundException;
+
 }

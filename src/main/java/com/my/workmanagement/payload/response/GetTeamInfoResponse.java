@@ -7,12 +7,21 @@ import java.util.List;
 
 public class GetTeamInfoResponse implements Serializable {
     private Integer teamId;
+    private Integer finalWorkId;
     private String teamName;
     // 人数
     private Integer memberCount;
     private List<StudentInfoBO> students;
     private Integer documentScore;
     private Integer score;
+
+    public Integer getFinalWorkId() {
+        return finalWorkId;
+    }
+
+    public void setFinalWorkId(Integer finalWorkId) {
+        this.finalWorkId = finalWorkId;
+    }
 
     public Integer getTeamId() {
         return teamId;

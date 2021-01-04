@@ -72,16 +72,19 @@ public class NormalWorkServiceImpl implements NormalWorkService {
     @Override
     @Transactional
     public Integer createTopic(String topicName, String topicDescription, Integer courseId, Date startTime, Date finishTime) {
+        // TODO: 2021/1/4 创建题目
         return null;
     }
 
     @Override
     public List<TopicInfoBO> getTopicInfosAsStudent(Integer courseId, Integer studentId) throws IdNotFoundException {
+        // TODO: 2021/1/4  获取题目列表
         return null;
     }
 
     @Override
     public List<TopicInfoBO> getTopicInfosAsTeacher(Integer courseId, Integer teacherId) throws IdNotFoundException {
+        // TODO: 2021/1/4  获取题目列表
         return null;
     }
 
@@ -92,7 +95,7 @@ public class NormalWorkServiceImpl implements NormalWorkService {
         if (normalWork == null) {
             throw new IdNotFoundException("normalwork");
         }
-        return normalWorkRepository.setScoreById(normalWork.getNworkId(), score);
+        return normalWorkRepository.setScoreById(normalWork.getNworkId(), score) > 0;
     }
 
 

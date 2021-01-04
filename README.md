@@ -23,19 +23,19 @@
 - 教师个人信息
   - [x] 获取教师信息             GET /teacher/:teacherId
 - 学生管理
-  - [ ] 导入学生信息             POST  /course/:courseId/student?courseName=
-  - [ ] 获取学生信息             GET   /course/:courseId/student // 同学生
+  - [ ] 导入学生信息 POST /course/:courseId/student?courseName=
+  - [x] 获取学生信息 GET /course/:courseId/student // 同学生
 - 作业管理
   - 平时作业
     - [x] 获取题目列表           GET  /course/:courseId/topic //同上
-    - [x] 获取题目信息           GET  /topic/:topicId //同上
-    - [x] 发布平时作业           POST /course/:courseId/topic
-    - [x] 下载平时作业           GET  /topic/:topicId/:studentId/file
+    - [x] 获取题目信息 GET /topic/:topicId //同上
+    - [ ] 发布平时作业 POST /course/:courseId/topic
+    - [x] 下载平时作业 GET /topic/:topicId/:studentId/file
     - [x] 平时作业评分           POST /topic/:topicId/:stidentId/score
   - 大作业
-    - [ ] 获取大作业列表         GET  /course/:courseId/final-work
-    - [ ] 获取大作业信息         GET  /final-work/:finalId
-    - [x] 设置大作业分数         POST /final-work/:finalId/score
+    - [ ] 获取大作业列表 GET /course/:courseId/final-work
+    - [x] 获取大作业信息 GET /team/:teamId //同上
+    - [x] 设置大作业分数 POST /final-work/:finalId/score
     - 文件相关
       - [x] 下载大作业文件       GET /final-work/:finalId/file
     - 文档相关

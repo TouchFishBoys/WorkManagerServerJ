@@ -84,6 +84,15 @@ public class TeamServiceImpl implements TeamService {
         return getTeamMembers(teamId).stream().map(StudentInfoBO::getStudentName).collect(Collectors.toList());
     }
 
+    @Override
+    public Integer getFinalWorkId(Integer teamId) throws IdNotFoundException {
+        TeamDO team = teamRepository.findByTeamId(teamId);
+        if (team == null) {
+            throw new IdNotFoundException("team id");
+        }
+        return team.getFinalWork().getFworkId();
+    }
+
     public TeamInfoBO getBoFromDo(TeamDO team) throws IdNotFoundException {
         FinalWorkDO finalWork = team.getFinalWork();
         TeamInfoBO bo = new TeamInfoBO();

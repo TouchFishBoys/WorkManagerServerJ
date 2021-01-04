@@ -59,24 +59,27 @@ public class FinalWorkServiceImpl implements FinalWorkService {
         if (!finalWorkRepository.existsById(finalWork)) {
             throw new IdNotFoundException("finalWorkId");
         }
-        return finalWorkRepository.setScoreByFinalWorkId(finalWork, score);
+        return finalWorkRepository.setScoreByFinalWorkId(finalWork, score) > 0;
     }
 
     @Override
+    @Transactional
     public boolean setDocumentScore(Integer finalWork, Integer score) throws IdNotFoundException {
         if (!finalWorkRepository.existsById(finalWork)) {
             throw new IdNotFoundException("finalWorkId");
         }
-        return finalWorkRepository.setDocumentScoreByFinalWorkId(finalWork, score);
+        return finalWorkRepository.setDocumentScoreByFinalWorkId(finalWork, score) > 0;
     }
 
     @Override
     public Resource loadDocumentByFworkId(Integer finalWorkId) throws FileNotFoundException {
+        // TODO: 2021/1/4  
         return null;
     }
 
     @Override
     public Resource loadFworkFileByFworkId(Integer finalWorkId) throws FileNotFoundException {
+        // TODO: 2021/1/4  
         return null;
     }
 }

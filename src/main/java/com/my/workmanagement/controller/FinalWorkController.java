@@ -2,13 +2,11 @@ package com.my.workmanagement.controller;
 
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
-import com.my.workmanagement.model.bo.FinalWorkBO;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.SingleValueRequest;
 import com.my.workmanagement.payload.request.finalwork.SetDocumentScoreRequest;
 import com.my.workmanagement.service.interfaces.FinalWorkService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,23 +32,6 @@ public class FinalWorkController {
     @Autowired
     public FinalWorkController(FinalWorkService finalWorkService) {
         this.finalWorkService = finalWorkService;
-    }
-
-    /**
-     * 获取大作业信息
-     *
-     * @param teamId 队伍Id
-     * @return 大作业信息
-     * @throws IdNotFoundException 队伍不存在
-     */
-    @GetMapping(value = "/{teamId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ApiOperation(
-            value = "获取大作业信息"
-    )
-    public ResponseEntity<PackedResponse<FinalWorkBO>> getFinalWorkInfo(@PathVariable Integer teamId) throws IdNotFoundException {
-        FinalWorkBO response = finalWorkService.getFinalWorkInfo(teamId);
-        // TODO: 2020/12/29 增加总人数和完成人数
-        return PackedResponse.success(response, "");
     }
 
     /**

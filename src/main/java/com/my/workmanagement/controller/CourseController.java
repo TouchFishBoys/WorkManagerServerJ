@@ -6,11 +6,13 @@ import com.my.workmanagement.exception.UnsupportedFileTypeException;
 import com.my.workmanagement.model.ERole;
 import com.my.workmanagement.model.WMUserDetails;
 import com.my.workmanagement.model.bo.CourseInfoBO;
+import com.my.workmanagement.model.bo.FinalWorkBO;
 import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.topic.ReleaseTopicRequest;
 import com.my.workmanagement.payload.response.CourseInfoResponse;
 import com.my.workmanagement.payload.response.TopicInfoListResponse;
+import com.my.workmanagement.payload.response.student.CourseListResponse;
 import com.my.workmanagement.payload.response.student.StudentInfoResponse;
 import com.my.workmanagement.service.interfaces.CourseService;
 import com.my.workmanagement.service.interfaces.NormalWorkService;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -47,6 +50,25 @@ public class CourseController {
         this.studentService = studentService;
         this.courseService = courseService;
         this.normalWorkService = normalWorkService;
+    }
+
+    @GetMapping
+    public ResponseEntity<PackedResponse<CourseListResponse>> getJoinedCourse() throws UndefinedUserRoleException, IdNotFoundException {
+        CourseListResponse response = new CourseListResponse();
+        WMUserDetails userDetails = AuthUtil.getUserDetail();
+        logger.info("Userid:{}", userDetails.getUserId());
+
+        switch (AuthUtil.getUserDetail().getRole()) {
+            case ROLE_TEACHER:
+                // TODO: 2021/1/4
+                break;
+            case ROLE_STUDENT:
+                response.setCourseInfoList(studentService.getSelectedCourseInfo(userDetails.getUserId()));
+                break;
+            default:
+                throw new UndefinedUserRoleException(AuthUtil.getUserDetail().getRole().name());
+        }
+        return PackedResponse.success(response, "ok");
     }
 
     /**
@@ -105,13 +127,13 @@ public class CourseController {
     ) throws IdNotFoundException {
         logger.info("Get student info list");
         List<StudentInfoResponse> response = new LinkedList<>();
-        List<StudentInfoBO> studentInfoBOS=courseService.getStudentInfo(courseId);
-        for(StudentInfoBO student:studentInfoBOS){
+        List<StudentInfoBO> studentInfoBOS = courseService.getStudentInfo(courseId);
+        for (StudentInfoBO student : studentInfoBOS) {
             response.add(StudentInfoResponse.StudentInfoResponseBuilder.aStudentInfoResponse()
-            .withStudentClass(student.getStudentClass())
-            .withStudentNum(student.getStudentNum())
-            .withStudentName(student.getStudentName())
-            .build());
+                    .withStudentClass(student.getStudentClass())
+                    .withStudentNum(student.getStudentNum())
+                    .withStudentName(student.getStudentName())
+                    .build());
         }
 
         return PackedResponse.success(response, "");
@@ -178,6 +200,7 @@ public class CourseController {
     ) throws UndefinedUserRoleException, IdNotFoundException {
         TopicInfoListResponse response = new TopicInfoListResponse();
         WMUserDetails userDetails = AuthUtil.getUserDetail();
+
         if (userDetails.getRole() == ERole.ROLE_STUDENT) {
             response.setTopics(normalWorkService.getTopicInfosAsStudent(courseId, userDetails.getUserId()));
         } else if (userDetails.getRole() == ERole.ROLE_TEACHER) {
@@ -185,6 +208,15 @@ public class CourseController {
         } else {
             throw new UndefinedUserRoleException(userDetails.getRole().name());
         }
+
+        return PackedResponse.success(response, "");
+    }
+
+    @GetMapping("/{courseId}/final-work")
+    public ResponseEntity<PackedResponse<List<FinalWorkBO>>> getFinalWorkList(
+            @PathVariable Integer courseId
+    ) {
+        List<FinalWorkBO> response = new ArrayList<>();
         return PackedResponse.success(response, "");
     }
 
