@@ -1,6 +1,7 @@
 package com.my.workmanagement;
 
 import com.deepoove.poi.XWPFTemplate;
+import com.my.workmanagement.entity.StudentDO;
 import com.my.workmanagement.util.ExcelUtils;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +28,7 @@ public class PoiTemplateTest {
     void testReadExcel() {
         try {
             var list = ExcelUtils.readFromExcel(new File("C:\\Users\\Kerit\\Desktop\\test.xlsx"));
-            for (HashMap<String, Object> map : list) {
+            for (StudentDO map : list) {
                 System.out.println(map.toString());
             }
         } catch (Exception exception) {

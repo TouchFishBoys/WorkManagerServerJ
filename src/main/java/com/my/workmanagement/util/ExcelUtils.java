@@ -1,33 +1,31 @@
 package com.my.workmanagement.util;
 
+import com.my.workmanagement.entity.StudentDO;
 import com.my.workmanagement.exception.UnsupportedFileTypeException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Header;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ExcelUtils {
     private final static Logger logger = LoggerFactory.getLogger(ExcelUtils.class);
 
-    public static List<HashMap<String, Object>> readFromExcel(File file) throws UnsupportedFileTypeException, FileNotFoundException {
+    public static List<StudentDO> readFromExcel(File file) throws UnsupportedFileTypeException, FileNotFoundException {
         InputStream is = new FileInputStream(file);
         String filename = file.getName();
         return readFromExcel(is, filename);
     }
 
-    public static List<HashMap<String, Object>> readFromExcel(InputStream is, String filename) throws UnsupportedFileTypeException {
-        List<HashMap<String, Object>> result = new LinkedList<>();
+    public static List<StudentDO> readFromExcel(InputStream is, String filename) throws UnsupportedFileTypeException {
+        List<StudentDO> result = new LinkedList<>();
         List<String> headerList = new LinkedList<>();
         try {
             Workbook workbook;
@@ -56,25 +54,11 @@ public class ExcelUtils {
                         headerList.add(row.getCell(j).getStringCellValue());
                     }
                 } else { // 不是表头
-                    HashMap<String, Object> rowData = new HashMap<>();
+                    StudentDO rowData = new StudentDO();
                     for (int j = 0; j < row.getLastCellNum(); j++) {
-                        switch (row.getCell(j).getCellType()) {
-                            case STRING:
-                                rowData.put(headerList.get(j), row.getCell(j).getStringCellValue());
-                                break;
-                            case NUMERIC:
-                                rowData.put(headerList.get(j), row.getCell(j).getNumericCellValue());
-                                break;
-                            case BOOLEAN:
-                                rowData.put(headerList.get(j), row.getCell(j).getBooleanCellValue());
-                                break;
-                            case ERROR:
-                                rowData.put(headerList.get(j), row.getCell(j).getErrorCellValue());
-                                break;
-                            default:
-                                rowData.put(headerList.get(j), "");
-                                break;
-                        }
+                        rowData.setStudentNum(row.getCell(0).getStringCellValue());
+                        rowData.setStudentName(row.getCell(1).getStringCellValue());
+                        rowData.setStudentClass(row.getCell(2).getStringCellValue());
                     }
                     result.add(rowData);
                 }
@@ -87,7 +71,7 @@ public class ExcelUtils {
         return result;
     }
 
-    public static List<HashMap<String, Object>> readFromExcel(MultipartFile mf) throws UnsupportedFileTypeException, IOException {
+    public static List<StudentDO> readFromExcel(MultipartFile mf) throws UnsupportedFileTypeException, IOException {
         InputStream is = mf.getInputStream();
         String filename = mf.getOriginalFilename();
         return readFromExcel(is, filename);

@@ -17,14 +17,25 @@ spring:
     url: "jdbc:${WORK_DB_TYPE:mysql}://${WORK_DB_URL:localhost}:${WORK_DB_PORT:3306}/work_management?serverTimezone=UTC"
     username: ${WORK_DB_USERNAME:root}
     password: ${WORK_DB_PASSWORD:root}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 180000
 server:
   port: 8090
 logging:
   level:
     root: INFO
     com.zaxxer.hikari: INFO
-    org.springframework.security: DEBUG
+    org.springframework.security: INFO
     com.my.workmanagement: DEBUG
 springfox:
   documentation:
     enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

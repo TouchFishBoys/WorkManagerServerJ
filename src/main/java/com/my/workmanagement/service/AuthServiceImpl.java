@@ -21,11 +21,10 @@ import javax.annotation.Resource;
 @Service
 public class AuthServiceImpl implements AuthService {
     private final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
-
-    @Resource
-    private AuthenticationManager authenticationManager;
     private final UserDetailsService teacherService;
     private final UserDetailsService studentService;
+    @Resource
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     public AuthServiceImpl(
@@ -39,7 +38,6 @@ public class AuthServiceImpl implements AuthService {
     public String login(String username, String password, ERole role) {
         String token = "";
         UserDetails userDetails = null;
-        logger.info("Entered login");
 
         if (role == ERole.ROLE_TEACHER) {
             login(new UsernamePasswordAuthenticationToken(username, password));
@@ -58,10 +56,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void login(UsernamePasswordAuthenticationToken token) {
-        logger.info(token.getCredentials().toString());
-        logger.info(token.getPrincipal().toString());
         Authentication authentication = authenticationManager.authenticate(token);
-        logger.info("Setting authentication");
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }
