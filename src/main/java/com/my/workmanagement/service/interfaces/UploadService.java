@@ -5,5 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface UploadService {
     UploadInfo uploadDocument(MultipartFile file, String uploadFilePath,Integer courseId,Integer teamId) throws Exception;
-    UploadInfo uploadFile(MultipartFile file, String uploadFilePath,Integer courseId,Integer teamId) throws Exception;
+    UploadInfo uploadFFile(MultipartFile file, String uploadFilePath,Integer courseId,Integer teamId) throws Exception;
+    UploadInfo uploadNFile(MultipartFile file, String uploadFilePath,Integer topicId,Integer stuId) throws Exception;
+
 }

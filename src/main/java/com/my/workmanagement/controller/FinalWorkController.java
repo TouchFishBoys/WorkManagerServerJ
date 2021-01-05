@@ -190,7 +190,7 @@ public class FinalWorkController {
                 .enter("final")
                 .enter(teamId.toString());
         try {
-            uploadInfo = uploadService.uploadFile(file, pathBuilder.build(),courseId,teamId);
+            uploadInfo = uploadService.uploadFFile(file, pathBuilder.build(),courseId,teamId);
         } catch (Exception e) {
             System.out.println(e.toString());
         }
