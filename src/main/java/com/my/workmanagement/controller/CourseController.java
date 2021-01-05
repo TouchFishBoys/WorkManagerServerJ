@@ -102,6 +102,7 @@ public class CourseController {
                     .withTeacherName(courseInfoBO.getCourseTeacherName())
                     .withTotalCount(courseInfoBO.getTotalCount())
                     .withFinishCount(courseInfoBO.getFinishCount())
+                    .withStudentCount(courseInfoBO.getStudentCount())
                     .build();
         } else {
             if (userDetails.getRole() == ERole.ROLE_STUDENT) {
@@ -201,8 +202,9 @@ public class CourseController {
     @GetMapping("/{courseId}/final-work")
     public ResponseEntity<PackedResponse<List<FinalWorkBO>>> getFinalWorkList(
             @PathVariable Integer courseId
-    ) {
-        List<FinalWorkBO> response = new ArrayList<>();
+    ) throws IdNotFoundException {
+        List<FinalWorkBO> response = courseService.getFinalWorkList(courseId);
+
         return PackedResponse.success(response, "");
     }
 

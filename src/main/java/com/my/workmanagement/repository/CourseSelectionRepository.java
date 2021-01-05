@@ -31,4 +31,6 @@ public interface CourseSelectionRepository extends CrudRepository<CourseSelectio
     CourseSelectionDO findFirstByStudent_StudentIdAndCourse_CourseId(Integer studentId, Integer courseId);
 
     CourseSelectionDO getFirstByTeam(TeamDO team);
+
+    List<CourseSelectionDO> findAllByTeam_TeamId(Integer TeamId);
 }

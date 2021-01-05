@@ -110,8 +110,8 @@ public class CourseServiceImpl implements CourseService {
                 .withCourseYear(courseDO.getCourseYear())
                 .withStudentCount(1)
                 .withCourseTeacherName(courseDO.getTeacher().getTeacherName())
-                .withTotalCount(normalWorkRepository.countAllByTopic_Course_CourseIdAndStudent_StudentId(courseId, studentId))
-                .withFinishCount(normalWorkRepository.countAllByTopic_Course_CourseId(courseId))
+                .withTotalCount(topicRepository.countAllByCourse_CourseId(courseId))
+                .withFinishCount(normalWorkRepository.countAllByTopic_Course_CourseIdAndStudent_StudentId(courseId,studentId))
                 .build();
     }
 
@@ -159,15 +159,42 @@ public class CourseServiceImpl implements CourseService {
         if (!courseRepository.existsById(courseId)) {
             throw new IdNotFoundException("course id");
         }
+        List<String> studentNames;
+        List<CourseSelectionDO> students;
+        List<FinalWorkBO> finalWorkBOS = new LinkedList<>();
         // 取出 （单课学生数）
         List<CourseSelectionDO> courseSelectionList = courseSelectionRepository.findAllByCourse_CourseId(courseId);
         // 去除重复的队伍并取出他们的 FinalWork
-        List<FinalWorkDO> teams = courseSelectionList.stream().map(CourseSelectionDO::getTeam).collect(
+        List<TeamDO> teams = courseSelectionList.stream().map(CourseSelectionDO::getTeam).collect(Collectors.toList());
+        for(int i=0;i<teams.size();i++) {
+            if(teams.get(i)==null){
+                teams.remove(i);
+            }
+        }
+                /*collect(
                 Collectors.collectingAndThen(
                         Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(TeamDO::getTeamId))), ArrayList::new
                 )
-        ).stream().map(TeamDO::getFinalWork).collect(Collectors.toList());
+        ).stream().map(TeamDO::getFinalWork).collect(Collectors.toList());*/
         // TODO: 2021/1/6
-        return null;
+        for (TeamDO team : teams) {
+            students = courseSelectionRepository.findAllByTeam_TeamId(team.getTeamId());
+            studentNames = new LinkedList<>();
+            for (CourseSelectionDO student : students) {
+                studentNames.add(student.getStudent().getStudentName());
+            }
+
+            finalWorkBOS.add(FinalWorkBO.FinalWorkBOBuilder.aFinalWorkBO()
+                    .withFinalWorkId(team.getFinalWork().getFworkId())
+                    .withScore(team.getFinalWork().getFworkScore())
+                    .withDocumentScore(team.getFinalWork().getDocumentScore())
+                    .withFinalWorkName(team.getFinalWork().getFworkName())
+                    .withTeamName(team.getTeamName())
+                    .withDescription(team.getFinalWork().getFworkDescription())
+                    .withSubmitTime(team.getFinalWork().getTimeUpload())
+                    .withAuthors(studentNames)
+                    .build());
+        }
+        return finalWorkBOS;
     }
 }
