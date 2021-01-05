@@ -106,6 +106,27 @@ public class FinalWorkController {
                 .body(resource);
     }
 
+    /**
+     * 下载大作业文件
+     *
+     * @param finalId 大作业Id
+     * @return 大作业文件
+     * @throws StorageFileNotFoundException 文档不存在
+     */
+    @ApiOperation("下载文件")
+    @GetMapping(value = "/{finalId}/file", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    public ResponseEntity<Resource> getFinalWorkFile(
+            @PathVariable Integer finalId,
+            @PathParam("fileName") String fileName
+    ) throws StorageFileNotFoundException {
+        Resource resource;
+        resource = finalWorkService.loadFworkFileByFworkId(finalId);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment;filename=\"%s.war\"", fileName))
+                .header(HttpHeaders.CACHE_CONTROL, "no-cache,no-store,must-revalidate")
+                .body(resource);
+    }
+
     /*
     @ApiOperation("下载上传的文件")
     @GetMapping(value = "/{finalId}/file", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

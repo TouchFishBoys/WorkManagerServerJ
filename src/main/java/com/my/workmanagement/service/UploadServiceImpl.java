@@ -64,7 +64,7 @@ public class UploadServiceImpl implements UploadService {
         //File targetFile = new File(uploadFilePath + "/" + fileName);
         // file.transferTo(targetFile);
         String location =
-                storageConfiguration.getRootDirectory() + "/" + courseId + "/final/" + teamId + "/"  + "File.war";
+                storageConfiguration.getRootDirectory() + "/" + courseId + "/final/" + teamId + "/"  + "file.war";
         File targetFile = new File(location);
         targetFile.mkdirs();
         file.transferTo(targetFile);
