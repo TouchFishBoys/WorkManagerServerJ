@@ -57,6 +57,7 @@ public class TeamController {
         response.setScore(teamInfo.getScore());
         response.setDocumentScore(teamInfo.getDocumentScore());
         response.setFinalWorkId(finalWorkId);
+        response.setStudents(studentService.getStudentsByTeamId(teamId));
 
         return PackedResponse.success(response, "Success");
     }
