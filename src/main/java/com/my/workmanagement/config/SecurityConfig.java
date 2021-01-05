@@ -1,5 +1,6 @@
 package com.my.workmanagement.config;
 
+import com.my.workmanagement.filter.CorsFilter;
 import com.my.workmanagement.filter.JwtTokenFilter;
 import com.my.workmanagement.util.authprovider.StudentAuthenticationProvider;
 import com.my.workmanagement.util.authprovider.TeacherAuthenticationProvider;
@@ -21,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.session.SessionManagementFilter;
 
 import javax.annotation.Resource;
 
@@ -67,6 +69,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return NoOpPasswordEncoder.getInstance();
     }
 
+    @Bean
+    CorsFilter corsFilter() {
+        CorsFilter filter = new CorsFilter();
+        return filter;
+    }
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -81,6 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
         // 添加 Filter
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(corsFilter(), SessionManagementFilter.class);
         http.headers().cacheControl();
     }
 
