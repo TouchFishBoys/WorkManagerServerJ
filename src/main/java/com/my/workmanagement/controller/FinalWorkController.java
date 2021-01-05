@@ -2,13 +2,20 @@ package com.my.workmanagement.controller;
 
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
+import com.my.workmanagement.exception.WordTemplateNotFoundException;
+import com.my.workmanagement.model.UploadInfo;
+import com.my.workmanagement.model.bo.QaTableBO;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.SingleValueRequest;
+import com.my.workmanagement.payload.request.SubmitQaTableRequest;
 import com.my.workmanagement.payload.request.finalwork.SetDocumentScoreRequest;
 import com.my.workmanagement.service.interfaces.FinalWorkService;
+import com.my.workmanagement.service.interfaces.UploadService;
+import com.my.workmanagement.util.FilePathUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,22 +24,33 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Min;
 import javax.websocket.server.PathParam;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/final")
 @Api(description = "大作业")
 public class FinalWorkController {
+    HttpServletRequest request;
     private static final Logger logger = LoggerFactory.getLogger(TopicController.class);
     private final FinalWorkService finalWorkService;
+    private final UploadService uploadService;
 
     @Autowired
-    public FinalWorkController(FinalWorkService finalWorkService) {
+    public FinalWorkController(FinalWorkService finalWorkService, UploadService uploadService) {
         this.finalWorkService = finalWorkService;
+        this.uploadService = uploadService;
     }
 
     /**
@@ -88,6 +106,7 @@ public class FinalWorkController {
                 .body(resource);
     }
 
+    /*
     @ApiOperation("下载上传的文件")
     @GetMapping(value = "/{finalId}/file", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<Resource> getFinalWorkFile(
@@ -100,7 +119,7 @@ public class FinalWorkController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment;filename=\"%s.war\"", fileName))
                 .header(HttpHeaders.CACHE_CONTROL, "no-cache,no-store,must-revalidate")
                 .body(resource);
-    }
+    }*/
 
     /**
      * 设置大作业文档分数
@@ -122,4 +141,41 @@ public class FinalWorkController {
             return PackedResponse.failure(null, "Score already set", HttpStatus.CONFLICT);
         }
     }
+
+    @ApiOperation("上传文档")
+    @PostMapping(value = "/{courseId}/{teamId}/document", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public UploadInfo uploadDocument(@RequestParam("file") MultipartFile file, @PathVariable Integer teamId, @PathVariable Integer courseId) {
+        UploadInfo uploadInfo = null;
+        FilePathUtil.FilePathBuilder pathBuilder = FilePathUtil.FilePathBuilder.builder();
+        ;
+        pathBuilder.enter(courseId.toString())
+                .enter("final")
+                .enter(teamId.toString());
+        try {
+            uploadInfo = uploadService.uploadDocument(file, pathBuilder.build(),courseId,teamId);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return uploadInfo;
+    }
+
+    @ApiOperation("上传大作业")
+    @PostMapping(value = "/{courseId}/{teamId}/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public UploadInfo uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Integer teamId, @PathVariable Integer courseId) {
+        UploadInfo uploadInfo = null;
+        FilePathUtil.FilePathBuilder pathBuilder = FilePathUtil.FilePathBuilder.builder();
+        ;
+        pathBuilder.enter(courseId.toString())
+                .enter("final")
+                .enter(teamId.toString());
+        try {
+            uploadInfo = uploadService.uploadFile(file, pathBuilder.build(),courseId,teamId);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return uploadInfo;
+    }
+
+
+
 }
