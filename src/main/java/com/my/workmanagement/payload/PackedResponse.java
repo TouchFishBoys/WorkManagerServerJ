@@ -1,12 +1,15 @@
 package com.my.workmanagement.payload;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 
 public final class PackedResponse<T> {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private final T data;
     private final String message;
     private final ResponseResult result;

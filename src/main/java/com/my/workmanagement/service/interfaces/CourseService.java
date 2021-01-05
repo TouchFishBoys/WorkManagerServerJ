@@ -2,6 +2,7 @@ package com.my.workmanagement.service.interfaces;
 
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.model.bo.CourseInfoBO;
+import com.my.workmanagement.model.bo.FinalWorkBO;
 import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.model.bo.TopicInfoBO;
 import org.springframework.stereotype.Service;
@@ -21,4 +22,6 @@ public interface CourseService {
     List<TopicInfoBO> getTopicInfoByCourseId(Integer courseId) throws IdNotFoundException;
 
     List<StudentInfoBO> getStudentInfo(Integer courseId) throws IdNotFoundException;
+
+    List<FinalWorkBO> getFinalWorkList(Integer courseId) throws IdNotFoundException;
 }

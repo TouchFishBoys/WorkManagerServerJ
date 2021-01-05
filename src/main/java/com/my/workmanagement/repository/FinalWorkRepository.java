@@ -15,4 +15,6 @@ public interface FinalWorkRepository extends CrudRepository<FinalWorkDO, Integer
     @Modifying
     @Query("UPDATE FinalWorkDO fw SET fw.documentScore = :score WHERE fw.fworkId = :finalWorkId AND fw.documentScore IS NULL")
     int setDocumentScoreByFinalWorkId(Integer finalWorkId, Integer score);
+
+    FinalWorkDO getByFworkId(Integer finalWorkId);
 }

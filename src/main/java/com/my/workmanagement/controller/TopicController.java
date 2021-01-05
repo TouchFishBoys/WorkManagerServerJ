@@ -4,6 +4,7 @@ import javax.websocket.server.PathParam;
 
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
+import com.my.workmanagement.model.WMUserDetails;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import com.my.workmanagement.service.interfaces.FileStorageService;
@@ -11,6 +12,9 @@ import com.my.workmanagement.service.interfaces.NormalWorkService;
 
 import java.util.List;
 
+import com.my.workmanagement.util.AuthUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.hibernate.validator.constraints.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +24,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,14 +42,26 @@ public class TopicController {
         this.fileStorageService = fileStorageService;
     }
 
-    @PostMapping(value = "/{stuId}/{topicId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    /**
+     * 提交作业
+     * @param file 提交的文件
+     * @param topicId 题目Id
+     * @return /
+     */
+    @ApiOperation("上传作业")
+    @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_STUDENT)")
+    @PostMapping(value = "/{topicId}",
+            produces = MediaType.TEXT_PLAIN_VALUE,
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+            )
     public ResponseEntity<String> uploadNormalWork(
             MultipartFile file,
-            @PathVariable Integer stuId,
             @PathVariable Integer topicId
-    ) {
-        logger.info("/normal uploadNormalWork");
-        normalWorkService.store(stuId, topicId, file);
+    ) throws Exception {
+        WMUserDetails userDetails = AuthUtil.getUserDetail();
+        Integer studentId = userDetails.getUserId();
+
+        normalWorkService.store(studentId, topicId, file);
         return ResponseEntity.ok("ok");
     }
 
@@ -56,6 +73,7 @@ public class TopicController {
      * @return 一份平时作业
      * @throws StorageFileNotFoundException 文件未找到（可能还未上传）
      */
+    @ApiOperation("下载作业")
     @GetMapping(value = "/{stuId}/{topicId}", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity<Resource> getNormalWork(
             @PathVariable Integer stuId,
@@ -77,6 +95,7 @@ public class TopicController {
      * @return null
      * @throws IdNotFoundException 记录不存在
      */
+    @ApiOperation("作业评分")
     @PostMapping("/{stuId}/{topicId}/score")
     public ResponseEntity<PackedResponse<Void>> setNormalWorkScore(
             @RequestBody @Range(max = 100, min = 0, message = "Score must >= 0 and <=100") Integer score,
@@ -96,6 +115,7 @@ public class TopicController {
      * @param stuId 学生Id
      * @return 学生提交的平时作业列表
      */
+    @ApiOperation("获取学生提交的作业")
     @GetMapping(value = "/{stuId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<String>> getNormalWorkList(
             @PathVariable Integer stuId
@@ -110,6 +130,7 @@ public class TopicController {
      * @param topicId 题目Id
      * @return 题目信息
      */
+    @ApiOperation("获取题目信息")
     @GetMapping(value = "/{topicId}")
     public ResponseEntity<PackedResponse<TopicInfoResponse>> getTopicInfo(
             @PathVariable("topicId") Integer topicId

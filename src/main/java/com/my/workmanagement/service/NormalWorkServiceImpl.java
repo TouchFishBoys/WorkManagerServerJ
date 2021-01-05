@@ -1,5 +1,6 @@
 package com.my.workmanagement.service;
 
+import com.my.workmanagement.config.StorageConfiguration;
 import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.entity.NormalWorkDO;
 import com.my.workmanagement.entity.TopicDO;
@@ -17,6 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +33,9 @@ public class NormalWorkServiceImpl implements NormalWorkService {
     private final CourseRepository courseRepository;
     private final NormalWorkRepository normalWorkRepository;
     private final CourseSelectionRepository courseSelectionRepository;
+
+    @javax.annotation.Resource
+    private StorageConfiguration storageConfiguration;
 
     @Autowired
     public NormalWorkServiceImpl(
@@ -44,8 +52,14 @@ public class NormalWorkServiceImpl implements NormalWorkService {
     }
 
     @Override
-    public boolean store(Integer stuId, Integer topicId, MultipartFile file) {
-        return false;
+    public boolean store(Integer stuId, Integer topicId, MultipartFile file) throws Exception {
+        Integer courseId = topicRepository.findByTopicId(topicId).getCourse().getCourseId();
+        String location =
+                storageConfiguration.getRootDirectory() + "/" + courseId + "/normal/" + topicId + "/" + stuId + "/" + file.getOriginalFilename();
+        File outputFile = new File(location);
+        outputFile.mkdirs();
+        file.transferTo(outputFile);
+        return true;
     }
 
     @Override

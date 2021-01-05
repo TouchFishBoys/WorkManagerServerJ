@@ -7,6 +7,7 @@ import com.my.workmanagement.payload.request.SingleValueRequest;
 import com.my.workmanagement.payload.request.finalwork.SetDocumentScoreRequest;
 import com.my.workmanagement.service.interfaces.FinalWorkService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,7 @@ public class FinalWorkController {
      * @return httpok or conflict(成绩已经设置)
      * @throws IdNotFoundException 大作业Id不存在
      */
+    @ApiOperation("大作业评分")
     @PostMapping(value = "/{finalId}/score",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -68,6 +70,7 @@ public class FinalWorkController {
      * @return 大作业文档
      * @throws StorageFileNotFoundException 文档不存在
      */
+    @ApiOperation("下载文档")
     @GetMapping(value = "/{finalId}/document", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity<Resource> getFinalWorkDocument(
             @PathVariable Integer finalId,
@@ -85,19 +88,16 @@ public class FinalWorkController {
                 .body(resource);
     }
 
+    @ApiOperation("下载上传的文件")
     @GetMapping(value = "/{finalId}/file", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<Resource> getFinalWorkFile(
             @PathVariable Integer finalId,
             @PathParam("filename") String fileName
     ) throws StorageFileNotFoundException {
         Resource resource;
-        try {
-            resource = finalWorkService.loadFworkFileByFworkId(finalId);
-        } catch (FileNotFoundException e) {
-            throw new StorageFileNotFoundException();
-        }
+        resource = finalWorkService.loadFworkFileByFworkId(finalId);
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment;filename=\"%s.docx\"", fileName))
+                .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment;filename=\"%s.war\"", fileName))
                 .header(HttpHeaders.CACHE_CONTROL, "no-cache,no-store,must-revalidate")
                 .body(resource);
     }
@@ -110,6 +110,7 @@ public class FinalWorkController {
      * @return null
      * @throws IdNotFoundException 大作业不存在
      */
+    @ApiOperation("文档评分")
     @PostMapping(value = "/{finalId}/document/score", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PackedResponse<Void>> setFworkDocumentScore(
             @PathVariable Integer finalId,

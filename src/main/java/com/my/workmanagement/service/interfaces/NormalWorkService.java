@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 public interface NormalWorkService {
-    boolean store(Integer stuId, Integer topicId, MultipartFile file);
+    boolean store(Integer stuId, Integer topicId, MultipartFile file) throws Exception;
 
     Resource loadResource(Integer stuId, Integer topicId) throws StorageFileNotFoundException;
 

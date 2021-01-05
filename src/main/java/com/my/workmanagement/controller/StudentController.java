@@ -10,6 +10,8 @@ import com.my.workmanagement.payload.response.student.StudentInfoResponse;
 import com.my.workmanagement.service.interfaces.CourseService;
 import com.my.workmanagement.service.interfaces.StudentService;
 import com.my.workmanagement.util.AuthUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -40,6 +42,7 @@ public class StudentController {
      * @param stuId 学生 Id
      * @return 学生信息
      */
+    @ApiOperation("获取学生信息")
     @GetMapping(value = "/{stuId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StudentInfoResponse> getStudentInfo(
             @PathVariable Integer stuId
@@ -59,6 +62,7 @@ public class StudentController {
      *
      * @return 学生参加的课程列表
      */
+    @ApiOperation("获取已选课程")
     @GetMapping("/course")
     public ResponseEntity<CourseListResponse> getCourseList(
     ) throws IdNotFoundException {
@@ -76,6 +80,7 @@ public class StudentController {
      * @param excelFile 文件
      * @return 无
      */
+    @ApiOperation("导入学生")
     @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_TEACHER)")
     public ResponseEntity<?> importStudents(
@@ -91,6 +96,7 @@ public class StudentController {
         return ResponseEntity.ok(result);
     }
 
+    @ApiOperation("导出学生")
     @GetMapping(value = "/export/{courseId}", produces = {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"})
     public ResponseEntity<Resource> exportStudents(@PathVariable String courseId) {
         Resource excelFile = studentService.getStudentExcel(courseId);

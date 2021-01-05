@@ -8,6 +8,8 @@ import com.my.workmanagement.payload.response.JwtResponse;
 import com.my.workmanagement.payload.response.WhoAmIResponse;
 import com.my.workmanagement.service.interfaces.AuthService;
 import com.my.workmanagement.util.AuthUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin
+@Api("用户验证接口")
 public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final AuthService authService;
@@ -30,6 +33,7 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @ApiOperation("登录")
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PackedResponse<JwtResponse>> handleLogin(
             @RequestBody @Valid LoginRequest request
@@ -49,6 +53,7 @@ public class AuthController {
         return PackedResponse.success(response, "");
     }
 
+    @ApiOperation("获取用户角色")
     @GetMapping("/who-am-i")
     public ResponseEntity<PackedResponse<WhoAmIResponse>> hello() {
         WMUserDetails user = AuthUtil.getUserDetail();

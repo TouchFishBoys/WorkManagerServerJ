@@ -19,6 +19,8 @@ import com.my.workmanagement.service.interfaces.NormalWorkService;
 import com.my.workmanagement.service.interfaces.StudentService;
 import com.my.workmanagement.service.interfaces.TeacherService;
 import com.my.workmanagement.util.AuthUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +58,7 @@ public class CourseController {
         this.teacherService = teacherService;
     }
 
+    @ApiOperation("获取课程列表")
     @GetMapping
     public ResponseEntity<PackedResponse<CourseListResponse>> getJoinedCourse() throws UndefinedUserRoleException, IdNotFoundException {
         CourseListResponse response = new CourseListResponse();
@@ -81,6 +84,7 @@ public class CourseController {
      * @param courseId 课程 Id
      * @return 课程信息
      */
+    @ApiOperation("获取课程信息")
     @GetMapping("/{courseId}")
     public ResponseEntity<PackedResponse<CourseInfoResponse>> getCourseInfo(
             @PathVariable Integer courseId
@@ -110,6 +114,7 @@ public class CourseController {
                         .withTeacherName(courseInfoBO.getCourseTeacherName())
                         .withTotalCount(courseInfoBO.getTotalCount())
                         .withFinishCount(courseInfoBO.getFinishCount())
+                        .withStudentCount(courseInfoBO.getStudentCount())
                         .build();
             } else {
                 logger.info("No User");
@@ -125,6 +130,7 @@ public class CourseController {
      * @param courseId 课程编号
      * @return 学生信息列表
      */
+    @ApiOperation("获取学生列表（详情）")
     @GetMapping("/{courseId}/student")
     public ResponseEntity<PackedResponse<List<StudentInfoResponse>>> getStudentInfoList(
             @PathVariable Integer courseId
@@ -144,30 +150,13 @@ public class CourseController {
     }
 
     /**
-     * 导入学生
-     *
-     * @param excelFile excel文件
-     * @param courseId  课程 Id
-     * @return ？
-     */
-    @PostMapping(value = "/{courseId}/student",
-            consumes = {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel"})
-    @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_TEACHER)")
-    public ResponseEntity<?> importStudents(
-            @RequestParam(value = "file", required = true) MultipartFile excelFile,
-            @PathVariable Integer courseId
-    ) throws UnsupportedFileTypeException, IOException, IdNotFoundException {
-        boolean result = studentService.importStudents(courseId, excelFile);
-        return ResponseEntity.ok(result);
-    }
-
-    /**
      * 发布题目
      *
      * @param request  发布的题目信息
      * @param courseId 课程 ID
      * @return 发布的题目的 topicId
      */
+    @ApiOperation("发布题目")
     @PostMapping("/{courseId}/topic")
     public ResponseEntity<PackedResponse<Integer>> releaseTopic(
             @RequestBody ReleaseTopicRequest request,
@@ -197,6 +186,7 @@ public class CourseController {
      * @return 题目信息列表
      * @throws IdNotFoundException 没有找到对应的记录
      */
+    @ApiOperation("获取题目列表")
     @GetMapping("/{courseId}/topic")
     public ResponseEntity<PackedResponse<TopicInfoListResponse>> getTopicInfoList(
             @PathVariable Integer courseId
@@ -207,6 +197,7 @@ public class CourseController {
         return PackedResponse.success(response, "");
     }
 
+    @ApiOperation("获取大作业列表")
     @GetMapping("/{courseId}/final-work")
     public ResponseEntity<PackedResponse<List<FinalWorkBO>>> getFinalWorkList(
             @PathVariable Integer courseId

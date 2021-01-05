@@ -7,6 +7,7 @@ import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.response.GetTeamInfoResponse;
 import com.my.workmanagement.service.interfaces.StudentService;
 import com.my.workmanagement.service.interfaces.TeamService;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,7 @@ public class TeamController {
      * @param teamId 队伍Id
      * @return 队伍信息
      */
+    @ApiOperation("获取队伍信息")
     @GetMapping("/{teamId}")
     public ResponseEntity<PackedResponse<GetTeamInfoResponse>> getTeamInfo(
             @PathVariable Integer teamId
@@ -65,6 +67,7 @@ public class TeamController {
      * @param teamId 队伍
      * @return /
      */
+    @ApiOperation("获取队伍成员（详细）")
     @GetMapping("/{teamId}/student")
     public ResponseEntity<PackedResponse<List<StudentInfoBO>>> getTeamMemberList(
             @PathVariable Integer teamId

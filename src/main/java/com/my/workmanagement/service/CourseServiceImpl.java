@@ -3,6 +3,7 @@ package com.my.workmanagement.service;
 import com.my.workmanagement.entity.*;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.model.bo.CourseInfoBO;
+import com.my.workmanagement.model.bo.FinalWorkBO;
 import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.repository.*;
@@ -151,5 +152,22 @@ public class CourseServiceImpl implements CourseService {
                     .build());
         }
         return studentInfoBOS;
+    }
+
+    @Override
+    public List<FinalWorkBO> getFinalWorkList(Integer courseId) throws IdNotFoundException {
+        if (!courseRepository.existsById(courseId)) {
+            throw new IdNotFoundException("course id");
+        }
+        // 取出 （单课学生数）
+        List<CourseSelectionDO> courseSelectionList = courseSelectionRepository.findAllByCourse_CourseId(courseId);
+        // 去除重复的队伍并取出他们的 FinalWork
+        List<FinalWorkDO> teams = courseSelectionList.stream().map(CourseSelectionDO::getTeam).collect(
+                Collectors.collectingAndThen(
+                        Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(TeamDO::getTeamId))), ArrayList::new
+                )
+        ).stream().map(TeamDO::getFinalWork).collect(Collectors.toList());
+        // TODO: 2021/1/6
+        return null;
     }
 }

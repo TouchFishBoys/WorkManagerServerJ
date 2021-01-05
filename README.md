@@ -54,10 +54,10 @@
   - :courseId
     - normal
       - :topicId
-        - :studentId
+        - :studentId.zip
     - final
       - :teamId
-        - document
-          - studentId.docx
-        - file
-        - qa-table.docx
+        - document.docx
+        - file.war //大作业文件
+        - qa-table
+          - :studentNum.docx    //答辩记录

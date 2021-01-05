@@ -98,13 +98,17 @@ public class StudentServiceImpl implements StudentService {
         logger.info("Found {} course selected by {}", courseSelections.size(), studentId);
         for (CourseSelectionDO courseSelection : courseSelections) {
             CourseDO course = courseSelection.getCourse();
+            Integer studentCount = courseSelectionRepository.countAllByCourse(course);
             // TODO: 2021/1/4 加上缺少的值
             list.add(CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBO()
                     .withCourseName(course.getCourseName())
                     .withCourseId(course.getCourseId())
                     .withCourseTeacherName(course.getTeacher().getTeacherName())
+                    .withCourseYear(course.getCourseYear())
                     .withFinishCount(normalWorkRepository.countAllByStudent(tmpStudent))
                     .withTotalCount(topicRepository.countAllByCourse_CourseId(course.getCourseId()))
+                    .withCourseDescription(course.getCourseDescription())
+                    .withStudentCount(studentCount)
                     .build()
             );
         }

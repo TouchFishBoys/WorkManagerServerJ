@@ -23,17 +23,8 @@ public class SwaggerConfig implements WebMvcConfigurer {
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.OAS_30)
-                .globalRequestParameters(authorizationParameter());
-    }
-
-    private List<RequestParameter> authorizationParameter() {
-        RequestParameterBuilder tokenBuilder = new RequestParameterBuilder();
-        tokenBuilder
-                .name(HttpHeaders.AUTHORIZATION)
-                .description("token")
-                .required(true)
-                .in("header")
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.my.workmanagement"))
                 .build();
-        return Collections.singletonList(tokenBuilder.build());
     }
 }

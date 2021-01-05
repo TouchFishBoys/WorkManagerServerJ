@@ -4,9 +4,9 @@ workmanager:
     jwt-expiration-ms: 86400000
   storage:
     root-directory:
-      /storage
+      "D:\\storage"
     qa-table-template-location:
-      /storage/qatemplate.docx
+      "D:\\storage\\qatemplate.docx"
 spring:
   jpa:
     hibernate:
@@ -21,7 +21,7 @@ spring:
       maximum-pool-size: 20
       minimum-idle: 10
       connection-timeout: 30000
-      idle-timeout: 600000
+      idle-timeout: 60000
       max-lifetime: 180000
 server:
   port: 8090

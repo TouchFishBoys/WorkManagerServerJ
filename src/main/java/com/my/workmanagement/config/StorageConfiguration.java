@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "workmanager.storage")
 public class StorageConfiguration {
     private String rootDirectory;
+    private String qaTableTemplateLocation;
 
     public String getRootDirectory() {
         return rootDirectory;
@@ -14,5 +15,13 @@ public class StorageConfiguration {
 
     public void setRootDirectory(String rootDirectory) {
         this.rootDirectory = rootDirectory;
+    }
+
+    public String getQaTableTemplateLocation() {
+        return qaTableTemplateLocation;
+    }
+
+    public void setQaTableTemplateLocation(String qaTableTemplateLocation) {
+        this.qaTableTemplateLocation = qaTableTemplateLocation;
     }
 }

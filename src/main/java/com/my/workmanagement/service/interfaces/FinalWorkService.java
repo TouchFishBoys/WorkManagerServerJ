@@ -1,6 +1,7 @@
 package com.my.workmanagement.service.interfaces;
 
 import com.my.workmanagement.exception.IdNotFoundException;
+import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.exception.WordTemplateNotFoundException;
 import com.my.workmanagement.model.bo.FinalWorkBO;
 import com.my.workmanagement.model.bo.QaTableBO;
@@ -27,9 +28,9 @@ public interface FinalWorkService {
 
     boolean setDocumentScore(Integer finalWork, Integer score) throws IdNotFoundException;
 
-    Resource loadDocumentByFworkId(Integer finalWorkId) throws FileNotFoundException;
+    Resource loadDocumentByFworkId(Integer finalWorkId) throws FileNotFoundException, StorageFileNotFoundException;
 
-    Resource loadFworkFileByFworkId(Integer finalWorkId) throws FileNotFoundException;
+    Resource loadFworkFileByFworkId(Integer finalWorkId) throws StorageFileNotFoundException;
 
     boolean generateQaTable(List<QaTableBO.QaTableItemBO> items, Integer courseId, Integer studentId, String location, Integer score) throws WordTemplateNotFoundException, IOException, IdNotFoundException;
 }

@@ -2,6 +2,7 @@ package com.my.workmanagement.controller;
 
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.model.bo.TeacherInfoBO;
+import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.response.teacher.TeacherInfoResponse;
 import com.my.workmanagement.service.interfaces.TeacherService;
 import io.swagger.annotations.ApiOperation;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("teacher")
 public class TeacherController {
-    private TeacherService teacherService;
+    private final TeacherService teacherService;
 
     @Autowired
     TeacherController(TeacherService teacherService) {
@@ -31,7 +32,7 @@ public class TeacherController {
      */
     @GetMapping(value = "/{teacherId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation("获取教师信息")
-    public ResponseEntity<TeacherInfoResponse> getTeacherInfo(
+    public ResponseEntity<PackedResponse<TeacherInfoResponse>> getTeacherInfo(
             @PathVariable Integer teacherId
     ) throws IdNotFoundException {
         TeacherInfoBO teacherInfoBO = teacherService.getTeacherInfo(teacherId);
@@ -41,6 +42,6 @@ public class TeacherController {
                 .withTeacherNum(teacherInfoBO.getTeacherNum())
                 .withTeacherTell(teacherInfoBO.getTeacherTell())
                 .build();
-        return ResponseEntity.ok(response);
+        return PackedResponse.success(response, "success");
     }
 }

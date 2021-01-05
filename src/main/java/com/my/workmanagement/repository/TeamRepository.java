@@ -14,4 +14,6 @@ public interface TeamRepository extends CrudRepository<TeamDO, Integer> {
 
     @Query("SELECT count(team) FROM TeamDO AS team LEFT OUTER JOIN team.finalWork where team.finalWork.timeUpload IS NOT NULL AND team IN :teams")
     Integer getFinishedTeams(List<TeamDO> teams);
+
+    TeamDO getByFinalWork_FworkId(Integer fworkId);
 }
