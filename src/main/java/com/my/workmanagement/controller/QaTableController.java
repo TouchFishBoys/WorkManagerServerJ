@@ -8,6 +8,7 @@ import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.SubmitQaTableRequest;
 import com.my.workmanagement.service.interfaces.FileStorageService;
 import com.my.workmanagement.service.interfaces.FinalWorkService;
+import com.my.workmanagement.service.interfaces.StudentService;
 import com.my.workmanagement.service.interfaces.TeamService;
 import com.my.workmanagement.util.FilePathUtil;
 import io.swagger.annotations.ApiOperation;
@@ -30,16 +31,19 @@ public class QaTableController {
     private final FileStorageService fileStorageService;
     private final TeamService teamService;
     private final FinalWorkService finalWorkService;
+    private final StudentService studentService;
 
     @Autowired
     public QaTableController(
             FileStorageService fileStorageService,
             TeamService teamService,
-            FinalWorkService finalWorkService
+            FinalWorkService finalWorkService,
+            StudentService studentService
     ) {
         this.fileStorageService = fileStorageService;
         this.teamService = teamService;
         this.finalWorkService = finalWorkService;
+        this.studentService=studentService;
     }
 
     /**
@@ -78,12 +82,14 @@ public class QaTableController {
         FilePathUtil.FilePathBuilder pathBuilder = FilePathUtil.FilePathBuilder.builder();
         Integer teamId = teamService.getTeamId(studentId, courseId);
 
+        String studentNum=studentService.getStudentInfo(studentId).getStudentNum();
         pathBuilder.enter(courseId.toString())
                 .enter("final")
                 .enter(teamId.toString())
-                .enter("qa-table.docx");
-
-        Resource resource = fileStorageService.loadAsResource(pathBuilder.build()); // 读取文件
+                .enter("qa-table")
+                .enter(studentNum+".docx");
+        String paths=pathBuilder.build();
+        Resource resource = fileStorageService.loadAsResource(paths); // 读取文件
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment;filename=\"%s.docx\"", fileName))
                 .header(HttpHeaders.CACHE_CONTROL, "no-cache,no-store,must-revalidate")

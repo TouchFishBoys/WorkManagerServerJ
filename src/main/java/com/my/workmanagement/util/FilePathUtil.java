@@ -31,7 +31,7 @@ public class FilePathUtil {
 
         public String build() {
             StringBuilder path = new StringBuilder();
-            while (pathQueue.isEmpty()) {
+            while (!pathQueue.isEmpty()) {
                 path.append("/").append(pathQueue.poll());
             }
             return path.toString();
