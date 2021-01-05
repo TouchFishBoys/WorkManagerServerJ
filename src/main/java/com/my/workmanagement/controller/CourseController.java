@@ -37,6 +37,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/course")
+@CrossOrigin
 public class CourseController {
     private static final Logger logger = LoggerFactory.getLogger(CourseController.class);
 
