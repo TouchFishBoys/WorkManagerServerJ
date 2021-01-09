@@ -5,6 +5,7 @@ import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.entity.NormalWorkDO;
 import com.my.workmanagement.entity.TopicDO;
 import com.my.workmanagement.exception.IdNotFoundException;
+import com.my.workmanagement.model.bo.NormalWorkBO;
 import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import com.my.workmanagement.repository.CourseRepository;
@@ -72,10 +73,6 @@ public class NormalWorkServiceImpl implements NormalWorkService {
         return null;
     }
 
-    @Override
-    public List<String> getTopicSubmittedList(Integer topicId) {
-        return null;
-    }
 
     @Override
     public TopicInfoResponse getTopicInfo(Integer topicId) throws IdNotFoundException {
@@ -144,4 +141,54 @@ public class NormalWorkServiceImpl implements NormalWorkService {
                 .withFinishTime(topic.getTopicTimeEnd())
                 .build();
     }
+
+    @Override
+    public List<NormalWorkBO> getFinishedNormalWork_Topic(Integer topicId) throws IdNotFoundException {
+        List<NormalWorkBO> list = getNormalWork_Topic(topicId);
+        list.removeIf(normalWorkBO -> normalWorkBO.getTimeUpload()==null);
+        return list;
+
+    }
+
+    @Override
+    public List<NormalWorkBO> getFinishedNormalWork_Student(Integer studentId) throws IdNotFoundException {
+        List<NormalWorkBO> list = getNormalWork_Student(studentId);
+        list.removeIf(normalWorkBO -> normalWorkBO.getTimeUpload() == null);
+        return list;
+
+    }
+
+    @Override
+    public List<NormalWorkBO> getNormalWork_Topic(Integer topicId) throws IdNotFoundException {
+        List<NormalWorkDO> normalWorkDOS = normalWorkRepository.findAllByTopic_TopicId(topicId);
+        if(normalWorkDOS==null) {
+            throw new IdNotFoundException("topicId="+topicId.toString());
+        }
+        return getNormalWorkBOS(normalWorkDOS);
+    }
+
+    @Override
+    public List<NormalWorkBO> getNormalWork_Student(Integer studentId) throws IdNotFoundException {
+        List<NormalWorkDO> normalWorkDOS = normalWorkRepository.findAllByStudent_StudentId(studentId);
+        if(normalWorkDOS==null) {
+            throw new IdNotFoundException("studentId="+studentId.toString());
+        }
+        return getNormalWorkBOS(normalWorkDOS);
+    }
+
+    private List<NormalWorkBO> getNormalWorkBOS(List<NormalWorkDO> normalWorkDOS) {
+        List<NormalWorkBO> list = new ArrayList<>();
+        for (NormalWorkDO normalWorkDO : normalWorkDOS) {
+            list.add(NormalWorkBO.NormalWorkBOBuilder.aNormalWorkBO()
+                    .withNworkName(normalWorkDO.getNworkName())
+                    .withNworkScore(normalWorkDO.getNworkScore())
+                    .withNworkId(normalWorkDO.getNworkId())
+                    .withTimeUpload(normalWorkDO.getTimeUpload())
+                    .withTopic(normalWorkDO.getTopic())
+                    .withStudent(normalWorkDO.getStudent())
+                    .build());
+        }
+        return list;
+    }
+
 }

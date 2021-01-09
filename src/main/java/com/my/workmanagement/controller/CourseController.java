@@ -30,6 +30,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -209,5 +210,31 @@ public class CourseController {
         return PackedResponse.success(response, "");
     }
 
+
+    /**
+     * 获取 TopicInfoList
+     *
+     * @param courseId 课程 Id
+     * @param finished
+     * @return 题目信息列表
+     * @throws IdNotFoundException 没有找到对应的记录
+     */
+    @ApiOperation("获取题目列表")
+    @GetMapping("/{courseId}/final-work")
+    public ResponseEntity<PackedResponse<List<FinalWorkBO>>> getFinalWorkList(
+            @PathVariable Integer courseId,
+            @PathParam("finished") boolean finished
+    ) throws IdNotFoundException {
+
+        List<FinalWorkBO> list = new ArrayList<>();
+        if(finished){
+            list=courseService.getFinishedFinalWorkList(courseId);
+        }else{
+            list=courseService.getFinalWorkList(courseId);
+        }
+        return PackedResponse.success(list,"ok");
+
+
+    }
 }
 

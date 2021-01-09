@@ -6,11 +6,13 @@ import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.model.UploadInfo;
 import com.my.workmanagement.model.WMUserDetails;
+import com.my.workmanagement.model.bo.NormalWorkBO;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import com.my.workmanagement.service.interfaces.FileStorageService;
 import com.my.workmanagement.service.interfaces.NormalWorkService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.my.workmanagement.service.interfaces.UploadService;
@@ -141,4 +143,53 @@ public class TopicController {
         TopicInfoResponse response = normalWorkService.getTopicInfo(topicId);
         return PackedResponse.success(response, "");
     }
+
+
+    /**
+     * 获取作业列表
+     *
+     * @param stuId 学生Id
+     * @return 作业列表
+     */
+    @ApiOperation("获取题目信息")
+    @GetMapping(value = "/{stuId}")
+    public ResponseEntity<PackedResponse<List<NormalWorkBO>>> getNormalWorkList_Student(
+            @PathVariable("stuId") Integer stuId,
+            @PathParam("finished") boolean finished
+    ) throws IdNotFoundException {
+
+        List<NormalWorkBO> list = new ArrayList<>();
+
+        if(finished=false){
+            list=normalWorkService.getNormalWork_Student(stuId);
+        }else{
+            list=normalWorkService.getFinishedNormalWork_Student(stuId);
+        }
+        return  PackedResponse.success(list,"ok");
+    }
+
+    /**
+     * 获取作业列表
+     *
+     * @param topicId 题目Id
+     * @return 作业列表
+     */
+    @ApiOperation("获取题目信息")
+    @GetMapping(value = "/{topicId}")
+    public ResponseEntity<PackedResponse<List<NormalWorkBO>>> getNormalWorkList(
+            @PathVariable("topicId") Integer topicId,
+            @PathParam("finished") boolean finished
+    ) throws IdNotFoundException {
+
+        List<NormalWorkBO> list = new ArrayList<>();
+
+        if(finished=false){
+            list=normalWorkService.getNormalWork_Topic(topicId);
+        }else{
+            list=normalWorkService.getFinishedNormalWork_Topic(topicId);
+        }
+        return  PackedResponse.success(list,"ok");
+    }
+
+
 }

@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
+
 public interface NormalWorkRepository extends CrudRepository<NormalWorkDO, Integer> {
 
     Integer countAllByStudent(StudentDO studentDO);
@@ -17,6 +19,10 @@ public interface NormalWorkRepository extends CrudRepository<NormalWorkDO, Integ
     boolean existsByTopic_TopicIdAndStudent_StudentId(Integer topicId, Integer studentId);
 
     NormalWorkDO getFirstByTopic_TopicIdAndStudent_StudentId(Integer topicId, Integer studentId);
+
+    List<NormalWorkDO> findAllByTopic_TopicId(Integer TopicId);
+
+    List<NormalWorkDO> findAllByStudent_StudentId(Integer studentId);
 
     @Modifying
     @Query("UPDATE NormalWorkDO nwork SET nwork.nworkScore = :score WHERE nwork.nworkId = :id")

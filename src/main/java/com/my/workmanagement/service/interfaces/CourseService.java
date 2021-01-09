@@ -24,4 +24,6 @@ public interface CourseService {
     List<StudentInfoBO> getStudentInfo(Integer courseId) throws IdNotFoundException;
 
     List<FinalWorkBO> getFinalWorkList(Integer courseId) throws IdNotFoundException;
+
+    List<FinalWorkBO> getFinishedFinalWorkList(Integer courseId) throws IdNotFoundException;
 }

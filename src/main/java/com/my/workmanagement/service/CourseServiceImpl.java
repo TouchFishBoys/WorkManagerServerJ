@@ -111,7 +111,7 @@ public class CourseServiceImpl implements CourseService {
                 .withStudentCount(1)
                 .withCourseTeacherName(courseDO.getTeacher().getTeacherName())
                 .withTotalCount(topicRepository.countAllByCourse_CourseId(courseId))
-                .withFinishCount(normalWorkRepository.countAllByTopic_Course_CourseIdAndStudent_StudentId(courseId,studentId))
+                .withFinishCount(normalWorkRepository.countAllByTopic_Course_CourseIdAndStudent_StudentId(courseId, studentId))
                 .build();
     }
 
@@ -166,8 +166,8 @@ public class CourseServiceImpl implements CourseService {
         List<CourseSelectionDO> courseSelectionList = courseSelectionRepository.findAllByCourse_CourseId(courseId);
         // 去除重复的队伍并取出他们的 FinalWork
         List<TeamDO> teams = courseSelectionList.stream().map(CourseSelectionDO::getTeam).collect(Collectors.toList());
-        for(int i=0;i<teams.size();i++) {
-            if(teams.get(i)==null){
+        for (int i = 0; i < teams.size(); i++) {
+            if (teams.get(i) == null) {
                 teams.remove(i);
             }
         }
@@ -196,5 +196,16 @@ public class CourseServiceImpl implements CourseService {
                     .build());
         }
         return finalWorkBOS;
+    }
+
+    @Override
+    public List<FinalWorkBO> getFinishedFinalWorkList(Integer courseId) throws IdNotFoundException {
+        List<FinalWorkBO> list = getFinalWorkList(courseId);
+        for(int i=0;i<list.size();i++){
+            if(list.get(i).getSubmitTime()==null){
+                list.remove(i);
+            }
+        }
+        return list;
     }
 }
