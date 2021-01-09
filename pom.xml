@@ -15,6 +15,7 @@
     <description>大作业管理系统</description>
 
     <properties>
+        <skipTests>true</skipTests>
         <java.version>11</java.version>
     </properties>
 
@@ -59,7 +60,6 @@
             <artifactId>springfox-swagger-ui</artifactId>
             <version>3.0.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.dropwizard.metrics/metrics-core -->
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
@@ -109,6 +109,7 @@
     </dependencies>
 
     <build>
+        <finalName>work-management</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
