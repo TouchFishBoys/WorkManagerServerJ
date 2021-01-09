@@ -37,11 +37,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/topic")
 public class TopicController {
-    Logger logger = LoggerFactory.getLogger(TopicController.class);
-
     private final NormalWorkService normalWorkService;
     private final FileStorageService fileStorageService;
     private final UploadService uploadService;
+    Logger logger = LoggerFactory.getLogger(TopicController.class);
 
     @Autowired
     public TopicController(NormalWorkService normalWorkService, FileStorageService fileStorageService, UploadService uploadService) {
@@ -144,52 +143,26 @@ public class TopicController {
         return PackedResponse.success(response, "");
     }
 
-
-    /**
-     * 获取作业列表
-     *
-     * @param stuId 学生Id
-     * @return 作业列表
-     */
-    @ApiOperation("获取题目信息")
-    @GetMapping(value = "/{stuId}")
-    public ResponseEntity<PackedResponse<List<NormalWorkBO>>> getNormalWorkList_Student(
-            @PathVariable("stuId") Integer stuId,
-            @PathParam("finished") boolean finished
-    ) throws IdNotFoundException {
-
-        List<NormalWorkBO> list = new ArrayList<>();
-
-        if(finished=false){
-            list=normalWorkService.getNormalWork_Student(stuId);
-        }else{
-            list=normalWorkService.getFinishedNormalWork_Student(stuId);
-        }
-        return  PackedResponse.success(list,"ok");
-    }
-
     /**
      * 获取作业列表
      *
      * @param topicId 题目Id
      * @return 作业列表
      */
-    @ApiOperation("获取题目信息")
-    @GetMapping(value = "/{topicId}")
+    @ApiOperation("获取题目下作业列表")
+    @GetMapping(value = "/{topicId}/normal-work")
     public ResponseEntity<PackedResponse<List<NormalWorkBO>>> getNormalWorkList(
             @PathVariable("topicId") Integer topicId,
             @PathParam("finished") boolean finished
     ) throws IdNotFoundException {
 
-        List<NormalWorkBO> list = new ArrayList<>();
+        List<NormalWorkBO> list;
 
-        if(finished=false){
-            list=normalWorkService.getNormalWork_Topic(topicId);
-        }else{
-            list=normalWorkService.getFinishedNormalWork_Topic(topicId);
+        if (!finished) {
+            list = normalWorkService.getNormalWork_Topic(topicId);
+        } else {
+            list = normalWorkService.getFinishedNormalWork_Topic(topicId);
         }
-        return  PackedResponse.success(list,"ok");
+        return PackedResponse.success(list, "ok");
     }
-
-
 }

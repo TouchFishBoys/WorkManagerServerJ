@@ -24,6 +24,8 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -62,14 +64,18 @@ public class CourseController {
 
     @ApiOperation("获取课程列表")
     @GetMapping
-    public ResponseEntity<PackedResponse<CourseListResponse>> getJoinedCourse() throws UndefinedUserRoleException, IdNotFoundException {
+    public ResponseEntity<PackedResponse<CourseListResponse>> getJoinedCourse(
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size
+    ) throws UndefinedUserRoleException, IdNotFoundException {
         CourseListResponse response = new CourseListResponse();
         WMUserDetails userDetails = AuthUtil.getUserDetail();
         logger.info("Userid:{}", userDetails.getUserId());
+        Pageable pageable = PageRequest.of(page - 1, size);
 
         switch (userDetails.getRole()) {
             case ROLE_TEACHER:
-                response.setCourses(teacherService.getHostedCourseInfoList(userDetails.getUserId()));
+                response = teacherService.getHostedCourseInfoList(userDetails.getUserId(), pageable);
                 break;
             case ROLE_STUDENT:
                 response.setCourses(studentService.getSelectedCourseInfo(userDetails.getUserId()));
@@ -136,7 +142,9 @@ public class CourseController {
     @ApiOperation("获取学生列表（详情）")
     @GetMapping("/{courseId}/student")
     public ResponseEntity<PackedResponse<List<StudentInfoResponse>>> getStudentInfoList(
-            @PathVariable Integer courseId
+            @PathVariable Integer courseId,
+            @PathParam("page") Integer page,
+            @PathParam("size") Integer size
     ) throws IdNotFoundException {
         logger.info("Get student info list");
         List<StudentInfoResponse> response = new LinkedList<>();
@@ -200,17 +208,6 @@ public class CourseController {
         return PackedResponse.success(response, "");
     }
 
-    @ApiOperation("获取大作业列表")
-    @GetMapping("/{courseId}/final-work")
-    public ResponseEntity<PackedResponse<List<FinalWorkBO>>> getFinalWorkList(
-            @PathVariable Integer courseId
-    ) throws IdNotFoundException {
-        List<FinalWorkBO> response = courseService.getFinalWorkList(courseId);
-
-        return PackedResponse.success(response, "");
-    }
-
-
     /**
      * 获取 TopicInfoList
      *
@@ -227,14 +224,12 @@ public class CourseController {
     ) throws IdNotFoundException {
 
         List<FinalWorkBO> list = new ArrayList<>();
-        if(finished){
-            list=courseService.getFinishedFinalWorkList(courseId);
-        }else{
-            list=courseService.getFinalWorkList(courseId);
+        if (finished) {
+            list = courseService.getFinishedFinalWorkList(courseId);
+        } else {
+            list = courseService.getFinalWorkList(courseId);
         }
-        return PackedResponse.success(list,"ok");
-
-
+        return PackedResponse.success(list, "ok");
     }
 }
 

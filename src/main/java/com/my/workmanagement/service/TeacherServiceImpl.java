@@ -5,10 +5,13 @@ import com.my.workmanagement.entity.TeacherDO;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.model.bo.CourseInfoBO;
 import com.my.workmanagement.model.bo.TeacherInfoBO;
+import com.my.workmanagement.payload.response.student.CourseListResponse;
 import com.my.workmanagement.repository.CourseRepository;
 import com.my.workmanagement.repository.TeacherRepository;
 import com.my.workmanagement.service.interfaces.CourseService;
 import com.my.workmanagement.service.interfaces.TeacherService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -44,17 +47,20 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<CourseInfoBO> getHostedCourseInfoList(Integer teacherId) throws IdNotFoundException {
+    public CourseListResponse getHostedCourseInfoList(Integer teacherId, Pageable page) throws IdNotFoundException {
+        CourseListResponse response = new CourseListResponse();
         TeacherDO teacher = teacherRepository.findByTeacherId(teacherId);
         List<CourseInfoBO> result = new LinkedList<>();
         if (teacher == null) {
             throw new IdNotFoundException("teacher id");
         }
-        List<CourseDO> courseDOS = courseRepository.findAllByTeacherOrderByCourseId(teacher);
-        for (CourseDO courseDO : courseDOS) {
+        Page<CourseDO> coursePage = courseRepository.findAllByTeacherOrderByCourseId(teacher, page);
+        for (CourseDO courseDO : coursePage) {
             result.add(courseService.getCourseInfo_Teacher(courseDO.getCourseId()));
         }
-        return result;
+        response.setPageCount(coursePage.getTotalPages());
+        response.setCourses(result);
+        return response;
     }
 
 }

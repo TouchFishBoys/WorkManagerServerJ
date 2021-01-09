@@ -4,10 +4,13 @@ import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.UnsupportedFileTypeException;
 import com.my.workmanagement.model.WMUserDetails;
 import com.my.workmanagement.model.bo.CourseInfoBO;
+import com.my.workmanagement.model.bo.NormalWorkBO;
 import com.my.workmanagement.model.bo.StudentInfoBO;
+import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.response.student.CourseListResponse;
 import com.my.workmanagement.payload.response.student.StudentInfoResponse;
 import com.my.workmanagement.service.interfaces.CourseService;
+import com.my.workmanagement.service.interfaces.NormalWorkService;
 import com.my.workmanagement.service.interfaces.StudentService;
 import com.my.workmanagement.util.AuthUtil;
 import io.swagger.annotations.Api;
@@ -20,6 +23,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.util.List;
 
@@ -28,12 +32,16 @@ import java.util.List;
 public class StudentController {
     private final StudentService studentService;
     private final CourseService courseService;
+    private final NormalWorkService normalWorkService;
 
     @Autowired
     public StudentController(StudentService studentService,
-                             CourseService courseService) {
+                             CourseService courseService,
+                             NormalWorkService normalWorkService
+    ) {
         this.studentService = studentService;
         this.courseService = courseService;
+        this.normalWorkService = normalWorkService;
     }
 
     /**
@@ -84,7 +92,7 @@ public class StudentController {
     @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_TEACHER)")
     public ResponseEntity<?> importStudents(
-            @RequestParam(value = "excel", required = true) MultipartFile excelFile,
+            @RequestParam(value = "excel") MultipartFile excelFile,
             @RequestParam(value = "course_name") String courseName,
             @RequestParam(value = "course_description") String courseDescription
     ) throws UnsupportedFileTypeException, IOException, IdNotFoundException {
@@ -101,5 +109,28 @@ public class StudentController {
     public ResponseEntity<Resource> exportStudents(@PathVariable String courseId) {
         Resource excelFile = studentService.getStudentExcel(courseId);
         return ResponseEntity.ok(excelFile);
+    }
+
+    /**
+     * 获取作业列表
+     *
+     * @param stuId 学生Id
+     * @return 作业列表
+     */
+    @ApiOperation("获取题目信息")
+    @GetMapping(value = "/{stuId}")
+    public ResponseEntity<PackedResponse<List<NormalWorkBO>>> getNormalWorkList_Student(
+            @PathVariable("stuId") Integer stuId,
+            @PathParam("finished") boolean finished
+    ) throws IdNotFoundException {
+
+        List<NormalWorkBO> list;
+
+        if (!finished) {
+            list = normalWorkService.getNormalWork_Student(stuId);
+        } else {
+            list = normalWorkService.getFinishedNormalWork_Student(stuId);
+        }
+        return PackedResponse.success(list, "ok");
     }
 }
