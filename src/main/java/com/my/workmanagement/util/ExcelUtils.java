@@ -3,6 +3,7 @@ package com.my.workmanagement.util;
 import com.my.workmanagement.entity.StudentDO;
 import com.my.workmanagement.exception.UnsupportedFileTypeException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -56,7 +57,11 @@ public class ExcelUtils {
                 } else { // 不是表头
                     StudentDO rowData = new StudentDO();
                     for (int j = 0; j < row.getLastCellNum(); j++) {
-                        rowData.setStudentNum(row.getCell(0).getStringCellValue());
+                        if (row.getCell(0).getCellType() == CellType.STRING) {
+                            rowData.setStudentNum(row.getCell(0).getStringCellValue());
+                        } else if (row.getCell(0).getCellType() == CellType.NUMERIC) {
+                            rowData.setStudentNum(String.valueOf(row.getCell(0).getNumericCellValue()));
+                        }
                         rowData.setStudentName(row.getCell(1).getStringCellValue());
                         rowData.setStudentClass(row.getCell(2).getStringCellValue());
                     }

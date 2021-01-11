@@ -201,8 +201,8 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<FinalWorkBO> getFinishedFinalWorkList(Integer courseId) throws IdNotFoundException {
         List<FinalWorkBO> list = getFinalWorkList(courseId);
-        for(int i=0;i<list.size();i++){
-            if(list.get(i).getSubmitTime()==null){
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getSubmitTime() == null) {
                 list.remove(i);
             }
         }

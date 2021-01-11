@@ -15,13 +15,9 @@ import java.io.File;
 
 @Service
 public class UploadServiceImpl implements UploadService {
-
     private final FileStorageService fileStorageService;
     private final TopicRepository topicRepository;
     private final StudentRepository studentRepository;
-
-    @javax.annotation.Resource
-    private StorageConfiguration storageConfiguration;
 
     UploadServiceImpl(
             TopicRepository topicRepository,

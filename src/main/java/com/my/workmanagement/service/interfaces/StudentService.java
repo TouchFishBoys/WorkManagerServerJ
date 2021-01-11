@@ -15,7 +15,7 @@ import java.util.List;
 public interface StudentService {
     Resource getStudentExcel(String courseId);
 
-    boolean importStudents(Integer courseId, MultipartFile file) throws UnsupportedFileTypeException, IOException, IdNotFoundException;
+    boolean importStudents(Integer courseId, MultipartFile file, String defaultPassword) throws UnsupportedFileTypeException, IOException, IdNotFoundException;
 
     StudentInfoBO getStudentInfo(Integer studentId) throws IdNotFoundException;
 

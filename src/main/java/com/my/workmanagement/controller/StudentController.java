@@ -93,13 +93,14 @@ public class StudentController {
     @PreAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_TEACHER)")
     public ResponseEntity<?> importStudents(
             @RequestParam(value = "excel") MultipartFile excelFile,
+            @RequestParam(value = "default_password") String defaultPassword,
             @RequestParam(value = "course_name") String courseName,
             @RequestParam(value = "course_description") String courseDescription
     ) throws UnsupportedFileTypeException, IOException, IdNotFoundException {
         WMUserDetails userDetails = AuthUtil.getUserDetail();
         Integer teacherId = userDetails.getUserId();
         Integer courseId = courseService.createCourse(teacherId, courseName, courseDescription);
-        boolean result = studentService.importStudents(courseId, excelFile);
+        boolean result = studentService.importStudents(courseId, excelFile, defaultPassword);
 
         return ResponseEntity.ok(result);
     }

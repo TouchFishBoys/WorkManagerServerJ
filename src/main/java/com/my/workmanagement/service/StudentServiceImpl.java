@@ -13,6 +13,7 @@ import com.my.workmanagement.util.ExcelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +32,7 @@ public class StudentServiceImpl implements StudentService {
     private final TopicRepository topicRepository;
     private final TeamRepository teamRepository;
     private final CourseRepository courseRepository;
+    private final PasswordEncoder passwordEncoder;
 
     StudentServiceImpl(
             StudentRepository studentRepository,
@@ -38,7 +40,8 @@ public class StudentServiceImpl implements StudentService {
             NormalWorkRepository normalWorkRepository,
             TopicRepository topicRepository,
             TeamRepository teamRepository,
-            CourseRepository courseRepository
+            CourseRepository courseRepository,
+            PasswordEncoder passwordEncoder
     ) {
         this.studentRepository = studentRepository;
         this.courseSelectionRepository = courseSelectionRepository;
@@ -46,6 +49,7 @@ public class StudentServiceImpl implements StudentService {
         this.topicRepository = topicRepository;
         this.teamRepository = teamRepository;
         this.courseRepository = courseRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -55,7 +59,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public boolean importStudents(Integer courseId, MultipartFile file)
+    public boolean importStudents(Integer courseId, MultipartFile file, String defaultPassword)
             throws UnsupportedFileTypeException, IOException, IdNotFoundException {
         List<StudentDO> students = ExcelUtils.readFromExcel(file);
         CourseDO course = courseRepository.findByCourseId(courseId);
@@ -63,7 +67,10 @@ public class StudentServiceImpl implements StudentService {
         if (course == null) {
             throw new IdNotFoundException("course id");
         }
+        String generatedPassword = passwordEncoder.encode(defaultPassword);
+        logger.debug("Generated password:{}", generatedPassword);
         students.forEach(item -> {
+            item.setStudentPassword(generatedPassword);
             CourseSelectionDO courseSelection = new CourseSelectionDO();
             courseSelection.setStudent(item);
             courseSelection.setCourse(course);
