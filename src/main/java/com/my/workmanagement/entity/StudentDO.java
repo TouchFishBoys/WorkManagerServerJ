@@ -1,6 +1,7 @@
 package com.my.workmanagement.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -20,6 +21,7 @@ public class StudentDO {
     @Column(nullable = false, unique = true)
     private String studentNum;
     @Column(nullable = false)
+    @JsonIgnore
     private String studentPassword;
 
     @Column(nullable = false)

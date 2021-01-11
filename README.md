@@ -55,7 +55,7 @@
   - :courseId
     - normal
       - :topicId
-        - :studentId.zip
+        - :studentNum.zip
     - final
       - :teamId
         - document.docx

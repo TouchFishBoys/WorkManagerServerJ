@@ -90,7 +90,7 @@ public class StudentServiceImpl implements StudentService {
     public StudentInfoBO getStudentInfo(Integer studentId) throws IdNotFoundException {
         StudentDO studentDO = studentRepository.findByStudentId(studentId);
         if (studentDO == null) {
-            throw new IdNotFoundException("studentId");
+            throw new IdNotFoundException("student id");
         }
         StudentInfoBO studentInfoBO = new StudentInfoBO();
         studentInfoBO.setStudentNum(studentDO.getStudentNum());

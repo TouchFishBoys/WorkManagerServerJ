@@ -2,23 +2,26 @@ package com.my.workmanagement.controller;
 
 import javax.websocket.server.PathParam;
 
+import com.aliyun.oss.common.utils.StringUtils;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
+import com.my.workmanagement.exception.StorageIOException;
 import com.my.workmanagement.model.UploadInfo;
-import com.my.workmanagement.model.WMUserDetails;
 import com.my.workmanagement.model.bo.NormalWorkBO;
+import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
 import com.my.workmanagement.service.interfaces.FileStorageService;
 import com.my.workmanagement.service.interfaces.NormalWorkService;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import com.my.workmanagement.service.interfaces.StudentService;
 import com.my.workmanagement.service.interfaces.UploadService;
 import com.my.workmanagement.util.AuthUtil;
-import com.my.workmanagement.util.FilePathUtil;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.hibernate.validator.constraints.Range;
 import org.slf4j.Logger;
@@ -26,11 +29,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,13 +40,20 @@ public class TopicController {
     private final NormalWorkService normalWorkService;
     private final FileStorageService fileStorageService;
     private final UploadService uploadService;
+    private final StudentService studentService;
     Logger logger = LoggerFactory.getLogger(TopicController.class);
 
     @Autowired
-    public TopicController(NormalWorkService normalWorkService, FileStorageService fileStorageService, UploadService uploadService) {
+    public TopicController(NormalWorkService normalWorkService,
+                           FileStorageService fileStorageService,
+                           UploadService uploadService,
+                           StudentService studentService
+
+    ) {
         this.normalWorkService = normalWorkService;
         this.fileStorageService = fileStorageService;
         this.uploadService = uploadService;
+        this.studentService = studentService;
     }
 
     /**
@@ -56,17 +63,18 @@ public class TopicController {
      * @param topicId 题目Id
      * @return /
      */
-    @ApiOperation("上传作业")
+    @ApiOperation("提交作业")
     @PostMapping(value = "/{topicId}/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public UploadInfo uploadNFile(@RequestParam("file") MultipartFile file, @PathVariable Integer topicId) {
-        UploadInfo uploadInfo = null;
+    public ResponseEntity<PackedResponse<Void>> uploadNFile(
+            @RequestParam("file") MultipartFile file,
+            @PathVariable Integer topicId
+    ) throws IdNotFoundException, StorageIOException {
         Integer stuId = AuthUtil.getUserDetail().getUserId();
-        try {
-            uploadInfo = uploadService.uploadNFile(file, "", topicId, stuId);
-        } catch (Exception e) {
-            System.out.println(e.toString());
+        if (normalWorkService.submit(topicId, stuId, file)) {
+            return PackedResponse.success(null, "成功");
+        } else {
+            return PackedResponse.success(null, "文件已被覆盖");
         }
-        return uploadInfo;
     }
 
     /**
@@ -83,10 +91,17 @@ public class TopicController {
             @PathVariable Integer stuId,
             @PathVariable Integer topicId,
             @PathParam("filename") String fileName
-    ) throws StorageFileNotFoundException {
-        Resource file = normalWorkService.loadResource(stuId, topicId);
+    ) throws StorageFileNotFoundException, IdNotFoundException {
+        logger.debug("下载{}的平时作业{}", stuId, topicId);
+        Resource file = normalWorkService.getNormalWorkFile(stuId, topicId);
+        if (StringUtils.isNullOrEmpty(fileName)) {
+            StudentInfoBO studentInfo = studentService.getStudentInfo(stuId);
+            fileName = studentInfo.getStudentNum() + "-" + studentInfo.getStudentName() + "-" + studentInfo.getStudentClass() + ".zip";
+            logger.debug(fileName);
+        }
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFilename())
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" +
+                        URLEncoder.encode(fileName, StandardCharsets.UTF_8))
                 .body(file);
     }
 
@@ -155,7 +170,6 @@ public class TopicController {
             @PathVariable("topicId") Integer topicId,
             @PathParam("finished") boolean finished
     ) throws IdNotFoundException {
-
         List<NormalWorkBO> list;
 
         if (!finished) {
