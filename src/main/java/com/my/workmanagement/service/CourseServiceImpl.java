@@ -145,11 +145,22 @@ public class CourseServiceImpl implements CourseService {
         List<StudentInfoBO> studentInfoBOS = new LinkedList<>();
         for (CourseSelectionDO courseSelection : courseSelectionDOS) {
             StudentDO student = courseSelection.getStudent();
-            studentInfoBOS.add(StudentInfoBO.StudentInfoBOBuilder.aStudentInfoBO()
-                    .withStudentClass(student.getStudentClass())
-                    .withStudentName(student.getStudentName())
-                    .withStudentNum(student.getStudentNum())
-                    .build());
+            if (courseSelection.getTeam() != null) {
+                studentInfoBOS.add(StudentInfoBO.StudentInfoBOBuilder.aStudentInfoBO()
+                        .withStudentClass(student.getStudentClass())
+                        .withStudentName(student.getStudentName())
+                        .withStudentNum(student.getStudentNum())
+                        .withTeamName(courseSelection.getTeam().getTeamName())
+                        .build());
+            }else{
+                studentInfoBOS.add(StudentInfoBO.StudentInfoBOBuilder.aStudentInfoBO()
+                        .withStudentClass(student.getStudentClass())
+                        .withStudentName(student.getStudentName())
+                        .withStudentNum(student.getStudentNum())
+                        .withTeamName("无")
+                        .build());
+            }
+
         }
         return studentInfoBOS;
     }

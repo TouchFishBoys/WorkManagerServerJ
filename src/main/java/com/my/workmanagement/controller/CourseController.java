@@ -149,6 +149,7 @@ public class CourseController {
                     .withStudentClass(student.getStudentClass())
                     .withStudentNum(student.getStudentNum())
                     .withStudentName(student.getStudentName())
+                    .withTeamName(student.getTeamName())
                     .build());
         }
 
