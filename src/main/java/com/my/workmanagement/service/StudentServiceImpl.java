@@ -3,6 +3,7 @@ package com.my.workmanagement.service;
 import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.entity.CourseSelectionDO;
 import com.my.workmanagement.entity.StudentDO;
+import com.my.workmanagement.entity.upk.CourseSelectionUPK;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.UnsupportedFileTypeException;
 import com.my.workmanagement.model.bo.CourseInfoBO;
@@ -58,7 +59,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public boolean importStudents(Integer courseId, MultipartFile file, String defaultPassword)
             throws UnsupportedFileTypeException, IOException, IdNotFoundException {
         List<StudentDO> students = ExcelUtils.readFromExcel(file);
@@ -69,14 +70,13 @@ public class StudentServiceImpl implements StudentService {
         }
         String generatedPassword = passwordEncoder.encode(defaultPassword);
         logger.debug("Generated password:{}", generatedPassword);
-        students.forEach(item -> {
-            item.setStudentPassword(generatedPassword);
-            CourseSelectionDO courseSelection = new CourseSelectionDO();
-            courseSelection.setStudent(item);
-            courseSelection.setCourse(course);
+        for (StudentDO student : students) {
+            student.setStudentPassword(generatedPassword);
+
+        }
+        studentRepository.saveAll(students).forEach(student -> {
+            courseSelectionRepository.insert(course.getCourseId(), student.getStudentId());
         });
-        studentRepository.saveAll(students);
-        courseSelectionRepository.saveAll(courseSelectionList);
         return true;
     }
 

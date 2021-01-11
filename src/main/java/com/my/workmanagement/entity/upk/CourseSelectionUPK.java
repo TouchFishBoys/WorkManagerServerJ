@@ -22,6 +22,22 @@ public class CourseSelectionUPK implements Serializable {
     public CourseSelectionUPK() {
     }
 
+    public StudentDO getStudent() {
+        return student;
+    }
+
+    public void setStudent(StudentDO student) {
+        this.student = student;
+    }
+
+    public CourseDO getCourse() {
+        return course;
+    }
+
+    public void setCourse(CourseDO course) {
+        this.course = course;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
