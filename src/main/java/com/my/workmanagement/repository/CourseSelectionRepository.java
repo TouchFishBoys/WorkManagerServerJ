@@ -36,5 +36,7 @@ public interface CourseSelectionRepository extends CrudRepository<CourseSelectio
 
     List<CourseSelectionDO> findAllByTeam_TeamId(Integer TeamId);
 
+    List<CourseSelectionDO> findAllByCourse_CourseIdOrderByTeam(Integer courseId);
+
     Page<CourseSelectionDO> findAllByStudent_StudentIdOrderByCourse(Integer studentId, Pageable pageable);
 }
