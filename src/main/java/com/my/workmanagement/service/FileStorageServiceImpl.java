@@ -1,48 +1,82 @@
 package com.my.workmanagement.service;
 
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.model.OSSObject;
+import com.aliyun.oss.model.ObjectMetadata;
+import com.my.workmanagement.config.OSSConfig;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.service.interfaces.FileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
     private static final Logger logger = LoggerFactory.getLogger(FileStorageServiceImpl.class);
-    @Value("${workmanager.storage.root-directory:/storage}")
-    private String storageRoot;
+    private final OSSConfig ossConfig;
+    private final OSS ossClient;
 
-    @Override
-    public boolean store(MultipartFile file) {
-
-        return false;
+    @Autowired
+    FileStorageServiceImpl(OSS ossClient, OSSConfig ossConfig) {
+        this.ossClient = ossClient;
+        this.ossConfig = ossConfig;
     }
 
     @Override
-    public boolean load() {
-        return false;
+    public boolean store(MultipartFile file, String path, String fileName) {
+        try {
+            return store(file.getInputStream(), path, fileName, file.getContentType());
+        } catch (IOException e) {
+            logger.error("Error occurred: {}", e.getMessage(), e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean store(byte[] content, String path, String fileName, String contentType) {
+        try (InputStream inputStream = new ByteArrayInputStream(content)) {
+            store(inputStream, path, fileName, contentType);
+        } catch (IOException ex) {
+            logger.error("Error occurred: {}", ex.getLocalizedMessage());
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean store(InputStream inputStream, String path, String fileName, String contentType) {
+        try {
+            logger.info("上传到OSS: fileName=\"{}\" contentLength={}", fileName, inputStream.available());
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentLength(inputStream.available());
+            objectMetadata.setCacheControl("no-cache");
+            objectMetadata.setHeader("Pragma", "no-cache");
+            objectMetadata.setContentType(contentType);
+            objectMetadata.setContentDisposition("inline;filename=" + fileName);
+            String location = path + "/" + fileName;
+            // 上传文件
+            ossClient.putObject(ossConfig.getBucketName(), location, inputStream, objectMetadata);
+        } catch (IOException e) {
+            logger.error("Error occurred: {}", e.getMessage(), e);
+            return false;
+        }
+        return true;
     }
 
     @Override
     public Resource loadAsResource(String path) throws StorageFileNotFoundException {
-        File file = new File(storageRoot + path);
-        if (!file.exists() || !file.isFile()) {
+        if (ossClient.doesObjectExist(ossConfig.getBucketName(), path)) {
             throw new StorageFileNotFoundException();
         }
-        try {
-            return new InputStreamResource(new FileInputStream(file));
-        } catch (FileNotFoundException ex) {
-            logger.error("File: '{}' not found", file.getAbsoluteFile());
-            throw new StorageFileNotFoundException();
-        }
+        OSSObject ossObject = ossClient.getObject(ossConfig.getBucketName(), path);
+
+        return new InputStreamResource(ossObject.getObjectContent());
     }
 }

@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -32,11 +33,7 @@ import java.util.List;
 public class FinalWorkServiceImpl implements FinalWorkService {
     private static final Logger logger = LoggerFactory.getLogger(FinalWorkServiceImpl.class);
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-    @javax.annotation.Resource
-    private StorageConfiguration storageConfiguration;
-
-    private File templateFile;
-
+    private static final String WORD_CONTENT_TYPE_VALUE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     private final TeamService teamService;
     private final FinalWorkRepository finalWorkRepository;
     private final TeamRepository teamRepository;
@@ -44,6 +41,9 @@ public class FinalWorkServiceImpl implements FinalWorkService {
     private final CourseRepository courseRepository;
     private final FileStorageService fileStorageService;
     private final CourseSelectionRepository courseSelectionRepository;
+    @javax.annotation.Resource
+    private StorageConfiguration storageConfiguration;
+    private File templateFile;
 
     FinalWorkServiceImpl(
             FinalWorkRepository finalWorkRepository,
@@ -121,15 +121,7 @@ public class FinalWorkServiceImpl implements FinalWorkService {
         logger.debug("Course: {}, Team: {}, Fwork: {}", course.getCourseId(), team.getTeamId(), finalWorkId);
         String fileLocation = storageConfiguration.getRootDirectory() + "/" + course.getCourseId() + "/final/" + team.getTeamId() + "/" + filename;
         logger.debug("Location: {}", fileLocation);
-        File file = new File(fileLocation);
-        if (!file.exists()) {
-            throw new StorageFileNotFoundException();
-        }
-        try {
-            return new InputStreamResource(new FileInputStream(file));
-        } catch (FileNotFoundException exception) {
-            throw new StorageFileNotFoundException();
-        }
+        return fileStorageService.loadAsResource(fileLocation);
     }
 
     @Override
@@ -158,13 +150,14 @@ public class FinalWorkServiceImpl implements FinalWorkService {
                     }
                 }
         );
-        String outputPath = storageConfiguration.getRootDirectory() + "/" + courseId + "/final/" + courseSelection.getTeam().getTeamId() + "/qa-table/" +
-                student.getStudentNum() + ".docx";
-        File outputFile = new File(outputPath);
-        outputFile.getParentFile().mkdirs();
-        outputFile.createNewFile();
-        FileOutputStream outputStream = new FileOutputStream(outputFile);
+        if (courseSelection.getTeam() == null) {
+            throw new IdNotFoundException("team id");
+        }
+        String outputPath = courseId + "/final/" + courseSelection.getTeam().getTeamId() + "/qa-table";
+        String fileName = student.getStudentNum() + ".docx";
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         template.write(outputStream);
+        fileStorageService.store(outputStream.toByteArray(), outputPath, fileName, WORD_CONTENT_TYPE_VALUE);
         outputStream.close();
         return true;
     }

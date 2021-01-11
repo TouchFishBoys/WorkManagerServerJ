@@ -24,10 +24,9 @@ import java.io.IOException;
  */
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
-    private static final Logger logger = LoggerFactory.getLogger(JwtTokenFilter.class);
     public static final String HEADER_AUTH = "Authorization";
     public static final String TOKEN_HEAD = "Bearer ";
-
+    private static final Logger logger = LoggerFactory.getLogger(JwtTokenFilter.class);
     private final UserDetailsService studentDetailsService;
     private final UserDetailsService teacherDetailsService;
 
@@ -43,19 +42,20 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader(HEADER_AUTH);
-        logger.debug("Receive token: {}", token);
 
         if (null != token && token.startsWith(TOKEN_HEAD)) {
+            logger.info("开始验证");
+            logger.debug("Received token: {}", token);
             token = token.substring(TOKEN_HEAD.length());
             // 从 Token 中获取用户名（工号或学号）
             String username = JwtUtils.getUsername(token);
             logger.debug("Username: {}", username);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                logger.debug("Start authentication");
+
                 UserDetails userDetails = null;
                 if (JwtUtils.validateToken(token)) {
-                    logger.debug(JwtUtils.getRole(token).name());
+                    logger.debug("传递的用户身份: {}", JwtUtils.getRole(token).name());
                     switch (JwtUtils.getRole(token)) {
                         case ROLE_STUDENT:
                             // 学生
@@ -73,8 +73,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     );
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                } else {
+                    logger.info("无效的Token");
                 }
             }
+            logger.info("结束验证");
         }
         filterChain.doFilter(request, response);
     }

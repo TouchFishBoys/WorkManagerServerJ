@@ -39,3 +39,8 @@ management:
     web:
       exposure:
         include: "*"
+aliyun:
+  endpoint: "oss-cn-shanghai.aliyuncs.com"
+  accessKeyId: "${OSS_KEY}"
+  accessKeySecret: "${OSS_SECRET}"
+  bucketName: "work-management"

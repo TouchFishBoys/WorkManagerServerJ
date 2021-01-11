@@ -19,5 +19,25 @@
       "name": "workmanager.storage.qa-table-template-location",
       "type": "java.lang.String",
       "description": "答辩记录模板."
+    },
+    {
+      "name": "aliyun.endpoint",
+      "type": "java.lang.String",
+      "description": "Description for aliyun.endpoint."
+    },
+    {
+      "name": "aliyun.accessKeyId",
+      "type": "java.lang.String",
+      "description": "Description for aliyun.accessKeyId."
+    },
+    {
+      "name": "aliyun.accessKeySecret",
+      "type": "java.lang.String",
+      "description": "Description for aliyun.accessKeySecret."
+    },
+    {
+      "name": "aliyun.bucketName",
+      "type": "java.lang.String",
+      "description": "Description for aliyun.bucketName."
     }
   ] }

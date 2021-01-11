@@ -168,7 +168,7 @@ public class FinalWorkController {
     public UploadInfo uploadDocument(@RequestParam("file") MultipartFile file, @PathVariable Integer teamId, @PathVariable Integer courseId) {
         UploadInfo uploadInfo = null;
         FilePathUtil.FilePathBuilder pathBuilder = FilePathUtil.FilePathBuilder.builder();
-        ;
+
         pathBuilder.enter(courseId.toString())
                 .enter("final")
                 .enter(teamId.toString());
@@ -185,7 +185,7 @@ public class FinalWorkController {
     public UploadInfo uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Integer teamId, @PathVariable Integer courseId) {
         UploadInfo uploadInfo = null;
         FilePathUtil.FilePathBuilder pathBuilder = FilePathUtil.FilePathBuilder.builder();
-        ;
+
         pathBuilder.enter(courseId.toString())
                 .enter("final")
                 .enter(teamId.toString());
