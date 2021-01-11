@@ -5,6 +5,7 @@ import com.my.workmanagement.entity.CourseSelectionDO;
 import com.my.workmanagement.entity.StudentDO;
 import com.my.workmanagement.entity.TeamDO;
 import com.my.workmanagement.entity.upk.CourseSelectionUPK;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -39,4 +40,8 @@ public interface CourseSelectionRepository extends CrudRepository<CourseSelectio
     List<CourseSelectionDO> findAllByCourse_CourseIdOrderByTeam(Integer courseId);
 
     Page<CourseSelectionDO> findAllByStudent_StudentIdOrderByCourse(Integer studentId, Pageable pageable);
+
+    @Modifying
+    @Query(value = "INSERT INTO course_selection(course_id, stu_id, gmt_create, gmt_modified) VALUES (?1, ?2, NOW(), NOW())", nativeQuery = true)
+    int insert(Integer courseId, Integer studentId);
 }
