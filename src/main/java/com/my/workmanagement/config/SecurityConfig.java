@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -30,11 +31,6 @@ import javax.annotation.Resource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final UserDetailsService teacherDetailsService;
-    private final UserDetailsService studentDetailsService;
-    @Resource
-    private JwtTokenFilter jwtTokenFilter;
-
     private static final String[] AUTH_WHITELIST = {
             "/swagger-ui/**",
             "/swagger-resources/**",
@@ -43,6 +39,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/error",
             "/actuator/**"
     };
+    private final UserDetailsService teacherDetailsService;
+    private final UserDetailsService studentDetailsService;
+    @Resource
+    private JwtTokenFilter jwtTokenFilter;
 
     @Autowired
     SecurityConfig(
@@ -66,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder encoder() {
         // return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        return NoOpPasswordEncoder.getInstance();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Bean
@@ -74,7 +74,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CorsFilter filter = new CorsFilter();
         return filter;
     }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
