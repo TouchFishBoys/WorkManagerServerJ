@@ -145,65 +145,77 @@ public class CourseServiceImpl implements CourseService {
         List<StudentInfoBO> studentInfoBOS = new LinkedList<>();
         for (CourseSelectionDO courseSelection : courseSelectionDOS) {
             StudentDO student = courseSelection.getStudent();
-            studentInfoBOS.add(StudentInfoBO.StudentInfoBOBuilder.aStudentInfoBO()
-                    .withStudentClass(student.getStudentClass())
-                    .withStudentName(student.getStudentName())
-                    .withStudentNum(student.getStudentNum())
-                    .build());
+            if (courseSelection.getTeam() != null) {
+                studentInfoBOS.add(StudentInfoBO.StudentInfoBOBuilder.aStudentInfoBO()
+                        .withStudentClass(student.getStudentClass())
+                        .withStudentName(student.getStudentName())
+                        .withStudentNum(student.getStudentNum())
+                        .withTeamName(courseSelection.getTeam().getTeamName())
+                        .build());
+            } else {
+                studentInfoBOS.add(StudentInfoBO.StudentInfoBOBuilder.aStudentInfoBO()
+                        .withStudentClass(student.getStudentClass())
+                        .withStudentName(student.getStudentName())
+                        .withStudentNum(student.getStudentNum())
+                        .withTeamName("无")
+                        .build());
+            }
+
         }
         return studentInfoBOS;
     }
 
     @Override
-    public List<FinalWorkBO> getFinalWorkList(Integer courseId) throws IdNotFoundException {
-        if (!courseRepository.existsById(courseId)) {
-            throw new IdNotFoundException("course id");
-        }
-        List<String> studentNames;
-        List<CourseSelectionDO> students;
-        List<FinalWorkBO> finalWorkBOS = new LinkedList<>();
-        // 取出 （单课学生数）
-        List<CourseSelectionDO> courseSelectionList = courseSelectionRepository.findAllByCourse_CourseId(courseId);
-        // 去除重复的队伍并取出他们的 FinalWork
-        List<TeamDO> teams = courseSelectionList.stream().map(CourseSelectionDO::getTeam).collect(Collectors.toList());
-        for (int i = 0; i < teams.size(); i++) {
-            if (teams.get(i) == null) {
-                teams.remove(i);
-            }
-        }
-                /*collect(
-                Collectors.collectingAndThen(
-                        Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(TeamDO::getTeamId))), ArrayList::new
-                )
-        ).stream().map(TeamDO::getFinalWork).collect(Collectors.toList());*/
-        // TODO: 2021/1/6
-        for (TeamDO team : teams) {
-            students = courseSelectionRepository.findAllByTeam_TeamId(team.getTeamId());
-            studentNames = new LinkedList<>();
-            for (CourseSelectionDO student : students) {
-                studentNames.add(student.getStudent().getStudentName());
-            }
-
-            finalWorkBOS.add(FinalWorkBO.FinalWorkBOBuilder.aFinalWorkBO()
-                    .withFinalWorkId(team.getFinalWork().getFworkId())
-                    .withScore(team.getFinalWork().getFworkScore())
-                    .withDocumentScore(team.getFinalWork().getDocumentScore())
-                    .withFinalWorkName(team.getFinalWork().getFworkName())
-                    .withTeamName(team.getTeamName())
-                    .withDescription(team.getFinalWork().getFworkDescription())
-                    .withSubmitTime(team.getFinalWork().getTimeUpload())
-                    .withAuthors(studentNames)
-                    .build());
-        }
-        return finalWorkBOS;
+    public List<FinalWorkBO> getFinishedFinalWorkList(Integer courseId) throws IdNotFoundException {
+        List<FinalWorkBO> list = new LinkedList<>();
+        list=getFinalWorkList(courseId);
+        list.removeIf(finalWork -> finalWork.getSubmitTime() == null);
+        return list;
     }
 
     @Override
-    public List<FinalWorkBO> getFinishedFinalWorkList(Integer courseId) throws IdNotFoundException {
-        List<FinalWorkBO> list = getFinalWorkList(courseId);
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getSubmitTime() == null) {
-                list.remove(i);
+    public List<FinalWorkBO> getFinalWorkList(Integer courseId) throws IdNotFoundException {
+        List<CourseSelectionDO> courseSelections = courseSelectionRepository.findAllByCourse_CourseIdOrderByTeam(courseId);
+        for(int i=0;i<courseSelections.size()-1;i++){
+            if(courseSelections.get(i).getTeam()==courseSelections.get(i+1).getTeam()||courseSelections.get(i).getTeam()==null){
+                courseSelections.remove(i);
+                i--;
+            }
+        }
+        List<FinalWorkBO> list = new LinkedList<>();
+        List<Integer> teams = new ArrayList<>();
+        List<CourseSelectionDO> aTeam = new LinkedList<>();
+        List<String> students = new LinkedList<>();
+        for (CourseSelectionDO courseSelection : courseSelections) {
+            students = new LinkedList<>();
+            if (courseSelection.getTeam() != null) {
+                aTeam = courseSelectionRepository.findAllByTeam_TeamId(courseSelection.getTeam().getTeamId());
+                if (aTeam == null) {
+                    throw new IdNotFoundException("teamId:" + courseSelection.getTeam().getTeamId().toString());
+                }
+                for (CourseSelectionDO CS : aTeam) {
+                    students.add(CS.getStudent().getStudentName());
+                }
+
+                if (courseSelection.getTeam().getFinalWork() != null) {
+                    list.add(FinalWorkBO.FinalWorkBOBuilder.aFinalWorkBO()
+                            .withFinalWorkId(courseSelection.getTeam().getFinalWork().getFworkId())
+                            .withAuthors(students)
+                            .withSubmitTime(courseSelection.getTeam().getFinalWork().getTimeUpload())
+                            .withDescription(courseSelection.getTeam().getFinalWork().getFworkDescription())
+                            .withFinalWorkName(courseSelection.getTeam().getFinalWork().getFworkName())
+                            .withTeamName(courseSelection.getTeam().getTeamName())
+                            .build());
+                }else {
+                    list.add(FinalWorkBO.FinalWorkBOBuilder.aFinalWorkBO()
+                            .withFinalWorkId(-1)
+                            .withAuthors(null)
+                            .withSubmitTime(null)
+                            .withDescription("未提交")
+                            .withFinalWorkName("未提交")
+                            .withTeamName(courseSelection.getTeam().getTeamName())
+                            .build());
+                }
             }
         }
         return list;

@@ -16,6 +16,8 @@ public class StudentInfoResponse {
     //学生班级
     private String studentClass;
 
+    private String teamName;
+
 
     public String getStudentName() {
         return studentName;
@@ -41,6 +43,14 @@ public class StudentInfoResponse {
         this.studentClass = studentClass;
     }
 
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
 
     public static final class StudentInfoResponseBuilder {
         //学生姓名
@@ -49,6 +59,7 @@ public class StudentInfoResponse {
         private String studentNum;
         //学生班级
         private String studentClass;
+        private String teamName;
 
         private StudentInfoResponseBuilder() {
         }
@@ -72,11 +83,17 @@ public class StudentInfoResponse {
             return this;
         }
 
+        public StudentInfoResponseBuilder withTeamName(String teamName) {
+            this.teamName = teamName;
+            return this;
+        }
+
         public StudentInfoResponse build() {
             StudentInfoResponse studentInfoResponse = new StudentInfoResponse();
             studentInfoResponse.setStudentName(studentName);
             studentInfoResponse.setStudentNum(studentNum);
             studentInfoResponse.setStudentClass(studentClass);
+            studentInfoResponse.setTeamName(teamName);
             return studentInfoResponse;
         }
     }
@@ -87,6 +104,7 @@ public class StudentInfoResponse {
                 "studentName='" + studentName + '\'' +
                 ", studentNum='" + studentNum + '\'' +
                 ", studentClass='" + studentClass + '\'' +
+                ", teamName='" + teamName + '\'' +
                 '}';
     }
 }

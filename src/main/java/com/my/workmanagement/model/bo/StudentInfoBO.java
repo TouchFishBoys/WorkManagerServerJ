@@ -12,8 +12,7 @@ public class StudentInfoBO implements Serializable {
     //学生班级（行政班）
     private String studentClass;
 
-    public StudentInfoBO() {
-    }
+    private String TeamName;
 
     public Integer getStudentId() {
         return studentId;
@@ -47,13 +46,12 @@ public class StudentInfoBO implements Serializable {
         this.studentClass = studentClass;
     }
 
-    @Override
-    public String toString() {
-        return "StudentInfoBO{" +
-                ", studentName='" + studentName + '\'' +
-                ", studentNum='" + studentNum + '\'' +
-                ", studentClass='" + studentClass + '\'' +
-                '}';
+    public String getTeamName() {
+        return TeamName;
+    }
+
+    public void setTeamName(String teamName) {
+        TeamName = teamName;
     }
 
     public static final class StudentInfoBOBuilder {
@@ -65,6 +63,7 @@ public class StudentInfoBO implements Serializable {
         private String studentNum;
         //学生班级（行政班）
         private String studentClass;
+        private String TeamName;
 
         private StudentInfoBOBuilder() {
         }
@@ -93,13 +92,30 @@ public class StudentInfoBO implements Serializable {
             return this;
         }
 
+        public StudentInfoBOBuilder withTeamName(String TeamName) {
+            this.TeamName = TeamName;
+            return this;
+        }
+
         public StudentInfoBO build() {
             StudentInfoBO studentInfoBO = new StudentInfoBO();
             studentInfoBO.setStudentId(studentId);
             studentInfoBO.setStudentName(studentName);
             studentInfoBO.setStudentNum(studentNum);
             studentInfoBO.setStudentClass(studentClass);
+            studentInfoBO.setTeamName(TeamName);
             return studentInfoBO;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "StudentInfoBO{" +
+                "studentId=" + studentId +
+                ", studentName='" + studentName + '\'' +
+                ", studentNum='" + studentNum + '\'' +
+                ", studentClass='" + studentClass + '\'' +
+                ", TeamName='" + TeamName + '\'' +
+                '}';
     }
 }
