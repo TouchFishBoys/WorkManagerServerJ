@@ -3,6 +3,7 @@ package com.my.workmanagement.controller;
 import javax.websocket.server.PathParam;
 
 import com.aliyun.oss.common.utils.StringUtils;
+import com.my.workmanagement.exception.DataConflictException;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.exception.StorageIOException;
@@ -68,7 +69,7 @@ public class TopicController {
     public ResponseEntity<PackedResponse<Void>> uploadNFile(
             @RequestParam("file") MultipartFile file,
             @PathVariable Integer topicId
-    ) throws IdNotFoundException, StorageIOException {
+    ) throws IdNotFoundException, StorageIOException, DataConflictException {
         Integer stuId = AuthUtil.getUserDetail().getUserId();
         if (normalWorkService.submit(topicId, stuId, file)) {
             return PackedResponse.success(null, "成功");

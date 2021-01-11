@@ -7,7 +7,9 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "normal_work")
+@Table(name = "normal_work", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"student_student_id", "topic_topic_id"})
+})
 public class NormalWorkDO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,6 +5,7 @@ import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.entity.NormalWorkDO;
 import com.my.workmanagement.entity.StudentDO;
 import com.my.workmanagement.entity.TopicDO;
+import com.my.workmanagement.exception.DataConflictException;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.exception.StorageIOException;
@@ -220,7 +221,7 @@ public class NormalWorkServiceImpl implements NormalWorkService {
 
     @Transactional(noRollbackFor = {IdNotFoundException.class}, rollbackFor = {IOException.class})
     public boolean submit(Integer topicId, Integer studentId, MultipartFile file)
-            throws IdNotFoundException, StorageIOException {
+            throws IdNotFoundException, StorageIOException, DataConflictException {
         TopicDO topic = topicRepository.findByTopicId(topicId);
         if (topic == null) {
             throw new IdNotFoundException("topic id");
@@ -228,6 +229,9 @@ public class NormalWorkServiceImpl implements NormalWorkService {
         StudentDO student = studentRepository.findByStudentId(studentId);
         if (student == null) {
             throw new IdNotFoundException("student id");
+        }
+        if (normalWorkRepository.existsByTopic_TopicIdAndStudent_StudentId(topicId, studentId)) {
+            throw new DataConflictException("normal-work");
         }
 
         NormalWorkDO normalWork = new NormalWorkDO();

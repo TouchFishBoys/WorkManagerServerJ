@@ -1,6 +1,7 @@
 package com.my.workmanagement.service.interfaces;
 
 import com.my.workmanagement.entity.NormalWorkDO;
+import com.my.workmanagement.exception.DataConflictException;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.exception.StorageIOException;
@@ -41,5 +42,5 @@ public interface NormalWorkService {
 
     Resource getNormalWorkFile(Integer stuId, Integer topicId) throws IdNotFoundException, StorageFileNotFoundException;
 
-    boolean submit(Integer topicId, Integer studentId, MultipartFile file) throws IdNotFoundException, StorageIOException;
+    boolean submit(Integer topicId, Integer studentId, MultipartFile file) throws IdNotFoundException, StorageIOException, DataConflictException;
 }
