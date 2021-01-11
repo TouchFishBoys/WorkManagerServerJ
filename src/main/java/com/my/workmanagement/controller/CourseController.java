@@ -73,7 +73,7 @@ public class CourseController {
                 response = teacherService.getHostedCourseInfoList(userDetails.getUserId(), pageable);
                 break;
             case ROLE_STUDENT:
-                response.setCourses(studentService.getSelectedCourseInfo(userDetails.getUserId()));
+                response = studentService.getHostedCourseInfoList(userDetails.getUserId(),pageable);
                 break;
             default:
                 throw new UndefinedUserRoleException(AuthUtil.getUserDetail().getRole().name());

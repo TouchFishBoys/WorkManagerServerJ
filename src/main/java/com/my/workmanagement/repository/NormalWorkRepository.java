@@ -24,6 +24,8 @@ public interface NormalWorkRepository extends CrudRepository<NormalWorkDO, Integ
 
     List<NormalWorkDO> findAllByStudent_StudentId(Integer studentId);
 
+    Integer countAllByStudent_StudentId(Integer studentId);
+
     @Modifying
     @Query("UPDATE NormalWorkDO nwork SET nwork.nworkScore = :score WHERE nwork.nworkId = :id")
     int setScoreById(Integer id, Integer score);

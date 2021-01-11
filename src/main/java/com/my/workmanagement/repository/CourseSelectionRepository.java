@@ -5,6 +5,8 @@ import com.my.workmanagement.entity.CourseSelectionDO;
 import com.my.workmanagement.entity.StudentDO;
 import com.my.workmanagement.entity.TeamDO;
 import com.my.workmanagement.entity.upk.CourseSelectionUPK;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -33,4 +35,6 @@ public interface CourseSelectionRepository extends CrudRepository<CourseSelectio
     CourseSelectionDO getFirstByTeam(TeamDO team);
 
     List<CourseSelectionDO> findAllByTeam_TeamId(Integer TeamId);
+
+    Page<CourseSelectionDO> findAllByStudent_StudentIdOrderByCourse(Integer studentId, Pageable pageable);
 }

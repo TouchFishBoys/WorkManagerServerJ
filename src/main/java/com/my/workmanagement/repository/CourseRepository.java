@@ -19,4 +19,6 @@ public interface CourseRepository extends PagingAndSortingRepository<CourseDO, I
     List<CourseDO> findAllByTeacherOrderByCourseId(TeacherDO teacher);
 
     Page<CourseDO> findAllByTeacherOrderByCourseId(TeacherDO teacher, Pageable pageable);
+
+
 }
