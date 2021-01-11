@@ -4,16 +4,20 @@ import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.entity.CourseSelectionDO;
 import com.my.workmanagement.entity.StudentDO;
 import com.my.workmanagement.entity.upk.CourseSelectionUPK;
+import com.my.workmanagement.entity.TeacherDO;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.UnsupportedFileTypeException;
 import com.my.workmanagement.model.bo.CourseInfoBO;
 import com.my.workmanagement.model.bo.StudentInfoBO;
+import com.my.workmanagement.payload.response.student.CourseListResponse;
 import com.my.workmanagement.repository.*;
 import com.my.workmanagement.service.interfaces.StudentService;
 import com.my.workmanagement.util.ExcelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,6 +81,8 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.saveAll(students).forEach(student -> {
             courseSelectionRepository.insert(course.getCourseId(), student.getStudentId());
         });
+        studentRepository.saveAll(students);
+        courseSelectionRepository.saveAll(courseSelectionList);
         return true;
     }
 
@@ -141,5 +147,32 @@ public class StudentServiceImpl implements StudentService {
         return result;
     }
 
+    @Override
+    public CourseListResponse getHostedCourseInfoList(Integer studentId, Pageable page) throws IdNotFoundException {
+        CourseListResponse response = new CourseListResponse();
+        StudentDO student = studentRepository.findByStudentId(studentId);
+        CourseDO course = new CourseDO();
+        List<CourseInfoBO> result = new LinkedList<>();
+        if (student == null) {
+            throw new IdNotFoundException("studentr id");
+        }
+        Page<CourseSelectionDO> courseSelectionPage = courseSelectionRepository.findAllByStudent_StudentIdOrderByCourse(studentId, page);
+        for (CourseSelectionDO courseSelection : courseSelectionPage) {
+            course = courseRepository.findByCourseId(courseSelection.getCourse().getCourseId());
+            result.add(CourseInfoBO.CourseInfoBOBuilder.aCourseInfoBO()
+                    .withCourseName(course.getCourseName())
+                    .withCourseTeacherName(course.getTeacher().getTeacherName())
+                    .withCourseId(course.getCourseId())
+                    .withCourseDescription(course.getCourseDescription())
+                    .withCourseYear(course.getCourseYear())
+                    .withFinishCount(normalWorkRepository.countAllByStudent_StudentId(studentId))
+                    .withStudentCount(courseSelectionRepository.countAllByCourse_CourseId(course.getCourseId()))
+                    .withTotalCount(topicRepository.countAllByCourse_CourseId(course.getCourseId()))
+                    .build());
+        }
+        response.setPageCount(courseSelectionPage.getTotalPages());
+        response.setCourses(result);
+        return response;
+    }
 
 }
