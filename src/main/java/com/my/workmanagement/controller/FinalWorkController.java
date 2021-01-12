@@ -154,9 +154,9 @@ public class FinalWorkController {
     @PostMapping(value = "/{finalId}/document/score", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PackedResponse<Void>> setFworkDocumentScore(
             @PathVariable Integer finalId,
-            @RequestBody SetDocumentScoreRequest request
+            @ApiParam("成绩") @RequestBody SingleValueRequest<Integer> request
     ) throws IdNotFoundException {
-        if (finalWorkService.setDocumentScore(finalId, request.getScore())) {
+        if (finalWorkService.setDocumentScore(finalId, request.getValue())) {
             return PackedResponse.success(null, String.format("Set document score success"));
         } else {
             return PackedResponse.failure(null, "Score already set", HttpStatus.CONFLICT);

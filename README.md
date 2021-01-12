@@ -19,6 +19,9 @@
   - [x] 获取已选课程列表                       GET /course
   - [x] 获取某课程的信息                       GET /course/:courseId
   - [x] 获取课程题目列表                       GET /course/:courseId/topic
+  - [ ] 创建小组                               post/team/:studentId/:courseId?teamName
+  - [ ] 加入小组                               post/team/:studentId/:courseId/:teamId
+  - [ ] 获取小组信息                           get /team/:courseId/course
 ----
 ###教师操作
 - 教师个人信息

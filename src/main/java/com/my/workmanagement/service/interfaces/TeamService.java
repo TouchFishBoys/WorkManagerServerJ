@@ -40,4 +40,9 @@ public interface TeamService {
 
     Integer getFinalWorkId(Integer teamId) throws IdNotFoundException;
 
+    Integer createTeam(String teamName, Integer studentId, Integer courseId);
+
+    List<TeamInfoBO> getTeamInfoByCourseId(Integer courseId) throws IdNotFoundException;
+
+    Integer joinTeam(Integer studentId,Integer courseId,Integer teamId);
 }

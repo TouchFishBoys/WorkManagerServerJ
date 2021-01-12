@@ -19,6 +19,7 @@ public interface CourseSelectionRepository extends CrudRepository<CourseSelectio
     List<CourseSelectionDO> findAllByStudent_StudentId(Integer studentId);
 
     Integer countAllByCourse_CourseId(Integer courseId);
+
     Integer countAllByCourse(CourseDO course);
 
     List<CourseSelectionDO> getAllByTeam_TeamId(Integer teamId);
@@ -33,9 +34,15 @@ public interface CourseSelectionRepository extends CrudRepository<CourseSelectio
 
     CourseSelectionDO findFirstByStudent_StudentIdAndCourse_CourseId(Integer studentId, Integer courseId);
 
+    @Modifying
+    @Query("UPDATE CourseSelectionDO  cs SET cs.team =:team WHERE cs.student.studentId = :studentId AND cs.course.courseId= :courseId")
+    void setTeamIdByStudentIdAndCourseId(TeamDO team, Integer studentId, Integer courseId);
+
     CourseSelectionDO getFirstByTeam(TeamDO team);
 
     List<CourseSelectionDO> findAllByTeam_TeamId(Integer TeamId);
+
+    Integer countAllByTeam_TeamId(Integer teamId);
 
     List<CourseSelectionDO> findAllByCourse_CourseIdOrderByTeam(Integer courseId);
 
