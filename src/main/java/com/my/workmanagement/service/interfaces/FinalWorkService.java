@@ -26,6 +26,8 @@ public interface FinalWorkService {
      */
     boolean setFinalWorkScore(Integer finalWork, Integer score) throws IdNotFoundException;
 
+    void setQAScore(Integer courseId, Integer studentId, Integer qaScore);
+
     boolean setDocumentScore(Integer finalWork, Integer score) throws IdNotFoundException;
 
     Resource loadDocumentByFworkId(Integer finalWorkId) throws FileNotFoundException, StorageFileNotFoundException;

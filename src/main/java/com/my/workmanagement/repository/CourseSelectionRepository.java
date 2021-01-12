@@ -40,6 +40,10 @@ public interface CourseSelectionRepository extends CrudRepository<CourseSelectio
 
     CourseSelectionDO getFirstByTeam(TeamDO team);
 
+    @Modifying
+    @Query("UPDATE CourseSelectionDO cs SET cs.qaScore = :qaScore WHERE cs.student.studentId = :studentId AND cs.course.courseId= :courseId")
+    void setQAScoreByStudentIdAndCourseId(Integer qaScore, Integer studentId, Integer courseId);
+
     List<CourseSelectionDO> findAllByTeam_TeamId(Integer TeamId);
 
     Integer countAllByTeam_TeamId(Integer teamId);
