@@ -128,6 +128,4 @@ public class TeamController {
         Integer response = teamService.joinTeam(studentId,courseId,teamId);
         return PackedResponse.success(response, "");
     }
-
-
 }

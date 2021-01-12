@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -55,10 +56,10 @@ public class TeamServiceImpl implements TeamService {
         List<String> name = new LinkedList<>();
         List<StudentInfoBO> students = new LinkedList<>();
         students = studentService.getStudentsByTeamId(teamId);
-        for(StudentInfoBO student:students){
+        for (StudentInfoBO student : students) {
             name.add(student.getStudentName());
         }
-                bo.setStudents(name);
+        bo.setStudents(name);
         return bo;
     }
 
@@ -134,9 +135,10 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @Transactional
     public Integer joinTeam(Integer studentId, Integer courseId, Integer teamId) {
         /// TODO: 2021/1/12 finish it
-
+        courseSelectionRepository.setTeamIdByStudentIdAndCourseId(teamId, studentId, courseId);
         return 0;
     }
 

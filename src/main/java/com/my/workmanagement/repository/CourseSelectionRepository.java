@@ -35,8 +35,8 @@ public interface CourseSelectionRepository extends CrudRepository<CourseSelectio
     CourseSelectionDO findFirstByStudent_StudentIdAndCourse_CourseId(Integer studentId, Integer courseId);
 
     @Modifying
-    @Query("UPDATE CourseSelectionDO  cs SET cs.team =:team WHERE cs.student.studentId = :studentId AND cs.course.courseId= :courseId")
-    void setTeamIdByStudentIdAndCourseId(TeamDO team, Integer studentId, Integer courseId);
+    @Query("UPDATE CourseSelectionDO cs SET cs.team.teamId = :teamId WHERE cs.student.studentId = :studentId AND cs.course.courseId= :courseId")
+    void setTeamIdByStudentIdAndCourseId(Integer teamId, Integer studentId, Integer courseId);
 
     CourseSelectionDO getFirstByTeam(TeamDO team);
 
