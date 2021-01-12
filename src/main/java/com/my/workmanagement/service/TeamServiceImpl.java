@@ -4,6 +4,7 @@ import com.my.workmanagement.entity.CourseSelectionDO;
 import com.my.workmanagement.entity.FinalWorkDO;
 import com.my.workmanagement.entity.StudentDO;
 import com.my.workmanagement.entity.TeamDO;
+import com.my.workmanagement.exception.DataConflictException;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.model.bo.TeamInfoBO;
@@ -126,20 +127,26 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Integer createTeam(String teamName, Integer studentId, Integer courseId) {
+    @Transactional(rollbackFor = DataConflictException.class)
+    public Integer createTeam(String teamName, Integer studentId, Integer courseId)
+            throws DataConflictException {
         TeamDO team = new TeamDO();
         Integer teamId = -1;
         team.setTeamName(teamName);
         teamId = teamRepository.save(team).getTeamId();
-        joinTeam( courseId, teamId);
+        joinTeam(courseId, teamId);
         return teamId;
     }
 
     @Override
     @Transactional
-    public Integer joinTeam( Integer courseId, Integer teamId) {
+    public Integer joinTeam(Integer courseId, Integer teamId)
+            throws DataConflictException {
         Integer studentId = AuthUtil.getUserDetail().getUserId();
-        /// TODO: 2021/1/12 finish it
+        var course = courseSelectionRepository.findFirstByStudent_StudentIdAndCourse_CourseId(studentId, courseId);
+        if (course.getTeam() != null) {
+            throw new DataConflictException("队伍");
+        }
         courseSelectionRepository.setTeamIdByStudentIdAndCourseId(teamId, studentId, courseId);
         return 0;
     }

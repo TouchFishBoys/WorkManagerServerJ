@@ -1,5 +1,6 @@
 package com.my.workmanagement.service.interfaces;
 
+import com.my.workmanagement.exception.DataConflictException;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.model.bo.TeamInfoBO;
@@ -40,9 +41,9 @@ public interface TeamService {
 
     Integer getFinalWorkId(Integer teamId) throws IdNotFoundException;
 
-    Integer createTeam(String teamName, Integer studentId, Integer courseId);
+    Integer createTeam(String teamName, Integer studentId, Integer courseId) throws DataConflictException;
 
     List<TeamInfoBO> getTeamInfoByCourseId(Integer courseId) throws IdNotFoundException;
 
-    Integer joinTeam(Integer courseId,Integer teamId);
+    Integer joinTeam(Integer courseId,Integer teamId) throws DataConflictException;
 }

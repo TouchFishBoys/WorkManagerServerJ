@@ -1,5 +1,6 @@
 package com.my.workmanagement.controller;
 
+import com.my.workmanagement.exception.DataConflictException;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.model.bo.TeamInfoBO;
@@ -8,12 +9,14 @@ import com.my.workmanagement.payload.request.SingleValueRequest;
 import com.my.workmanagement.payload.response.GetTeamInfoResponse;
 import com.my.workmanagement.service.interfaces.StudentService;
 import com.my.workmanagement.service.interfaces.TeamService;
+import com.my.workmanagement.util.AuthUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -81,17 +84,17 @@ public class TeamController {
     /**
      * 创建队伍
      *
-     * @param studentId 学生ID
-     * @param courseId  课程ID
+     * @param courseId 课程ID
      * @return /
      */
     @ApiOperation("创建队伍")
-    @PostMapping("/{studentId}/{courseId}")
+    @PostMapping("/{courseId}")
+    @PostAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_STUDENT)")
     public ResponseEntity<PackedResponse<Integer>> createTeam(
-            @PathVariable Integer studentId,
             @PathVariable Integer courseId,
             @ApiParam("队伍名") @RequestBody SingleValueRequest<String> request
-    ) throws IdNotFoundException {
+    ) throws IdNotFoundException, DataConflictException {
+        Integer studentId = AuthUtil.getUserDetail().getUserId();
         return PackedResponse.success(teamService.createTeam(request.getValue(), studentId, courseId), "success");
     }
 
@@ -113,8 +116,8 @@ public class TeamController {
     /**
      * 加入队伍
      *
-     * @param courseId  课程ID
-     * @param teamId    队伍ID
+     * @param courseId 课程ID
+     * @param teamId   队伍ID
      * @return /
      */
     @ApiOperation("加入队伍")
@@ -122,8 +125,8 @@ public class TeamController {
     public ResponseEntity<PackedResponse<Integer>> joinTeam(
             @PathVariable Integer courseId,
             @PathVariable Integer teamId
-    ) throws IdNotFoundException {
-        Integer response = teamService.joinTeam(courseId,teamId);
+    ) throws IdNotFoundException, DataConflictException {
+        Integer response = teamService.joinTeam(courseId, teamId);
         return PackedResponse.success(response, "success");
     }
 }
