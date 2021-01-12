@@ -3,25 +3,30 @@ package com.my.workmanagement.service;
 import com.my.workmanagement.config.StorageConfiguration;
 import com.my.workmanagement.entity.CourseDO;
 import com.my.workmanagement.entity.NormalWorkDO;
+import com.my.workmanagement.entity.StudentDO;
 import com.my.workmanagement.entity.TopicDO;
+import com.my.workmanagement.exception.DataConflictException;
 import com.my.workmanagement.exception.IdNotFoundException;
+import com.my.workmanagement.exception.StorageFileNotFoundException;
+import com.my.workmanagement.exception.StorageIOException;
 import com.my.workmanagement.model.bo.NormalWorkBO;
 import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
-import com.my.workmanagement.repository.CourseRepository;
-import com.my.workmanagement.repository.CourseSelectionRepository;
-import com.my.workmanagement.repository.NormalWorkRepository;
-import com.my.workmanagement.repository.TopicRepository;
+import com.my.workmanagement.repository.*;
+import com.my.workmanagement.service.interfaces.FileStorageService;
 import com.my.workmanagement.service.interfaces.NormalWorkService;
+import com.my.workmanagement.service.interfaces.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Id;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -30,26 +35,34 @@ import java.util.List;
 
 @Service
 public class NormalWorkServiceImpl implements NormalWorkService {
+    private final FileStorageService fileStorageService;
     private final TopicRepository topicRepository;
     private final CourseRepository courseRepository;
     private final NormalWorkRepository normalWorkRepository;
     private final CourseSelectionRepository courseSelectionRepository;
+    private final StudentRepository studentRepository;
+    private final UploadService uploadService;
 
     @javax.annotation.Resource
     private StorageConfiguration storageConfiguration;
 
     @Autowired
     public NormalWorkServiceImpl(
+            StudentRepository studentRepository,
             TopicRepository topicRepository,
             CourseRepository courseRepository,
             NormalWorkRepository normalWorkRepository,
-            CourseSelectionRepository courseSelectionRepository
+            CourseSelectionRepository courseSelectionRepository,
+            FileStorageService fileStorageService,
+            UploadService uploadService
     ) {
+        this.studentRepository = studentRepository;
         this.topicRepository = topicRepository;
         this.courseRepository = courseRepository;
         this.normalWorkRepository = normalWorkRepository;
         this.courseSelectionRepository = courseSelectionRepository;
-
+        this.fileStorageService = fileStorageService;
+        this.uploadService = uploadService;
     }
 
     @Override
@@ -145,7 +158,7 @@ public class NormalWorkServiceImpl implements NormalWorkService {
     @Override
     public List<NormalWorkBO> getFinishedNormalWork_Topic(Integer topicId) throws IdNotFoundException {
         List<NormalWorkBO> list = getNormalWork_Topic(topicId);
-        list.removeIf(normalWorkBO -> normalWorkBO.getTimeUpload()==null);
+        list.removeIf(normalWorkBO -> normalWorkBO.getTimeUpload() == null);
         return list;
 
     }
@@ -161,8 +174,8 @@ public class NormalWorkServiceImpl implements NormalWorkService {
     @Override
     public List<NormalWorkBO> getNormalWork_Topic(Integer topicId) throws IdNotFoundException {
         List<NormalWorkDO> normalWorkDOS = normalWorkRepository.findAllByTopic_TopicId(topicId);
-        if(normalWorkDOS==null) {
-            throw new IdNotFoundException("topicId="+topicId.toString());
+        if (normalWorkDOS == null) {
+            throw new IdNotFoundException("topicId=" + topicId.toString());
         }
         return getNormalWorkBOS(normalWorkDOS);
     }
@@ -170,8 +183,8 @@ public class NormalWorkServiceImpl implements NormalWorkService {
     @Override
     public List<NormalWorkBO> getNormalWork_Student(Integer studentId) throws IdNotFoundException {
         List<NormalWorkDO> normalWorkDOS = normalWorkRepository.findAllByStudent_StudentId(studentId);
-        if(normalWorkDOS==null) {
-            throw new IdNotFoundException("studentId="+studentId.toString());
+        if (normalWorkDOS == null) {
+            throw new IdNotFoundException("studentId=" + studentId.toString());
         }
         return getNormalWorkBOS(normalWorkDOS);
     }
@@ -191,4 +204,46 @@ public class NormalWorkServiceImpl implements NormalWorkService {
         return list;
     }
 
+    @Override
+    public Resource getNormalWorkFile(Integer stuId, Integer topicId) throws IdNotFoundException, StorageFileNotFoundException {
+        StudentDO student = studentRepository.findByStudentId(stuId);
+        if (student == null) {
+            throw new IdNotFoundException("student id");
+        }
+        TopicDO topic = topicRepository.findByTopicId(topicId);
+        if (topic == null) {
+            throw new IdNotFoundException("topic id");
+        }
+        Integer courseId = topic.getCourse().getCourseId();
+        String location = courseId + "/normal/" + topicId + "/" + student.getStudentNum() + ".zip";
+        return fileStorageService.loadAsResource(location);
+    }
+
+    @Transactional(noRollbackFor = {IdNotFoundException.class}, rollbackFor = {IOException.class})
+    public boolean submit(Integer topicId, Integer studentId, MultipartFile file)
+            throws IdNotFoundException, StorageIOException, DataConflictException {
+        TopicDO topic = topicRepository.findByTopicId(topicId);
+        if (topic == null) {
+            throw new IdNotFoundException("topic id");
+        }
+        StudentDO student = studentRepository.findByStudentId(studentId);
+        if (student == null) {
+            throw new IdNotFoundException("student id");
+        }
+        if (normalWorkRepository.existsByTopic_TopicIdAndStudent_StudentId(topicId, studentId)) {
+            throw new DataConflictException("normal-work");
+        }
+
+        NormalWorkDO normalWork = new NormalWorkDO();
+        normalWork.setStudent(student);
+        normalWork.setTopic(topic);
+        normalWork.setTimeUpload(new Timestamp(new Date().getTime()));
+        normalWorkRepository.save(normalWork);
+        try {
+            return uploadService.uploadNormalWorkFile(file, topicId, studentId).isSuccess();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+            throw new StorageIOException(ioException);
+        }
+    }
 }

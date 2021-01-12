@@ -2,12 +2,9 @@ package com.my.workmanagement.controller;
 
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
-import com.my.workmanagement.exception.WordTemplateNotFoundException;
 import com.my.workmanagement.model.UploadInfo;
-import com.my.workmanagement.model.bo.QaTableBO;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.SingleValueRequest;
-import com.my.workmanagement.payload.request.SubmitQaTableRequest;
 import com.my.workmanagement.payload.request.finalwork.SetDocumentScoreRequest;
 import com.my.workmanagement.service.interfaces.FinalWorkService;
 import com.my.workmanagement.service.interfaces.UploadService;
@@ -15,7 +12,6 @@ import com.my.workmanagement.util.FilePathUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +20,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Min;
 import javax.websocket.server.PathParam;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/final")
@@ -190,7 +180,7 @@ public class FinalWorkController {
                 .enter("final")
                 .enter(teamId.toString());
         try {
-            uploadInfo = uploadService.uploadFFile(file, pathBuilder.build(),courseId,teamId);
+            uploadInfo = uploadService.uploadFinalWorkFile(file, pathBuilder.build(),courseId,teamId);
         } catch (Exception e) {
             System.out.println(e.toString());
         }

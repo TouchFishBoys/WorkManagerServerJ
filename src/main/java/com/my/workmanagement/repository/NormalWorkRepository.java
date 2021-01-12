@@ -16,8 +16,6 @@ public interface NormalWorkRepository extends CrudRepository<NormalWorkDO, Integ
 
     Integer countAllByTopic_Course_CourseIdAndStudent_StudentId(Integer courseId, Integer studentId);
 
-    boolean existsByTopic_TopicIdAndStudent_StudentId(Integer topicId, Integer studentId);
-
     NormalWorkDO getFirstByTopic_TopicIdAndStudent_StudentId(Integer topicId, Integer studentId);
 
     List<NormalWorkDO> findAllByTopic_TopicId(Integer TopicId);
@@ -31,4 +29,6 @@ public interface NormalWorkRepository extends CrudRepository<NormalWorkDO, Integ
     int setScoreById(Integer id, Integer score);
 
     int countAllByTopic_TopicId(Integer topicId);
+
+    boolean existsByTopic_TopicIdAndStudent_StudentId(int topicId, int studentId);
 }

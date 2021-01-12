@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 
 @Service
 public class UploadServiceImpl implements UploadService {
@@ -31,39 +32,41 @@ public class UploadServiceImpl implements UploadService {
 
     @Override
     public UploadInfo uploadDocument(MultipartFile file, String uploadFilePath, Integer courseId, Integer teamId) throws Exception {
+        UploadInfo uploadInfo = new UploadInfo();
+        String location = courseId + "/final/" + teamId + "/" + "document.docx";
+
+        boolean exists = fileStorageService.exists(location + "/document.docx");
+        boolean success = fileStorageService.store(file, location, "document.docx");
+
+        uploadInfo.setSuccess(success);
+        uploadInfo.setExists(exists);
+        return uploadInfo;
+    }
+
+    @Override
+    public UploadInfo uploadFinalWorkFile(MultipartFile file, String uploadFilePath, Integer courseId, Integer teamId) throws Exception {
         if (file.isEmpty())
             return null;
         UploadInfo uploadInfo = new UploadInfo();
+        String location = courseId + "/final/" + teamId;
 
-        String location = "/" + courseId + "/final/" + teamId + "/" + "document.docx";
-        fileStorageService.store(file, location, "document.docx");
+        uploadInfo.setExists(fileStorageService.exists(location + "/file.war"));
+        uploadInfo.setSuccess(fileStorageService.store(file, location, "file.war"));
 
         return uploadInfo;
     }
 
     @Override
-    public UploadInfo uploadFFile(MultipartFile file, String uploadFilePath, Integer courseId, Integer teamId) throws Exception {
-        if (file.isEmpty())
-            return null;
-        UploadInfo uploadInfo = new UploadInfo();
-
-        String location = "/" + courseId + "/final/" + teamId;
-        fileStorageService.store(file, location, "file.war");
-
-        return uploadInfo;
-    }
-
-    @Override
-    public UploadInfo uploadNFile(MultipartFile file, String uploadFilePath, Integer topicId, Integer stuId) throws Exception {
+    public UploadInfo uploadNormalWorkFile(MultipartFile file, Integer topicId, Integer stuId) throws IOException {
         if (file.isEmpty())
             return null;
         UploadInfo uploadInfo = new UploadInfo();
 
         Integer courseId = topicRepository.findByTopicId(topicId).getCourse().getCourseId();
 
-        String location = "/" + courseId + "/normal/" + topicId;
+        String location = courseId + "/normal/" + topicId;
         String fileName = studentRepository.findByStudentId(stuId).getStudentNum() + ".zip";
-        fileStorageService.store(file, location, fileName);
+        boolean isExists = fileStorageService.store(file, location, fileName);
 
         return uploadInfo;
     }

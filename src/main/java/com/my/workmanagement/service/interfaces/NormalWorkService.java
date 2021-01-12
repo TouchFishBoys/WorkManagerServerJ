@@ -1,8 +1,10 @@
 package com.my.workmanagement.service.interfaces;
 
 import com.my.workmanagement.entity.NormalWorkDO;
+import com.my.workmanagement.exception.DataConflictException;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
+import com.my.workmanagement.exception.StorageIOException;
 import com.my.workmanagement.model.bo.NormalWorkBO;
 import com.my.workmanagement.model.bo.TopicInfoBO;
 import com.my.workmanagement.payload.response.normalwork.TopicInfoResponse;
@@ -10,6 +12,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -37,4 +40,7 @@ public interface NormalWorkService {
 
     List<NormalWorkBO> getFinishedNormalWork_Student(Integer studentId) throws IdNotFoundException;
 
+    Resource getNormalWorkFile(Integer stuId, Integer topicId) throws IdNotFoundException, StorageFileNotFoundException;
+
+    boolean submit(Integer topicId, Integer studentId, MultipartFile file) throws IdNotFoundException, StorageIOException, DataConflictException;
 }

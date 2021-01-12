@@ -9,13 +9,14 @@ import com.my.workmanagement.service.interfaces.FileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
@@ -30,28 +31,33 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
-    public boolean store(MultipartFile file, String path, String fileName) {
+    public boolean store(MultipartFile file, String path, String fileName) throws IOException {
         try {
             return store(file.getInputStream(), path, fileName, file.getContentType());
         } catch (IOException e) {
             logger.error("Error occurred: {}", e.getMessage(), e);
-            return false;
+            throw e;
         }
     }
 
     @Override
-    public boolean store(byte[] content, String path, String fileName, String contentType) {
+    public boolean store(byte[] content, String path, String fileName, String contentType) throws IOException {
         try (InputStream inputStream = new ByteArrayInputStream(content)) {
-            store(inputStream, path, fileName, contentType);
+            return store(inputStream, path, fileName, contentType);
         } catch (IOException ex) {
             logger.error("Error occurred: {}", ex.getLocalizedMessage());
-            return false;
+            throw ex;
         }
-        return true;
     }
 
     @Override
-    public boolean store(InputStream inputStream, String path, String fileName, String contentType) {
+    public boolean exists(String file) {
+        return ossClient.doesObjectExist(ossConfig.getBucketName(), file);
+    }
+
+    @Override
+    public boolean store(InputStream inputStream, String path, String fileName, String contentType) throws IOException {
+        boolean isExists = exists(path + "/" + fileName);
         try {
             logger.info("上传到OSS: fileName=\"{}\" contentLength={}", fileName, inputStream.available());
             ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -65,14 +71,15 @@ public class FileStorageServiceImpl implements FileStorageService {
             ossClient.putObject(ossConfig.getBucketName(), location, inputStream, objectMetadata);
         } catch (IOException e) {
             logger.error("Error occurred: {}", e.getMessage(), e);
-            return false;
+            throw e;
         }
-        return true;
+        return isExists;
     }
 
     @Override
     public Resource loadAsResource(String path) throws StorageFileNotFoundException {
-        if (ossClient.doesObjectExist(ossConfig.getBucketName(), path)) {
+        logger.info("Loading resourse at \"{}\"", path);
+        if (!ossClient.doesObjectExist(ossConfig.getBucketName(), path)) {
             throw new StorageFileNotFoundException();
         }
         OSSObject ossObject = ossClient.getObject(ossConfig.getBucketName(), path);
