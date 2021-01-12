@@ -173,6 +173,13 @@ public class FinalWorkServiceImpl implements FinalWorkService {
         return templateFile;
     }
 
+    @Override
+    public void setQAScore(Integer courseId, Integer studentId, Integer qaScore){
+        courseSelectionRepository.setQAScoreByStudentIdAndCourseId(qaScore,studentId,courseId);
+    }
+
+
+
     @Bean
     private Configure config() {
         HackLoopTableRenderPolicy policy = new HackLoopTableRenderPolicy();

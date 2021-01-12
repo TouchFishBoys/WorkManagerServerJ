@@ -117,6 +117,7 @@ public class QaTableController {
             @RequestBody SubmitQaTableRequest request
     ) throws WordTemplateNotFoundException, IOException, IdNotFoundException {
         List<QaTableBO.QaTableItemBO> qaItems = request.getQaList();
+        finalWorkService.setQAScore(courseId,studentId,request.getScore());
         if (finalWorkService.generateQaTable(qaItems, courseId, studentId, request.getQaLocation(), request.getScore())) {
             return PackedResponse.success(null, "success");
         } else {
