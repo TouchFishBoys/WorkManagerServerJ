@@ -44,5 +44,5 @@ public interface TeamService {
 
     List<TeamInfoBO> getTeamInfoByCourseId(Integer courseId) throws IdNotFoundException;
 
-    Integer joinTeam(Integer studentId,Integer courseId,Integer teamId);
+    Integer joinTeam(Integer courseId,Integer teamId);
 }

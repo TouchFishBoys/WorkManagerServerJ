@@ -26,6 +26,7 @@ public class CourseServiceImpl implements CourseService {
     private final NormalWorkRepository normalWorkRepository;
     private final TeacherRepository teacherRepository;
     private final TeamRepository teamRepository;
+    private final FinalWorkRepository finalWorkRepository;
 
     @Autowired
     public CourseServiceImpl(
@@ -34,7 +35,8 @@ public class CourseServiceImpl implements CourseService {
             TopicRepository topicRepository,
             NormalWorkRepository normalWorkRepository,
             CourseSelectionRepository courseSelectionRepository,
-            TeamRepository teamRepository
+            TeamRepository teamRepository,
+            FinalWorkRepository finalWorkRepository
     ) {
         this.courseRepository = courseRepository;
         this.courseSelectionRepository = courseSelectionRepository;
@@ -42,6 +44,7 @@ public class CourseServiceImpl implements CourseService {
         this.normalWorkRepository = normalWorkRepository;
         this.teacherRepository = teacherRepository;
         this.teamRepository = teamRepository;
+        this.finalWorkRepository = finalWorkRepository;
     }
 
 
@@ -167,17 +170,31 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<FinalWorkBO> getFinishedFinalWorkList(Integer courseId) throws IdNotFoundException {
+        List<FinalWorkBO> temp = new LinkedList<>();
         List<FinalWorkBO> list = new LinkedList<>();
-        list=getFinalWorkList(courseId);
-        list.removeIf(finalWork -> finalWork.getSubmitTime() == null);
+        temp = getFinalWorkList(courseId);
+        temp.removeIf(finalWork -> finalWork.getSubmitTime() == null);
+        for (FinalWorkBO fw : temp) {
+            FinalWorkDO finalWorkDO = finalWorkRepository.getByFworkId(fw.getFinalWorkId());
+            list.add(FinalWorkBO.FinalWorkBOBuilder.aFinalWorkBO()
+                    .withFinalWorkId(fw.getFinalWorkId())
+                    .withTeamName(fw.getTeamName())
+                    .withFinalWorkName(fw.getFinalWorkName())
+                    .withDescription(fw.getDescription())
+                    .withSubmitTime(fw.getSubmitTime())
+                    .withAuthors(fw.getAuthors())
+                    .withScore(finalWorkDO.getFworkScore())
+                    .withDocumentScore(finalWorkDO.getDocumentScore())
+                    .build());
+        }
         return list;
     }
 
     @Override
     public List<FinalWorkBO> getFinalWorkList(Integer courseId) throws IdNotFoundException {
         List<CourseSelectionDO> courseSelections = courseSelectionRepository.findAllByCourse_CourseIdOrderByTeam(courseId);
-        for(int i=0;i<courseSelections.size()-1;i++){
-            if(courseSelections.get(i).getTeam()==courseSelections.get(i+1).getTeam()||courseSelections.get(i).getTeam()==null){
+        for (int i = 0; i < courseSelections.size() - 1; i++) {
+            if (courseSelections.get(i).getTeam() == courseSelections.get(i + 1).getTeam() || courseSelections.get(i).getTeam() == null) {
                 courseSelections.remove(i);
                 i--;
             }
@@ -206,7 +223,7 @@ public class CourseServiceImpl implements CourseService {
                             .withFinalWorkName(courseSelection.getTeam().getFinalWork().getFworkName())
                             .withTeamName(courseSelection.getTeam().getTeamName())
                             .build());
-                }else {
+                } else {
                     list.add(FinalWorkBO.FinalWorkBOBuilder.aFinalWorkBO()
                             .withFinalWorkId(-1)
                             .withAuthors(null)

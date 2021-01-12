@@ -12,6 +12,7 @@ import com.my.workmanagement.repository.StudentRepository;
 import com.my.workmanagement.repository.TeamRepository;
 import com.my.workmanagement.service.interfaces.StudentService;
 import com.my.workmanagement.service.interfaces.TeamService;
+import com.my.workmanagement.util.AuthUtil;
 import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,13 +131,14 @@ public class TeamServiceImpl implements TeamService {
         Integer teamId = -1;
         team.setTeamName(teamName);
         teamId = teamRepository.save(team).getTeamId();
-        joinTeam(studentId, courseId, teamId);
+        joinTeam( courseId, teamId);
         return teamId;
     }
 
     @Override
     @Transactional
-    public Integer joinTeam(Integer studentId, Integer courseId, Integer teamId) {
+    public Integer joinTeam( Integer courseId, Integer teamId) {
+        Integer studentId = AuthUtil.getUserDetail().getUserId();
         /// TODO: 2021/1/12 finish it
         courseSelectionRepository.setTeamIdByStudentIdAndCourseId(teamId, studentId, courseId);
         return 0;

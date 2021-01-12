@@ -113,19 +113,17 @@ public class TeamController {
     /**
      * 加入队伍
      *
-     * @param studentId 学生ID
      * @param courseId  课程ID
      * @param teamId    队伍ID
      * @return /
      */
     @ApiOperation("加入队伍")
-    @GetMapping("/{courseId}/{studentId}/{teamId}")
+    @PatchMapping("/{courseId}/{teamId}")
     public ResponseEntity<PackedResponse<Integer>> joinTeam(
-            @PathVariable Integer studentId,
             @PathVariable Integer courseId,
             @PathVariable Integer teamId
     ) throws IdNotFoundException {
-        Integer response = teamService.joinTeam(studentId,courseId,teamId);
-        return PackedResponse.success(response, "");
+        Integer response = teamService.joinTeam(courseId,teamId);
+        return PackedResponse.success(response, "success");
     }
 }
