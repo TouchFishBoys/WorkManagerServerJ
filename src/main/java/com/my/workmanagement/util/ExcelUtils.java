@@ -81,4 +81,29 @@ public class ExcelUtils {
         String filename = mf.getOriginalFilename();
         return readFromExcel(is, filename);
     }
+
+    public static <T> List<T> readFromExcel(InputStream is, ExcelParser<T> parser, int sheetNum)
+            throws IOException {
+        List<T> result = new LinkedList<>();
+        try (Workbook workbook = new XSSFWorkbook(is)) {
+            Sheet sheet = workbook.getSheetAt(sheetNum);
+            if (sheet == null) {
+                logger.error("Sheet is empty");
+                return result;
+            }
+            logger.info("Sheet has {} rows", sheet.getLastRowNum());
+
+            for (int i = sheet.getFirstRowNum(); i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                T obj = parser.parse(row);
+                if (obj != null) {
+                    result.add(obj);
+                }
+            }
+        } catch (IOException ioe) {
+            logger.error(ioe.getLocalizedMessage());
+            throw ioe;
+        }
+        return result;
+    }
 }

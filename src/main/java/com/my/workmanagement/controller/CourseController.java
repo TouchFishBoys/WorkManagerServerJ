@@ -228,4 +228,3 @@ public class CourseController {
         return PackedResponse.success(list, "ok");
     }
 }
-

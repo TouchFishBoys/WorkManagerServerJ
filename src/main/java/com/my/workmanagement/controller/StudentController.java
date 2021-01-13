@@ -17,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -133,5 +134,19 @@ public class StudentController {
             list = normalWorkService.getFinishedNormalWork_Student(stuId);
         }
         return PackedResponse.success(list, "ok");
+    }
+
+    @PostMapping("/preview")
+    public ResponseEntity<PackedResponse<List<StudentInfoBO>>> previewExcel(
+            @RequestParam("file") MultipartFile file
+    ) {
+        try {
+            return PackedResponse.success(
+                    studentService.parseExcel(file.getInputStream()),
+                    "success");
+        } catch (IOException e) {
+            return PackedResponse.failure(null, e.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

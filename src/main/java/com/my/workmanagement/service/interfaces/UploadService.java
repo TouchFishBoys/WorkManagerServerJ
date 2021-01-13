@@ -11,5 +11,4 @@ public interface UploadService {
     UploadInfo uploadFinalWorkFile(MultipartFile file, String uploadFilePath, Integer courseId, Integer teamId) throws Exception;
 
     UploadInfo uploadNormalWorkFile(MultipartFile file, Integer topicId, Integer stuId) throws IOException;
-
 }

@@ -12,7 +12,10 @@ import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.payload.response.student.CourseListResponse;
 import com.my.workmanagement.repository.*;
 import com.my.workmanagement.service.interfaces.StudentService;
+import com.my.workmanagement.util.ExcelParser;
 import com.my.workmanagement.util.ExcelUtils;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -24,6 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -175,4 +180,27 @@ public class StudentServiceImpl implements StudentService {
         return response;
     }
 
+    @Override
+    public List<StudentInfoBO> parseExcel(InputStream file) {
+        try {
+            return ExcelUtils.readFromExcel(file, row -> {
+                StudentInfoBO info = new StudentInfoBO();
+                logger.info("{},{},{}",
+                        row.getCell(0),
+                        row.getCell(1),
+                        row.getCell(2)
+                );
+                if(row.getCell(0) == null || row.getCell(1)==null || row.getCell(2)==null){
+                    return null;
+                }
+                info.setStudentNum(row.getCell(0).toString());
+                info.setStudentName(row.getCell(1).toString());
+                info.setStudentClass(row.getCell(2).toString());
+                return info;
+            }, 0);
+        } catch (IOException e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return new ArrayList<>();
+    }
 }

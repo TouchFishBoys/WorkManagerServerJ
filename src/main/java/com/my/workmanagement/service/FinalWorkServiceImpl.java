@@ -10,6 +10,7 @@ import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.exception.WordTemplateNotFoundException;
 import com.my.workmanagement.model.bo.FinalWorkBO;
 import com.my.workmanagement.model.bo.QaTableBO;
+import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.repository.*;
 import com.my.workmanagement.service.interfaces.FileStorageService;
 import com.my.workmanagement.service.interfaces.FinalWorkService;
@@ -21,13 +22,16 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.*;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class FinalWorkServiceImpl implements FinalWorkService {
@@ -118,9 +122,9 @@ public class FinalWorkServiceImpl implements FinalWorkService {
         FinalWorkDO fwork = finalWorkRepository.getByFworkId(finalWorkId);
         TeamDO team = teamRepository.getByFinalWork_FworkId(finalWorkId);
         CourseDO course = courseSelectionRepository.getFirstByTeam(team).getCourse();
-        logger.debug("Course: {}, Team: {}, Fwork: {}", course.getCourseId(), team.getTeamId(), finalWorkId);
-        String fileLocation = storageConfiguration.getRootDirectory() + "/" + course.getCourseId() + "/final/" + team.getTeamId() + "/" + filename;
-        logger.debug("Location: {}", fileLocation);
+        logger.debug("下载大作业：Course: {}, Team: {}, Fwork: {}", course.getCourseId(), team.getTeamId(), finalWorkId);
+        String fileLocation = course.getCourseId() + "/final/" + team.getTeamId() + "/" + filename;
+        logger.debug("下载大作业：Location: {}", fileLocation);
         return fileStorageService.loadAsResource(fileLocation);
     }
 
@@ -162,6 +166,54 @@ public class FinalWorkServiceImpl implements FinalWorkService {
         return true;
     }
 
+    @Override
+    @Transactional
+    public void uploadFinalWork(Integer courseId, Integer studentId, MultipartFile file)
+            throws IdNotFoundException, IOException {
+        CourseSelectionDO courseSelection = courseSelectionRepository.findFirstByStudent_StudentIdAndCourse_CourseId(studentId, courseId);
+
+        if (courseSelection == null || courseSelection.getTeam() == null) {
+            throw new IdNotFoundException("team");
+        }
+        TeamDO team = courseSelection.getTeam();
+        Integer teamId = courseSelection.getTeam().getTeamId();
+
+        FinalWorkDO finalWork = new FinalWorkDO();
+        finalWork.setTimeUpload(new Timestamp(new Date().getTime()));
+        finalWork.setFworkName(UUID.randomUUID().toString());
+        FinalWorkDO newFinalWork = finalWorkRepository.save(finalWork);
+        team.setFinalWork(newFinalWork);
+        teamRepository.save(team);
+
+        String location = courseId + "/final/" + teamId;
+
+        fileStorageService.store(file, location, "file.war");
+    }
+
+    @Override
+    public void uploadDocument(Integer courseId, Integer studentId, MultipartFile file)
+            throws IdNotFoundException, IOException {
+        CourseSelectionDO courseSelection = courseSelectionRepository.findFirstByStudent_StudentIdAndCourse_CourseId(studentId, courseId);
+
+        if (courseSelection == null || courseSelection.getTeam() == null) {
+            throw new IdNotFoundException("team");
+        }
+        Integer teamId = courseSelection.getTeam().getTeamId();
+
+        String location = courseId + "/final/" + teamId;
+
+        fileStorageService.store(file, location, "document.docx");
+    }
+
+    @Override
+    public List<StudentInfoBO> getAuthors(Integer finalId) throws IdNotFoundException {
+        TeamDO team = teamRepository.getByFinalWork_FworkId(finalId);
+        if (team == null) {
+            throw new IdNotFoundException("team");
+        }
+        return teamService.getTeamMembers(team.getTeamId());
+    }
+
     private File templateFile() throws WordTemplateNotFoundException {
         if (templateFile == null) {
             logger.info("Template location is {}", storageConfiguration.getQaTableTemplateLocation());
@@ -174,10 +226,9 @@ public class FinalWorkServiceImpl implements FinalWorkService {
     }
 
     @Override
-    public void setQAScore(Integer courseId, Integer studentId, Integer qaScore){
-        courseSelectionRepository.setQAScoreByStudentIdAndCourseId(qaScore,studentId,courseId);
+    public void setQAScore(Integer courseId, Integer studentId, Integer qaScore) {
+        courseSelectionRepository.setQAScoreByStudentIdAndCourseId(qaScore, studentId, courseId);
     }
-
 
 
     @Bean
