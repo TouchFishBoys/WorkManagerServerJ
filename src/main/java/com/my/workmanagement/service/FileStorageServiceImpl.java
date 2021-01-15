@@ -60,7 +60,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             throws IOException {
         boolean isExists = exists(path + "/" + fileName);
         try {
-            logger.info("上传到OSS: fileName=\"{}\" contentLength={}", fileName, inputStream.available());
+            logger.info("上传到OSS: fileName=\"{}\",contentLength={},path=\"{}\"", fileName, inputStream.available(), path);
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentLength(inputStream.available());
             objectMetadata.setCacheControl("no-cache");

@@ -1,13 +1,17 @@
 package com.my.workmanagement.controller;
 
+import com.aliyun.oss.common.utils.AuthUtils;
 import com.my.workmanagement.exception.IdNotFoundException;
 import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.model.UploadInfo;
+import com.my.workmanagement.model.bo.CourseInfoBO;
+import com.my.workmanagement.model.bo.StudentInfoBO;
 import com.my.workmanagement.payload.PackedResponse;
 import com.my.workmanagement.payload.request.SingleValueRequest;
 import com.my.workmanagement.payload.request.finalwork.SetDocumentScoreRequest;
 import com.my.workmanagement.service.interfaces.FinalWorkService;
 import com.my.workmanagement.service.interfaces.UploadService;
+import com.my.workmanagement.util.AuthUtil;
 import com.my.workmanagement.util.FilePathUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +24,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +32,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/final")
@@ -90,6 +97,9 @@ public class FinalWorkController {
         } catch (FileNotFoundException e) {
             throw new StorageFileNotFoundException();
         }
+        if (fileName == null) {
+            fileName = "document";
+        }
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment;filename=\"%s.docx\"", fileName))
                 .header(HttpHeaders.CACHE_CONTROL, "no-cache,no-store,must-revalidate")
@@ -104,13 +114,17 @@ public class FinalWorkController {
      * @throws StorageFileNotFoundException 文档不存在
      */
     @ApiOperation("下载文件")
-    @GetMapping(value = "/{finalId}/file", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    @GetMapping(value = "/{finalId}/file",
+            produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity<Resource> getFinalWorkFile(
             @PathVariable Integer finalId,
             @PathParam("fileName") String fileName
     ) throws StorageFileNotFoundException {
         Resource resource;
         resource = finalWorkService.loadFworkFileByFworkId(finalId);
+        if (fileName == null) {
+            fileName = "FinalWork";
+        }
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment;filename=\"%s.war\"", fileName))
                 .header(HttpHeaders.CACHE_CONTROL, "no-cache,no-store,must-revalidate")
@@ -154,39 +168,51 @@ public class FinalWorkController {
     }
 
     @ApiOperation("上传文档")
-    @PostMapping(value = "/{courseId}/{teamId}/document", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public UploadInfo uploadDocument(@RequestParam("file") MultipartFile file, @PathVariable Integer teamId, @PathVariable Integer courseId) {
-        UploadInfo uploadInfo = null;
-        FilePathUtil.FilePathBuilder pathBuilder = FilePathUtil.FilePathBuilder.builder();
+    @PostMapping(value = "/document", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<PackedResponse<Void>> uploadDocument(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("courseId") Integer courseId
+    ) throws IdNotFoundException {
+        Integer studentId = AuthUtil.getUserDetail().getUserId();
 
-        pathBuilder.enter(courseId.toString())
-                .enter("final")
-                .enter(teamId.toString());
         try {
-            uploadInfo = uploadService.uploadDocument(file, pathBuilder.build(),courseId,teamId);
-        } catch (Exception e) {
-            System.out.println(e.toString());
+            finalWorkService.uploadDocument(courseId, studentId, file);
+        } catch (IOException e) {
+            logger.error(e.getLocalizedMessage());
+            return PackedResponse.failure(null, "IOException", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return uploadInfo;
+        return PackedResponse.success(null, "success");
     }
 
     @ApiOperation("上传大作业")
-    @PostMapping(value = "/{courseId}/{teamId}/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public UploadInfo uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Integer teamId, @PathVariable Integer courseId) {
-        UploadInfo uploadInfo = null;
-        FilePathUtil.FilePathBuilder pathBuilder = FilePathUtil.FilePathBuilder.builder();
+    @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostAuthorize("hasRole(T(com.my.workmanagement.model.ERole).ROLE_STUDENT)")
+    public ResponseEntity<PackedResponse<Void>> uploadFile(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("courseId") Integer courseId
+    ) throws IdNotFoundException {
+        Integer studentId = AuthUtil.getUserDetail().getUserId();
 
-        pathBuilder.enter(courseId.toString())
-                .enter("final")
-                .enter(teamId.toString());
         try {
-            uploadInfo = uploadService.uploadFinalWorkFile(file, pathBuilder.build(),courseId,teamId);
-        } catch (Exception e) {
-            System.out.println(e.toString());
+            finalWorkService.uploadFinalWork(courseId, studentId, file);
+        } catch (IOException e) {
+            logger.error(e.getLocalizedMessage());
+            return PackedResponse.failure(null, "IOException", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return uploadInfo;
+        return PackedResponse.success(null, "success");
     }
 
+    @GetMapping("/{finalId}/authors")
+    public ResponseEntity<PackedResponse<List<StudentInfoBO>>> getFinalAuthor(
+            @PathVariable Integer finalId
+    ) throws IdNotFoundException {
+        List<StudentInfoBO> studentInfos = finalWorkService.getAuthors(finalId);
+        return PackedResponse.success(studentInfos, "success");
+    }
 
-
+    @GetMapping("/{finalId}/course")
+    public ResponseEntity<PackedResponse<CourseInfoBO>> getCourseInfo() {
+        CourseInfoBO courseInfo = new CourseInfoBO();
+        return PackedResponse.success(courseInfo, "success");
+    }
 }

@@ -5,8 +5,10 @@ import com.my.workmanagement.exception.StorageFileNotFoundException;
 import com.my.workmanagement.exception.WordTemplateNotFoundException;
 import com.my.workmanagement.model.bo.FinalWorkBO;
 import com.my.workmanagement.model.bo.QaTableBO;
+import com.my.workmanagement.model.bo.StudentInfoBO;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -35,4 +37,10 @@ public interface FinalWorkService {
     Resource loadFworkFileByFworkId(Integer finalWorkId) throws StorageFileNotFoundException;
 
     boolean generateQaTable(List<QaTableBO.QaTableItemBO> items, Integer courseId, Integer studentId, String location, Integer score) throws WordTemplateNotFoundException, IOException, IdNotFoundException;
+
+    void uploadFinalWork(Integer courseId, Integer studentId, MultipartFile file) throws IdNotFoundException, IOException;
+
+    void uploadDocument(Integer courseId, Integer studentId, MultipartFile file) throws IdNotFoundException, IOException;
+
+    List<StudentInfoBO> getAuthors(Integer finalId) throws IdNotFoundException;
 }

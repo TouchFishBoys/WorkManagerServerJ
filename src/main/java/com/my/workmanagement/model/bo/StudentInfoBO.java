@@ -1,9 +1,12 @@
 package com.my.workmanagement.model.bo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serializable;
 
 public class StudentInfoBO implements Serializable {
     // 学生 Id
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer studentId;
     //学生姓名
     private String studentName;
