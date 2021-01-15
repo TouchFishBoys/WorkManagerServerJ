@@ -71,25 +71,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     CorsFilter corsFilter() {
-        CorsFilter filter = new CorsFilter();
-        return filter;
+        return new CorsFilter();
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                // 使用Jwt所以选择无状态
+                //使用Jwt所以选择无状态
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                // OPTIONS 请求全部放行
+                //OPTIONS 请求全部放行
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                // 登录接口放行
+                //登录接口放行
                 .antMatchers(AUTH_WHITELIST).permitAll()
-                // 其它接口进行验证
+                //其它接口进行验证
                 .anyRequest().authenticated();
-        // 添加 Filter
-        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(corsFilter(), SessionManagementFilter.class);
+        //添加 Filter
+        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);//Jwt Filter
+        http.addFilterBefore(corsFilter(), SessionManagementFilter.class); //CORS Filter
         http.headers().cacheControl();
     }
 

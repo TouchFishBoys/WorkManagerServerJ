@@ -56,7 +56,8 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
-    public boolean store(InputStream inputStream, String path, String fileName, String contentType) throws IOException {
+    public boolean store(InputStream inputStream, String path, String fileName, String contentType)
+            throws IOException {
         boolean isExists = exists(path + "/" + fileName);
         try {
             logger.info("上传到OSS: fileName=\"{}\" contentLength={}", fileName, inputStream.available());

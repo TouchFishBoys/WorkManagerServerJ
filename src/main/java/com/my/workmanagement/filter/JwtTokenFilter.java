@@ -40,7 +40,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         String token = request.getHeader(HEADER_AUTH);
 
         if (null != token && token.startsWith(TOKEN_HEAD)) {
@@ -52,11 +53,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             logger.debug("Username: {}", username);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
                 UserDetails userDetails = null;
-                if (JwtUtils.validateToken(token)) {
+                if (JwtUtils.validateToken(token)) { //Token 有效
                     logger.debug("传递的用户身份: {}", JwtUtils.getRole(token).name());
-                    switch (JwtUtils.getRole(token)) {
+                    switch (JwtUtils.getRole(token)) {//获取 JWT 中的身份
                         case ROLE_STUDENT:
                             // 学生
                             userDetails = studentDetailsService.loadUserByUsername(JwtUtils.getUsername(token));
@@ -74,7 +74,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 } else {
-                    logger.info("无效的Token");
+                    logger.info("无效的Token：{}", token);
                 }
             }
             logger.info("结束验证");

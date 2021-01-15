@@ -153,7 +153,7 @@ public class CourseController {
                     .build());
         }
 
-        return PackedResponse.success(response, "");
+        return PackedResponse.success(response, "success");
     }
 
     /**
@@ -228,4 +228,3 @@ public class CourseController {
         return PackedResponse.success(list, "ok");
     }
 }
-

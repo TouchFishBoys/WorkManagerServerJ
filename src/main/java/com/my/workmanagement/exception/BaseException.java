@@ -2,7 +2,7 @@ package com.my.workmanagement.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class BaseException extends Exception {
+public abstract class BaseException extends Exception {
     private final HttpStatus status;
 
     public BaseException(HttpStatus status, String message){
